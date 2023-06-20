@@ -1,0 +1,7 @@
+{
+  "name": "Rovin' Ranger",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
