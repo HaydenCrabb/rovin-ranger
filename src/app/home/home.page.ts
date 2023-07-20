@@ -1,6 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { GestureDetail } from '@ionic/angular';
-import { GestureController, IonCard } from '@ionic/angular';
+import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
