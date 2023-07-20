@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { Gesture, GestureController } from '@ionic/angular';
+import { GestureController, IonContent } from '@ionic/angular';
+import type { GestureDetail } from '@ionic/angular';
 
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
@@ -15,22 +16,85 @@ import { Character } from './variables';
   templateUrl: './play.page.html',
   styleUrls: ['./play.page.scss'],
 })
-export class PlayPage implements OnInit {
+export class PlayPage implements OnInit, AfterViewInit {
 
-  constructor(private storage: Storage, public modalController: ModalController, private gestureCtrl: GestureController) { 
-      //use this to setup swipe functionality. HTML page will need to be changed as well.
-      // const gesture: Gesture = this.gestureCtrl.create({
-      //     el: this.element.nativeElement,
-      //     threshold: 15,
-      //     gestureName: 'swipe-detector',
-      //     onMove: ev => this.swiped(ev)
-      // }, true);
+  @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
+
+  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef) { 
+
   }
 
   async ngOnInit() {
     await this.storage.create();
     this.setup();
   }
+
+  async ngAfterViewInit() {
+
+    // CREATING FUNCTIONALITY TO READ HORIZONTAL AND VERTICAL GESTURES
+    const gestureX = this.gestureCtrl.create({
+      el: this.playspace.nativeElement.closest("ion-content"),
+      onMove: (detail) => this.onMoveX(detail),
+      gestureName: 'example',
+    });
+
+    const gestureY = this.gestureCtrl.create({
+      el: this.playspace.nativeElement.closest("ion-content"),
+      direction: 'y',
+      onMove: (detail) => this.onMoveY(detail),
+      gestureName: 'example',
+    });
+
+      gestureY.enable();
+      gestureX.enable();
+    
+  }
+
+  // FUNCTION FOR HORIZONTAL MOVEMENT 
+  private onMoveX(detail: GestureDetail) {
+
+    const { deltaX, velocityX, deltaY, velocityY } = detail;
+    if (deltaX > 0 && velocityX > 1){
+      this.characterPosition.direction = 2;
+    }
+    else if ( deltaX < 0 && velocityX < -1){
+      this.characterPosition.direction = 4;
+    }
+    else if (deltaY > 0 && velocityY > 1){
+      this.characterPosition.direction = 3;
+    }
+    else if ( deltaY < 0 && velocityY < -1){
+      this.characterPosition.direction = 1;
+    }
+
+
+    
+    }
+
+    private onMoveY(detail: GestureDetail) {
+
+      const { deltaY, velocityY, deltaX, velocityX } = detail;
+      if (deltaY > 0 && velocityY > 1){
+        this.characterPosition.direction = 3;
+      }
+      else if ( deltaY < 0 && velocityY < -1){
+        this.characterPosition.direction = 1;
+      }
+      else if (deltaX > 0 && velocityX > 1){
+        this.characterPosition.direction = 2;
+      }
+      else if ( deltaX < 0 && velocityX < -1){
+        this.characterPosition.direction = 4;
+      }
+  
+  
+      
+    }
+
+  
+
+
+
 
   coveringWalls = [
       {top: 0, left: 0, height: 0, width: 0},
@@ -492,19 +556,19 @@ export class PlayPage implements OnInit {
   actuallyMove(character:Character)
   {
 
-    if (character.direction == 1)
+    if (character.direction == 1) //move up
     {
       character.position.top = character.position.top - this.characterSize;
     }
-    else if (character.direction == 2)
+    else if (character.direction == 2) //more right
     {
       character.position.left = character.position.left + this.characterSize;
     }
-    else if (character.direction == 3)
+    else if (character.direction == 3) // move down
     {
       character.position.top = character.position.top + this.characterSize;
     }
-    else if (character.direction == 4)
+    else if (character.direction == 4) // move left.
     {
       character.position.left = character.position.left - this.characterSize;
     }
@@ -646,30 +710,6 @@ export class PlayPage implements OnInit {
     if(event.tapCount == 2 && this.gameOver == false) //double tap
     {
       this.startOrStop();
-    }
-  }
-
-  swiped(event:any)
-  {
-    console.log(event);
-    if (this.playing)
-    {
-      if (event.direction == 2) //left
-      {
-        this.characterPosition.direction = 4;
-      }
-      else if (event.direction == 4) //right
-      {
-        this.characterPosition.direction = 2;
-      }
-      else if (event.direction == 8) // up
-      {
-        this.characterPosition.direction = 1;
-      }
-      else if (event.direction == 16) // down
-      {
-        this.characterPosition.direction = 3;
-      }
     }
   }
 

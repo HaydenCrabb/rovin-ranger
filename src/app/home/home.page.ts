@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { GestureDetail } from '@ionic/angular';
+import { GestureController, IonCard } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
@@ -7,6 +9,7 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+
 
   constructor(private storage: Storage) {
     
@@ -17,6 +20,8 @@ export class HomePage {
     this.getHighscore();
 
   }
+
+
   highscore = 0;
 
   getHighscore()
