@@ -55,17 +55,12 @@
 }
 .points {
 	position: absolute;
-	width: 0px;
-	height: 0px;
-	top: 0px;
-	left: 0px;
+	bottom: 0;
+	left: 49.5%;
+	right: 50%;
 }
 .points-inner{
 	position: relative;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
 	text-align: center;
 	margin: 0px;
 	padding: 0px;
