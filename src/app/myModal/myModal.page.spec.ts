@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ModalPage } from './modal.page';
+import { ModalPage } from './myModal.page';
 
 describe('ModalPage', () => {
   let component: ModalPage;

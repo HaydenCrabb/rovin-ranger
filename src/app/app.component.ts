@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ScoreService } from './score.service';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
-  
-  parentHighScore = 0;
+  constructor(private scoreService: ScoreService) {}
+  ngOnInit() {
+
+    if(localStorage.getItem('savedScore')){
+      console.log("found savedScore")
+    }
+    else {
+      localStorage.setItem('savedScore','0')
+    }
+
+    this.scoreService.highScore = localStorage.getItem('savedScore');
+  }
 }
