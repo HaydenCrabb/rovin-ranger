@@ -4,7 +4,7 @@ import { GestureController, IonContent } from '@ionic/angular';
 import type { GestureDetail } from '@ionic/angular';
 
 import { ModalController } from '@ionic/angular';
-import { ModalPage } from '../modal/modal.page';
+import { ModalPage } from '../myModal/myModal.page';
 
 import { Wall } from './variables';
 import { Zone } from './variables';

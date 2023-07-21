@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ScoreService } from '../score.service';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
@@ -7,33 +8,15 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  currentHighScore: any;
 
-
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private scoreService: ScoreService) {
     
   }
 
   async ngOnInit() {
-    await this.storage.create();
-    this.getHighscore();
+    this.currentHighScore = this.scoreService.highScore;
 
-  }
-
-
-  highscore = 0;
-
-  getHighscore()
-  {
-    this.storage.get('highscore').then((val) => {
-          if (val != null)
-          {
-          this.highscore = val.value;
-          console.log("we got one");
-        }
-          else {
-            console.log("There is no value");
-          }
-      });
   }
 
 }

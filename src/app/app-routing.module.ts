@@ -17,7 +17,7 @@ const routes: Routes = [
   },
   {
     path: 'modal',
-    loadChildren: () => import('./modal/modal.module').then( m => m.ModalPageModule)
+    loadChildren: () => import('./myModal/myModal.module').then( m => m.ModalPageModule)
   },
 ];
 
