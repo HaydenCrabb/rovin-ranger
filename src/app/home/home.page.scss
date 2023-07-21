@@ -25,3 +25,29 @@
 #container a {
   text-decoration: none;
 }
+
+.logo-container {
+  width: 100%;
+  bottom: 20%;
+}
+
+#logo {
+  width: 40%;
+  height: auto;
+  margin-left:30%;
+  margin-right:30%;
+}
+
+#play-button {
+  width: 30% !important;
+  --padding-start: 10%;
+  --padding-end: 10%;
+  font-size: 2rem;
+  --background: #2b3648 !important;
+  --background-hover: #596f94 !important;
+  --background-focus: #596f94 !important;
+}
+
+p {
+  font-size: large;
+}

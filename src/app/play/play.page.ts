@@ -20,13 +20,16 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
 
-  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef) { 
+  BGMusic = new Audio('../assets/Sounds/BGMusic.mp3');
 
+  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef) { 
+    
   }
 
   async ngOnInit() {
     await this.storage.create();
     this.setup();
+    
   }
 
   async ngAfterViewInit() {
@@ -48,6 +51,16 @@ export class PlayPage implements OnInit, AfterViewInit {
       gestureY.enable();
       gestureX.enable();
     
+  }
+
+  //FUNCTIONS FOR TURNING ON/OFF BACKGROUND MUSIC
+  public playBGMusic() {
+    this.BGMusic.play();
+  }
+
+  public stopBGMusic() {
+    this.BGMusic.pause();
+    this.BGMusic.currentTime = 0;
   }
 
   // FUNCTION FOR HORIZONTAL MOVEMENT 
@@ -149,27 +162,12 @@ export class PlayPage implements OnInit, AfterViewInit {
       this.createUpgrade();
       this.createEnemy();
       this.moveInCharacter();
-      this.getHighscore();
 
       window.setTimeout(() => {
         console.log("boom starting");
+        // this.playBGMusic();
         this.startOrStop();
       }, 2000); 
-  }
-
-  getHighscore()
-  {
-    this.storage.get('highscore').then((val) => {
-          if (val != null)
-          {
-          this.highscore = val.value;
-          console.log("Not a new one. " + this.highscore);
-        }
-          else {
-            this.highscore = this.pointsValue;
-            this.storage.set('highscore', this.pointsValue);
-          }
-      });
   }
 
   getRandomFour(previousDirection:any): number
@@ -433,12 +431,17 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   checkIfTouchedUpgrade()
   {
+
+    const pickupAudio = new Audio('../assets/Sounds/UpgradeAquired.mp3');
+
+
     if (this.characterPosition.position.top == this.upgradePosition.top && this.characterPosition.position.left == this.upgradePosition.left)
     {
       //then we got em.
       this.pointsValue++;
       this.createUpgrade();
       this.createEnemy();
+      pickupAudio.play();
     }
   }
   checkIfGameOver()
@@ -673,6 +676,7 @@ export class PlayPage implements OnInit, AfterViewInit {
       console.log("Starting up!");
       this.timer = window.setInterval(() => {
         this.checkIfGameOver();
+        this.playBGMusic();
         if (this.gameOver == false)
         {
           this.move();
@@ -714,6 +718,8 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   async presentModal(newHighscore:boolean) {
+
+    this.stopBGMusic();
     var localHighscore = this.highscore;
     if (newHighscore)
     {
