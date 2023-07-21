@@ -19,24 +19,24 @@ export class ModalPage implements OnInit {
 
   	this.theLastScore = this.params.get('points');
   	
-
+    // CHECK TO SEE IF TOTAL POINTS IS GREATER THAN HIGH SCORE
     if(this.theLastScore > this.currentHighScore){
-      this.currentHighScore = this.theLastScore;
+      // UPDATE HIGH SCORE STORED IN LOCALSTORAGE TO MATCH NEW NUMBER
       localStorage.clear();
-      localStorage.setItem('savedScore', this.currentHighScore.toString());
+      localStorage.setItem('savedScore', this.theLastScore.toString());
+
+      // SET SCORE GLOBALLY
       this.scoreService.highScore = localStorage.getItem('savedScore');
     }
 
-    this.highscore = "Highscore: " + this.currentHighScore;
+    this.highscore = "High Score: " + this.currentHighScore;
 
-  	if (this.params.get('newHighscore') == true)
+  	if (this.params.get('newHighscore') == true && this.theLastScore > this.currentHighScore)
   	{
-  		this.highscore = "New Highscore: " + this.currentHighScore + "!!!";
+      //IF SCORE IS HIGHER, CHANGE HIGH SCORE MESSAGE
+      this.currentHighScore = this.theLastScore;;
+  		this.highscore = "New High Score: " + this.currentHighScore + "!!!";
   	}
-
-    // if (this.theLastScore > this.highscore)
-    
-  	console.log(this.highscore);
 
     
   }

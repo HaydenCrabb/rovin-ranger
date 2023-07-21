@@ -1,10 +1,14 @@
 <ion-content scroll-y="false">
   <ion-grid style="height: 100%">
+    <div class="logo-container">
+      <img id="logo" src="../../assets/Logo.png">
+    </div>
       <ion-row class="ion-align-items-end ion-justify-content-center element">
-        <ion-button color="dark" routerLink="/play" routerDirection="root">Play</ion-button>
+        <ion-button id="play-button" size="small" shape="round" routerLink="/play" routerDirection="root">PLAY</ion-button>
       </ion-row>
       <ion-row class="ion-align-items-start ion-justify-content-center element second">
-        Highscore: {{ currentHighScore }}
+        <br>
+        <p>High Score: {{ currentHighScore }}</p>
       </ion-row>
   </ion-grid>
 </ion-content>

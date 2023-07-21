@@ -6,7 +6,9 @@ import { ScoreService } from './score.service';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
+
 export class AppComponent {
+
   constructor(private scoreService: ScoreService) {}
   ngOnInit() {
 
@@ -19,4 +21,5 @@ export class AppComponent {
 
     this.scoreService.highScore = localStorage.getItem('savedScore');
   }
+
 }
