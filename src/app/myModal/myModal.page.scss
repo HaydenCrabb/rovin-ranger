@@ -1,9 +1,7 @@
 
 
 .points {
-	font-size: 5em;
-	margin-bottom: 0.25em;
-	margin-top: 0.25em;
+	font-size: 8em;
 	text-align: center;
 	display: block;
 	color: white;
@@ -16,9 +14,8 @@
 }
 
 .points-2 {
-	font-size: 5em;
-	margin-bottom: 0.25em;
-	margin-top: 0.28em;
+	font-size: 8em;
+	margin-top: 0.03m;
 	text-align: center;
 	position: absolute;
 	color: #c75c58;
@@ -36,19 +33,23 @@
 }
 
 .main-button {
-	width: 6.5em;
-	height: 4em;
+	width: 12em;
+	height: 7em;
+	background-color: #2b3648;
+	border-radius: 2em;
+	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
 }
 .margin-none {
 	margin: none;
 }
 .highscore {
+	margin-top: 0;
 	width: 100%;
 	text-align: center;
 	color: white;
-	font-size: 1em;
+	font-size: 1.2em;
 }
-ion-button > img {
+button > img {
 	height: 50%;
 	width: auto;
 }
@@ -57,13 +58,22 @@ ion-button > img {
 	padding: 5px;
 }
 
+.icon-button {
+	width: 3em;
+	height: 3em;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	text-align: center;
+}
+
 @keyframes enlarge {
   0%   {font-size: 0px;}
   60%  {
-  			font-size: 7em; margin-bottom: -.1em;
+  			font-size: 12em; margin-bottom: -.1em;
   			-ms-transform: rotate(-7deg); /* IE 9 */
 			-webkit-transform: rotate(-7deg); /* Safari 3-8 */
 			transform: rotate(-7deg);
   		}
-  100% {font-size: 5em; margin-bottom: 0.25em;}
+  100% {font-size: 8em}
 }

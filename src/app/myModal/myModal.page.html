@@ -8,15 +8,20 @@
 				{{ theLastScore }}
 			</div>
 		</ion-row>
+		<ion-row>
+			<p class="highscore">{{ highscore }}</p>
+		</ion-row>
+		<ion-row class="ion-justify-content-center">
+			<ion-col size="2"><div class='icon-button'>Home</div></ion-col>
+			<ion-col size="2"><div class='icon-button'>Settings</div></ion-col>
+			<ion-col size="2"><div class='icon-button'>Share</div></ion-col>
+		</ion-row>
 	 	<ion-row class="ion-align-items-center ion-justify-content-center">
 	 		<div class="space">
-		    	<ion-button class="main-button" color="button" (click)="dismiss()">
+		    	<button class="main-button" (click)="dismiss()">
 		    		<img src="../../assets/RedoButton.png">
-		    	</ion-button>
+		    	</button>
 	   		</div>
-	 	</ion-row>
-	 	<ion-row>
-	 		<p class="highscore">{{ highscore }}</p>
 	 	</ion-row>
 	</ion-grid>
 	
