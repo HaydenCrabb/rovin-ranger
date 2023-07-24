@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { ScoreService } from '../score.service';
+import { ScoreService } from '../services/score.service';
 
 @Component({
   selector: 'app-modal',

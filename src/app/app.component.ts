@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ScoreService } from './score.service';
+import { ScoreService } from './services/score.service';
 
 @Component({
   selector: 'app-root',
