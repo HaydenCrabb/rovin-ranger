@@ -1,7 +1,3 @@
-ion-grid {
-  background-color:  #FFEED6;
-}
-
 #container {
   text-align: center;
 
@@ -54,4 +50,164 @@ ion-grid {
 
 p {
   font-size: large;
+}
+
+.UI {
+  position: absolute;
+  z-index: 15;
+}
+
+.playFieldOverlay {
+  position: fixed;
+  z-index: 12;
+  background: #FFFFFF40;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+
+// CSS to display game components
+.background1 {
+	--ion-background-color:#28364A;
+}
+.playingField {
+	position: relative;
+	z-index: 1;
+	background-color: #FFEED6;
+}
+.playingField-black {
+	border: 1px solid black;
+	background-color: black;
+}
+.player {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	border-radius: 7.5px;
+	top: 0px;
+	left: 0px;
+	background-color: #2D5C5C;
+}
+.player::after {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	content: " ";
+	background-color: #B2A59A;
+	position: absolute;
+	z-index: -1;
+	top: 3px;
+	left: -3px;
+	border-radius: 7.5px;
+}
+.enemy {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	border-radius: 7.5px;
+	top: 0px;
+	left: 0px;
+	border: 1px solid #FFEED6 inset;
+	background-color: #D65353;
+}
+.enemy::after {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	content: " ";
+	background-color: #B2A59A;
+	position: absolute;
+	z-index: -1;
+	top: 3px;
+	left: -3px;
+	border-radius: 7.5px;
+}
+.points {
+	position: absolute;
+	bottom: 0;
+	left: 45%;
+	right: 45%;
+	text-align: center;
+}
+.points-inner{
+	position: relative;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	font-size: 18px;
+	font-weight: bold;
+}
+.upgrade {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	border-radius: 7.5px;
+	top: 0px;
+	left: 0px;
+	background-color: #F7C45F;
+}
+.upgrade::after {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	content: " ";
+	background-color: #B2A59A;
+	position: absolute;
+	z-index: -1;
+	top: 3px;
+	left: -3px;
+	border-radius: 7.5px;
+}
+.cover {
+	position: absolute;
+	background-color: #28364A;
+	z-index: 10;
+}
+.wall {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	top: 0px;
+	left: 0px;
+	background-color: #28364A;
+	border: 1px solid #FFEED6 inset;
+}
+.wall::after {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	content: " ";
+	background-color: #B2A59A;
+	position: absolute;
+	z-index: -1;
+	top: 5px;
+	left: -5px;
+}
+.wall.one::after {
+	border-top-left-radius: 7.5px;
+}
+.wall.two::after {
+	border-top-right-radius: 7.5px;
+}
+.wall.three::after {
+	border-bottom-right-radius: 7.5px;
+}
+.wall.four::after {
+	border-bottom-left-radius: 7.5px;
+}
+.wall-white {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	top: 0px;
+	left: 0px;
+	background-color: white;
+	border: 1px solid white inset;
+}
+.highScore {
+	position: absolute;
+	top: 50px;
+	left: 600px;
 }

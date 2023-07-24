@@ -9,7 +9,7 @@ import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-br
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { ScoreService } from './score.service';
+import { ScoreService } from './services/score.service';
 
 @NgModule({
   declarations: [AppComponent],
