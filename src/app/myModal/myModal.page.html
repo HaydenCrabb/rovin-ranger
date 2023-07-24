@@ -1,14 +1,17 @@
-<ion-content class="dropin">
+<div class="dropin" scroll-y="false">
 	<ion-grid style="height: 100%">
-		<ion-row>
+		<ion-row class="points-container">
 			<div class="points">
+				{{ theLastScore }}
+			</div>
+			<div class="points-2">
 				{{ theLastScore }}
 			</div>
 		</ion-row>
 	 	<ion-row class="ion-align-items-center ion-justify-content-center">
 	 		<div class="space">
 		    	<ion-button class="main-button" color="button" (click)="dismiss()">
-		    		<ion-icon name="refresh" slot="icon-only"></ion-icon>
+		    		<img src="../../assets/RedoButton.png">
 		    	</ion-button>
 	   		</div>
 	 	</ion-row>
@@ -17,4 +20,4 @@
 	 	</ion-row>
 	</ion-grid>
 	
-</ion-content>
+</div>

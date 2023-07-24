@@ -172,27 +172,27 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   getRandomFour(previousDirection:any): number
   {
-    var sucess = false;
+    var success = false;
     var solution: number = 0;
-    while (sucess == false)
+    while (success == false)
     {
-      sucess = true;
+      success = true;
       solution =  Math.floor(Math.random() * 4);
       if(previousDirection == 1 && solution == 3)
       {
-        sucess = false;
+        success = false;
       }
       else if (previousDirection == 3 && solution == 1)
       {
-        sucess = false;
+        success = false;
       }
       else if (previousDirection == 4 && solution == 2)
       {
-        sucess = false;
+        success = false;
       }
       else if (previousDirection == 2 && solution == 4)
       {
-        sucess = false;
+        success = false;
       }
     }
     return solution

@@ -29,6 +29,6 @@
     font-family: fairplex-narrow, serif;
 }
 
-ion-button {
-    border-radius: 50px;
-}
+ion-modal {
+    --background: transparent !important;
+    }

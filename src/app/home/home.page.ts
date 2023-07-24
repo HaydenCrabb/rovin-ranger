@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ScoreService } from '../score.service';
 import { Storage } from '@ionic/storage-angular';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -16,7 +17,6 @@ export class HomePage {
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
-
   }
 
 }
