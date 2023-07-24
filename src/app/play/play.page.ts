@@ -9,11 +9,6 @@ import { SetupService } from '../services/setup.service';
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../myModal/myModal.page';
 
-import { Wall } from '../models/variables';
-import { Zone } from '../models/variables';
-import { Point } from '../models/variables';
-import { Character } from '../models/variables';
-
 @Component({
   selector: 'app-play',
   templateUrl: './play.page.html',
