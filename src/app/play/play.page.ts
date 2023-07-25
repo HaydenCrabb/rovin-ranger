@@ -20,14 +20,19 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   BGMusic = new Audio('../assets/Sounds/BGMusic.mp3');
 
+
   constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService) { 
     
   }
 
+  currentPath: string = window.location.pathname;
+
   async ngOnInit() {
     await this.storage.create();
     this.resetBoard();
-    this.setupService.setup(true);
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
+    this.setupService.setup(this.currentPath);
     window.setTimeout(() => {
       console.log("boom starting");
       // this.playBGMusic();

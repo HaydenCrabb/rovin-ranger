@@ -3,6 +3,7 @@ import { Wall } from '../models/variables';
 import { Zone } from '../models/variables';
 import { Point } from '../models/variables';
 import { Character } from '../models/variables';
+import { max } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class SetupService {
     { top: 0, left: 0, height: 0, width: 0 }
   ]
 
+  currentPath: string = window.location.pathname;
+
   characterPosition: Character = new Character(60, 70, 3);
   upgradePosition: Point = new Point(0, 0);
   playingFieldPosition: Point = new Point(0, 0);
@@ -25,11 +28,12 @@ export class SetupService {
   characterSize = 15;
   playingWidth = 0;
   playingHeight = 0;
+  playingArea = 0;
   highscore = 0;
   playing = false;
   noGoZone: Zone[] = [];
   totalWalls = 0;
-  maxWalls = 100;
+  maxWalls = 0;
   walls: Wall[] = [];
   playingInterval = 100;
   enemies: Character[] = [];
@@ -39,7 +43,7 @@ export class SetupService {
 
   constructor() { }
 
-  setup(playPage: boolean) {
+  setup(currentPath: string) {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
 
@@ -49,6 +53,10 @@ export class SetupService {
     this.playingWidth = window.innerWidth - remainderx;
     this.playingHeight = window.innerHeight - remaindery;
 
+    this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+
+    this.maxWalls = Math.floor(this.playingArea / 165);
+
     this.playingFieldPosition.top = remaindery / 2;
     this.playingFieldPosition.left = remainderx / 2;
 
@@ -57,8 +65,10 @@ export class SetupService {
     this.coveringWalls[2] = { top: window.innerHeight - (remaindery / 2), left: 0, height: (remaindery / 2) + 1, width: window.innerWidth };
     this.coveringWalls[3] = { top: 0, left: window.innerWidth - (remainderx / 2), height: window.innerHeight, width: remainderx / 2 };
 
+    this.currentPath = currentPath;
+
     // BOOLEAN IS INTENDED TO SPECIFY IF PLAY PAGE, IF IT ISN'T, IT WON'T MAKE POINTS AREA
-    if (playPage) {
+    if (currentPath == '/play') {
       this.createPointsArea();
       this.createWalls();
       this.roundOffWalls();
@@ -67,10 +77,15 @@ export class SetupService {
       this.moveInCharacter();
     }
     else {
+      //Remove default assets from board
+      this.upgradePosition.top = -100;
+      this.upgradePosition.left = -100;
+
+      this.characterPosition.position.top = -25;
+      this.characterPosition.position.left = -25;
+
       this.createWalls();
       this.roundOffWalls();
-      this.createUpgrade();
-      this.createEnemy();
       this.moveInCharacter();
     }
   }
@@ -176,7 +191,7 @@ export class SetupService {
         if (this.inNoGoZone(topy, leftx) != true) {
 
           var random = Math.floor(Math.random() * 150);
-          if (random == 15) {
+          if (random <= this.maxWalls * .0055) {
             this.createAWall(topy, leftx, 0, true);
             if (this.totalWalls == this.maxWalls) {
               break;
@@ -375,7 +390,7 @@ export class SetupService {
     {
       character.position.top = character.position.top - this.characterSize;
     }
-    else if (character.direction == 2) //more right
+    else if (character.direction == 2) //move right
     {
       character.position.left = character.position.left + this.characterSize;
     }
@@ -438,6 +453,124 @@ export class SetupService {
     else {
       return false;
     }
+  }
+
+  // sendInTheCowboy() {
+  //   var allWalls = document.getElementsByClassName('wall');
+  //   var xValueArray = [];
+  //   var yValueArray = [];
+
+  //   for (var i = 0; i < allWalls.length; i++){
+  //     var wallXY = allWalls[i].getBoundingClientRect();
+  //     yValueArray.push(wallXY.y);
+  //     xValueArray.push(wallXY.x);
+  //   }
+
+  //   for (var j = this.playingFieldPosition.left; j < this.playingWidth; j+=this.characterSize) {
+  //     for (var i = 0; i < xValueArray.length; i++) {
+  //       if (xValueArray[i] == j){
+  //         console.log('found wall at ' + xValueArray[i]);
+  //       }
+  //     }
+
+  //   }
+  // }
+
+  demoMove(){
+    this.actuallyMove(this.characterPosition);
+  }
+
+  demoMoveEnemy(){
+    var self = this;
+    this.enemies.forEach(function (enemy) {
+        self.actuallyMove(enemy);
+    });
+    
+  }
+
+  createDemoEnemy() {
+    var enemyLeft = this.playingWidth - this.characterSize;
+    var enemyTop = this.playingHeight - this.characterSize;
+
+
+    if (this.characterPosition.position.top > this.playingHeight / 2 && this.characterPosition.position.left > this.playingWidth / 2) {
+      enemyTop = 0;
+      enemyLeft = 0;
+    }
+
+    var Enemy = new Character(enemyTop, enemyLeft, 1);
+    this.enemies.push(Enemy);
+  }
+
+  sendInTheCowboy() {
+    // overwrite location of cowboy
+
+    this.enemies = [];
+
+    console.log('sending cowboy');
+
+    var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
+    var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+
+    randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
+    randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
+
+    var allowedY = true;
+    var allowedX = true;
+
+    //Randomly pick an X or Y value
+    if (Math.round(Math.random()) < .5) {
+      // Check if can send cowboy along Y value "i"
+      for (var i = 0; i < this.playingHeight; i += this.characterSize) {
+
+        if (this.theresAWallThere(randomX, i)) {
+
+          allowedY = false;
+          break;
+        }
+      }
+
+      if (allowedY) {
+        this.characterPosition.position.top = this.characterSize * -1;
+        this.characterPosition.position.left = randomX;
+        this.characterPosition.direction = 3;
+
+        for (var l = 0; l < 2; l++){
+          var Enemy = new Character(this.characterSize * -2 * (l + 1), randomX, 1);
+          this.enemies.push(Enemy);
+        }
+      }
+      else {
+        this.sendInTheCowboy();
+      }
+
+    }
+
+    else {
+      // Check if can send cowboy along X value "i"
+      for (var i = 0; i < this.playingWidth; i += this.characterSize) {
+
+        if (this.theresAWallThere(i, randomY)) {
+          allowedX = false;
+          break;
+        }
+      }
+
+      if (allowedX) {
+        this.characterPosition.position.top = randomY;
+        this.characterPosition.position.left = this.characterSize * -1;
+        this.characterPosition.direction = 2
+
+        for (var l = 0; l < 2; l++){
+          var Enemy = new Character(randomY, this.characterSize * -2 * (l + 1), 1);
+          this.enemies.push(Enemy);
+        }
+      }
+      else {
+        this.sendInTheCowboy();
+      }
+    }
+
   }
 
 }
