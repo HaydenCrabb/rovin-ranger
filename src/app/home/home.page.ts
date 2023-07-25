@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ScoreService } from '../services/score.service';
 import { Storage } from '@ionic/storage-angular';
 import { SetupService } from '../services/setup.service';
+import { interval, Subscription } from 'rxjs';
 
 
 @Component({
@@ -9,8 +10,13 @@ import { SetupService } from '../services/setup.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   currentHighScore: any;
+  currentPath: string = window.location.pathname;
+
+  subscription!: Subscription;
+  demoTimer = interval(15000);
+
 
   constructor(private storage: Storage, private scoreService: ScoreService, public setupService: SetupService) {
     
@@ -18,7 +24,37 @@ export class HomePage {
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
-    this.setupService.setup(false);
+    this.setupService.setup(this.currentPath);
+  }
+
+  async ngAfterViewInit() {
+    window.setTimeout(() => {
+      this.startDemo();
+    }, 1000);
+    
+    window.setTimeout(() => {
+    this.setupService.sendInTheCowboy();
+    }, 1000);
+
+    this.subscription = this.demoTimer.subscribe(val => this.setupService.sendInTheCowboy());
+    
+  }
+
+  async ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  startDemo (){
+    this.setupService.timer = window.setInterval(() => {
+      this.setupService.demoMove();
+    }, this.setupService.playingInterval);
+
+    var enemyPlayingInterval = (this.setupService.playingInterval * 1.4);
+
+    this.setupService.enemyTimer = window.setInterval(() => {
+      this.setupService.adjustEnemiesDirection();
+      this.setupService.demoMoveEnemy();
+    }, enemyPlayingInterval);
   }
 
 }
