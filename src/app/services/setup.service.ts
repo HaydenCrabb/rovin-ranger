@@ -83,6 +83,7 @@ export class SetupService {
 
       this.characterPosition.position.top = -25;
       this.characterPosition.position.left = -25;
+      this.maxWalls = Math.floor(this.playingArea / 200);
 
       this.createWalls();
       this.roundOffWalls();
