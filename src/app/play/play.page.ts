@@ -29,15 +29,14 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.storage.create();
-    
-  }
-
-  async ngAfterViewInit() {
-
     this.resetBoard();
     clearInterval(this.setupService.timer);
     clearInterval(this.setupService.enemyTimer);
     this.setupService.setup(this.currentPath);
+    
+  }
+
+  async ngAfterViewInit() {
     window.setTimeout(() => {
       console.log("boom starting");
       // this.playBGMusic();
@@ -180,12 +179,17 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.walls = [];
     this.setupService.enemies = [];
     this.setupService.gameOver = false;
-    this.setupService.timer;
-    this.setupService.enemyTimer;
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
   }
 
   reset(){
-    this.ngAfterViewInit();
+    this.ngOnInit();
+    window.setTimeout(() => {
+      console.log("boom starting");
+      // this.playBGMusic();
+      this.startOrStop();
+    }, 2000);
   }
 
   startOrStop()
@@ -240,6 +244,8 @@ export class PlayPage implements OnInit, AfterViewInit {
   async presentModal(newHighscore:boolean) {
 
     this.stopBGMusic();
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
     var localHighscore = this.setupService.highscore;
     if (newHighscore)
     {

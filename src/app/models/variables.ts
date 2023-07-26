@@ -70,3 +70,17 @@ export class Character {
     this.direction = direction; 
   }
 }
+
+export class Cloud {
+  position: Point;
+  borderRadius: Borders;
+  classes: CustomClasses;
+  cloudId: string; 
+
+  constructor(top: number, left: number, borderTopLeftRadius: number, borderTopRightRadius: number, borderBottomLeftRadius: number, borderBottomRightRadius: number, one: boolean, two: boolean, three: boolean, four: boolean, cloudId: string) {
+    this.position = new Point(top,left);
+    this.borderRadius = new Borders(borderTopLeftRadius,borderTopRightRadius,borderBottomLeftRadius,borderBottomRightRadius);
+    this.classes = new CustomClasses(one,two,three,four);
+    this.cloudId = cloudId;
+  }
+}

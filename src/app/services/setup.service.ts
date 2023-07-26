@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Wall } from '../models/variables';
-import { Zone } from '../models/variables';
-import { Point } from '../models/variables';
-import { Character } from '../models/variables';
+import { Wall, Zone, Point, Character, Cloud } from '../models/variables';
 import { max } from 'rxjs';
 
 @Injectable({
@@ -35,13 +32,20 @@ export class SetupService {
   totalWalls = 0;
   maxWalls = 0;
   walls: Wall[] = [];
+  totalClouds = 0;
+  maxClouds = 30;
+
+  cloudClusters: Cloud[][] = []
+
   playingInterval = 100;
   enemies: Character[] = [];
   gameOver = false;
   timer: number = 0;
   enemyTimer: number = 0;
 
-  constructor() { }
+  constructor() {
+
+  }
 
   setup(currentPath: string) {
     //console.log(this.screen_orientation.type);
@@ -78,6 +82,7 @@ export class SetupService {
     }
     else {
       //Remove default assets from board
+      this.createCloudCluster();
       this.upgradePosition.top = -100;
       this.upgradePosition.left = -100;
 
@@ -88,6 +93,7 @@ export class SetupService {
       this.createWalls();
       this.roundOffWalls();
       this.moveInCharacter();
+
     }
   }
 
@@ -456,37 +462,16 @@ export class SetupService {
     }
   }
 
-  // sendInTheCowboy() {
-  //   var allWalls = document.getElementsByClassName('wall');
-  //   var xValueArray = [];
-  //   var yValueArray = [];
-
-  //   for (var i = 0; i < allWalls.length; i++){
-  //     var wallXY = allWalls[i].getBoundingClientRect();
-  //     yValueArray.push(wallXY.y);
-  //     xValueArray.push(wallXY.x);
-  //   }
-
-  //   for (var j = this.playingFieldPosition.left; j < this.playingWidth; j+=this.characterSize) {
-  //     for (var i = 0; i < xValueArray.length; i++) {
-  //       if (xValueArray[i] == j){
-  //         console.log('found wall at ' + xValueArray[i]);
-  //       }
-  //     }
-
-  //   }
-  // }
-
-  demoMove(){
+  demoMove() {
     this.actuallyMove(this.characterPosition);
   }
 
-  demoMoveEnemy(){
+  demoMoveEnemy() {
     var self = this;
     this.enemies.forEach(function (enemy) {
-        self.actuallyMove(enemy);
+      self.actuallyMove(enemy);
     });
-    
+
   }
 
   createDemoEnemy() {
@@ -536,7 +521,7 @@ export class SetupService {
         this.characterPosition.position.left = randomX;
         this.characterPosition.direction = 3;
 
-        for (var l = 0; l < 2; l++){
+        for (var l = 0; l < 2; l++) {
           var Enemy = new Character(this.characterSize * -2 * (l + 1), randomX, 1);
           this.enemies.push(Enemy);
         }
@@ -562,7 +547,7 @@ export class SetupService {
         this.characterPosition.position.left = this.characterSize * -1;
         this.characterPosition.direction = 2
 
-        for (var l = 0; l < 2; l++){
+        for (var l = 0; l < 2; l++) {
           var Enemy = new Character(randomY, this.characterSize * -2 * (l + 1), 1);
           this.enemies.push(Enemy);
         }
@@ -574,4 +559,72 @@ export class SetupService {
 
   }
 
+  //I would like to apply the same logic from wall building to make clouds, with some adjustments of course
+  createCloudCluster() {
+
+    console.log('creating clouds')
+
+    var previousDirection = 0;
+
+    for (var i = 0; i < 10; i++) {
+      this.cloudClusters[i] = []
+      console.log('creating new cluster')
+      var topx = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
+      var leftx = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+
+      topx = Math.ceil(topx / this.characterSize) * this.characterSize;
+      leftx = Math.ceil(leftx / this.characterSize) * this.characterSize;
+
+
+      console.log('cluster placed at ' + topx + " " + leftx);
+
+        const newCloudID: string = "cloud" + this.totalClouds;
+        var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
+        this.cloudClusters[i].push(cloud);
+        this.totalClouds++;
+
+        var random2: number = 0;
+        while (this.cloudClusters[i].length < 6) {
+          //then lets add another cloudPuff!
+            random2 = this.getRandomFour(previousDirection)
+
+          if (random2 == 1) {
+            const newCloudID: string = "cloud" + this.totalClouds;
+            topx = topx - this.characterSize;
+            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
+            previousDirection = 1;
+            this.cloudClusters[i].push(cloud);
+            this.totalClouds++;
+          }
+          else if (random2 == 2) {
+            const newCloudID: string = "cloud" + this.totalClouds;
+            leftx = leftx + this.characterSize;
+            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
+            previousDirection = 2;
+            this.cloudClusters[i].push(cloud);
+            this.totalClouds++;
+          }
+          else if (random2 == 3) {
+            const newCloudID: string = "cloud" + this.totalClouds;
+            topx = topx + this.characterSize;
+            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
+            previousDirection = 3;
+            this.cloudClusters[i].push(cloud);
+            this.totalClouds++;
+          }
+          else if (random2 == 4) {
+            const newCloudID: string = "cloud" + this.totalClouds;
+            leftx = leftx - this.characterSize
+            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
+            previousDirection = 4;
+            this.cloudClusters[i].push(cloud);
+            this.totalClouds++;
+          }
+        }
+
+      console.log(this.cloudClusters);
+
+
+    }
+  }
 }
