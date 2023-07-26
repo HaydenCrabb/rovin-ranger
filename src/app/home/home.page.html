@@ -1,23 +1,46 @@
 <ion-content scroll-y="false">
-    <div class="UI">
+  <div class="UI">
     <div class="logo-container">
       <img id="logo" src="../../assets/Logo.png">
     </div>
-      <ion-row class="ion-align-items-end ion-justify-content-center element">
-        <ion-button id="play-button" size="small" shape="round" routerLink="/play" routerDirection="root">PLAY</ion-button>
-      </ion-row>
-      <ion-row class="ion-align-items-start ion-justify-content-center element second">
-        <br>
-        <p>High Score: {{ currentHighScore }}</p>
-      </ion-row>
-      </div>
-      <div class="playFieldOverlay">
-      </div>
-      <div class="playingField" id="playingField" [style.width]="setupService.playingWidth + 'px'" [style.height]="setupService.playingHeight + 'px'" [style.top]="setupService.playingFieldPosition.top + 'px'" [style.left]="setupService.playingFieldPosition.left + 'px'">
-        <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'" [style.left]="setupService.characterPosition.position.left + 'px'"></div>
-        <div id="upgrade" class="upgrade" [style.top]="setupService.upgradePosition.top + 'px'" [style.left]="setupService.upgradePosition.left + 'px'"></div>
-        <div class="enemy" *ngFor="let enemy of setupService.enemies" [style.top]="enemy.position.top + 'px'" [style.left]="enemy.position.left + 'px'"></div>
-        <div [ngClass]="{wall: true, one: wall.classes.one, two: wall.classes.two, three: wall.classes.three, four: wall.classes.four}" *ngFor="let wall of setupService.walls" [style.top]="wall.position.top + 'px'" [style.left]="wall.position.left + 'px'" [style.borderTopLeftRadius]="wall.borderRadius.borderTopLeftRadius + 'px'" [style.borderTopRightRadius]="wall.borderRadius.borderTopRightRadius + 'px'" [style.borderBottomLeftRadius]="wall.borderRadius.borderBottomLeftRadius + 'px'" [style.borderBottomRightRadius]="wall.borderRadius.borderBottomRightRadius + 'px'"></div>
-      </div>
-      <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'" [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
+    <ion-row class="ion-align-items-end ion-justify-content-center element">
+      <ion-button id="play-button" size="small" shape="round" routerLink="/play"
+        routerDirection="root">PLAY</ion-button>
+    </ion-row>
+    <ion-row class="ion-align-items-start ion-justify-content-center element second">
+      <br>
+      <p>High Score: {{ currentHighScore }}</p>
+    </ion-row>
+  </div>
+  <div class="playFieldOverlay">
+  </div>
+  <div class="playingField" id="playingField" [style.width]="setupService.playingWidth + 'px'"
+    [style.height]="setupService.playingHeight + 'px'" [style.top]="setupService.playingFieldPosition.top + 'px'"
+    [style.left]="setupService.playingFieldPosition.left + 'px'">
+    <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'"
+      [style.left]="setupService.characterPosition.position.left + 'px'"></div>
+    <div id="upgrade" class="upgrade" [style.top]="setupService.upgradePosition.top + 'px'"
+      [style.left]="setupService.upgradePosition.left + 'px'"></div>
+    <div class="enemy" *ngFor="let enemy of setupService.enemies" [style.top]="enemy.position.top + 'px'"
+      [style.left]="enemy.position.left + 'px'"></div>
+    <div
+      [ngClass]="{wall: true, one: wall.classes.one, two: wall.classes.two, three: wall.classes.three, four: wall.classes.four}"
+      *ngFor="let wall of setupService.walls" [style.top]="wall.position.top + 'px'"
+      [style.left]="wall.position.left + 'px'"
+      [style.borderTopLeftRadius]="wall.borderRadius.borderTopLeftRadius + 'px'"
+      [style.borderTopRightRadius]="wall.borderRadius.borderTopRightRadius + 'px'"
+      [style.borderBottomLeftRadius]="wall.borderRadius.borderBottomLeftRadius + 'px'"
+      [style.borderBottomRightRadius]="wall.borderRadius.borderBottomRightRadius + 'px'"></div>
+    <div *ngFor="let clouds of setupService.cloudClusters">
+      <div [ngClass]="{cloud: true, one: cloud.classes.one, two: cloud.classes.two, three: cloud.classes.three, four:
+        cloud.classes.four}" *ngFor="let cloud of clouds" [style.top]="cloud.position.top + 'px'"
+        [style.left]="cloud.position.left + 'px'"
+        [style.borderTopLeftRadius]="cloud.borderRadius.borderTopLeftRadius + 'px'"
+        [style.borderTopRightRadius]="cloud.borderRadius.borderTopRightRadius + 'px'"
+        [style.borderBottomLeftRadius]="cloud.borderRadius.borderBottomLeftRadius + 'px'"
+        [style.borderBottomRightRadius]="cloud.borderRadius.borderBottomRightRadius + 'px'"></div>
+    </div>
+    </div>
+    <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'"
+      [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
 </ion-content>

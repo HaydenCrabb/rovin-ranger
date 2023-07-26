@@ -47,6 +47,8 @@ export class HomePage implements OnInit {
   }
 
   startDemo (){
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
     this.setupService.timer = window.setInterval(() => {
       this.setupService.demoMove();
     }, this.setupService.playingInterval);
