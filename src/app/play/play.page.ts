@@ -29,6 +29,11 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.storage.create();
+    
+  }
+
+  async ngAfterViewInit() {
+
     this.resetBoard();
     clearInterval(this.setupService.timer);
     clearInterval(this.setupService.enemyTimer);
@@ -38,10 +43,6 @@ export class PlayPage implements OnInit, AfterViewInit {
       // this.playBGMusic();
       this.startOrStop();
     }, 2000);
-    
-  }
-
-  async ngAfterViewInit() {
 
     // CREATING FUNCTIONALITY TO READ HORIZONTAL AND VERTICAL GESTURES
     const gestureX = this.gestureCtrl.create({
@@ -184,7 +185,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   reset(){
-    this.ngOnInit();
+    this.ngAfterViewInit();
   }
 
   startOrStop()

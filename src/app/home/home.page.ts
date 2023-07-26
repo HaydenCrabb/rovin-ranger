@@ -24,10 +24,12 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
-    this.setupService.setup(this.currentPath);
   }
 
   async ngAfterViewInit() {
+    this.setupService.setup(this.currentPath);
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
     window.setTimeout(() => {
       this.startDemo();
     }, 1000);
