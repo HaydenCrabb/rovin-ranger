@@ -17,7 +17,9 @@
 	border-radius: 7.5px;
 	top: 0px;
 	left: 0px;
-	background-color: #2D5C5C;
+	background-image: url(../../assets/Cowboy_Down.png);
+	background-size: contain;
+
 }
 .player::after {
 	width: 15px;
