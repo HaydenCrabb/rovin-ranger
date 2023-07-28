@@ -8,44 +8,27 @@ export class Point {
     this.left = left;
   }
 }
-
-export class Borders {
-    borderTopLeftRadius: number; 
-    borderTopRightRadius: number;
-    borderBottomLeftRadius: number;
-    borderBottomRightRadius: number;
-    constructor(topLeft:number, topRight:number, bottomLeft: number, bottomRight: number) {
-      this.borderTopLeftRadius = topLeft;
-      this.borderTopRightRadius = topRight;
-      this.borderBottomLeftRadius = bottomLeft;
-      this.borderBottomRightRadius = bottomRight; 
-    }
-}
-export class CustomClasses {
-    one: boolean; 
-    two: boolean;
-    three: boolean;
-    four: boolean;
-    constructor(one:boolean, two:boolean, three: boolean, four: boolean) {
-      this.one = one;
-      this.two = two;
-      this.three = three;
-      this.four = four;
+export class CustomBorderRadius {
+    top_left: boolean; 
+    top_right: boolean;
+    bottom_left: boolean;
+    bottom_right: boolean;
+    constructor(top_left:boolean, top_right:boolean, bottom_left: boolean, bottom_right: boolean) {
+      this.top_left = top_left;
+      this.top_right = top_right;
+      this.bottom_left = bottom_left;
+      this.bottom_right = bottom_right;
     }
 }
 
 
 export class Wall {
   position: Point;
-  borderRadius: Borders;
-  classes: CustomClasses;
-  wallId: string; 
+  classes: CustomBorderRadius;
 
-  constructor(top: number, left: number, borderTopLeftRadius: number, borderTopRightRadius: number, borderBottomLeftRadius: number, borderBottomRightRadius: number, one: boolean, two: boolean, three: boolean, four: boolean, wallId: string) {
+  constructor(top: number, left: number, top_left: boolean, top_right: boolean, bottom_left: boolean, bottom_right: boolean) {
     this.position = new Point(top,left);
-    this.borderRadius = new Borders(borderTopLeftRadius,borderTopRightRadius,borderBottomLeftRadius,borderBottomRightRadius);
-    this.classes = new CustomClasses(one,two,three,four);
-    this.wallId = wallId;
+    this.classes = new CustomBorderRadius(top_left,top_right,bottom_left,bottom_right);
   }
 }
 
@@ -73,12 +56,10 @@ export class Character {
 
 export class Cloud {
   position: Point;
-  borderRadius: Borders;
-  classes: CustomClasses;
+  classes: CustomBorderRadius;
 
-  constructor(top: number, left: number, borderTopLeftRadius: number, borderTopRightRadius: number, borderBottomLeftRadius: number, borderBottomRightRadius: number, one: boolean, two: boolean, three: boolean, four: boolean) {
+  constructor(top: number, left: number, top_left: boolean, top_right: boolean, bottom_left: boolean, bottom_right: boolean) {
     this.position = new Point(top,left);
-    this.borderRadius = new Borders(borderTopLeftRadius,borderTopRightRadius,borderBottomLeftRadius,borderBottomRightRadius);
-    this.classes = new CustomClasses(one,two,three,four);
+    this.classes = new CustomBorderRadius(top_left,top_right,bottom_left,bottom_right);
   }
 }
