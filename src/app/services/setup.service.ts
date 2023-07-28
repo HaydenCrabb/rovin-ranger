@@ -569,6 +569,34 @@ export class SetupService {
 
   }
 
+  selectPoint(maxX: number, minX: number, maxY: number, minY: number) {
+
+    const occupiedPositions = new Set();
+
+    const gridMinX = Math.ceil(minX / this.characterSize);
+    const gridMaxX = Math.floor(maxX / this.characterSize);
+    const gridMinY = Math.ceil(minY / this.characterSize);
+    const gridMaxY = Math.floor(maxY / this.characterSize);
+
+    let randomX, randomY, hash;
+    do {
+      // Generate random x and y values within the grid bounds
+      randomX = Math.floor(Math.random() * (gridMaxX - gridMinX + 1) + gridMinX);
+      randomY = Math.floor(Math.random() * (gridMaxY - gridMinY + 1) + gridMinY);
+
+      // Calculate a hash representing the position (x, y)
+      hash = `${randomX}_${randomY}`;
+    } while (occupiedPositions.has(hash));
+
+    // Mark the position as occupied
+    occupiedPositions.add(hash);
+
+    randomX = randomX * this.characterSize;
+    randomY = randomY * this.characterSize;
+
+    return { x: randomX, y: randomY }
+  }
+
   buildCloud() {
     var previousDirection = 0
     // Set strating position of cloud, starts offscreen at random Y value
@@ -578,26 +606,39 @@ export class SetupService {
 
     //Create a new cloud object
     var cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
-    this.allClouds.push(cloudPuff);
+    // this.allClouds.push(cloudPuff);
 
-    //Maximum cloud size is 50, minimum is 20, pick a random number in that range
-    var cloudSize = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+    // Create a 5x5 grid in which all future clouds must exist
+    var xMax = xPosition + (5 * this.characterSize);
+    var xMin = xPosition;
+    var yMax = yPosition;
+    var yMin = yPosition + (6 * this.characterSize)
+
+    //Maximum cloud size is 20, minimum is 10, pick a random number in that range
+    var cloudSize = Math.floor(Math.random() * (50 - 35 + 1)) + 35;
 
     for (let i = 0; i < cloudSize; i++) {
-      var randomDirection = this.getRandomFour(previousDirection);
 
-      if (randomDirection == 1) {
-        yPosition -= this.characterSize;
-      }
-      else if (randomDirection == 2) {
-        xPosition += this.characterSize;
-      }
-      else if (randomDirection == 3) {
-        yPosition += this.characterSize;
-      }
-      else if (randomDirection == 4) {
-        xPosition -= this.characterSize;
-      }
+      // var randomDirection = this.getRandomFour(previousDirection);
+
+      // if (randomDirection == 1) {
+      //   yPosition -= this.characterSize;
+      // }
+      // else if (randomDirection == 2) {
+      //   xPosition += this.characterSize;
+      // }
+      // else if (randomDirection == 3) {
+      //   yPosition += this.characterSize;
+      // }
+      // else if (randomDirection == 4) {
+      //   xPosition -= this.characterSize;
+      // }
+
+      //function to select a random point within defined space
+      xPosition = this.selectPoint(xMax, xMin, yMax, yMin).x
+      yPosition = this.selectPoint(xMax, xMin, yMax, yMin).y
+
+
       cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
       this.allClouds.push(cloudPuff);
     }
@@ -606,7 +647,7 @@ export class SetupService {
   moveClouds(allClouds: Cloud[]) {
     allClouds = this.allClouds;
 
-    if (allClouds == undefined){
+    if (allClouds == undefined) {
       return;
     }
 
