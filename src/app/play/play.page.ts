@@ -18,7 +18,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
 
-  BGMusic = new Audio('../assets/Sounds/BGMusic.mp3');
+  BGMusic = new Audio('../assets/Sounds/Rovin_Ranger_Mixing_Full.mp3');
 
 
   constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService) { 
