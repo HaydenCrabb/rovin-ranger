@@ -139,8 +139,7 @@ export class SetupService {
       if (this.theresAWallThere(topx, leftx) == false) {
         if (this.totalWalls < this.maxWalls) {
           if (!this.inNoGoZone(topx, leftx)) {
-            const newWallID: string = "wall" + this.totalWalls;
-            var wall = new Wall(topx, leftx, 0, 0, 0, 0, false, false, false, false, newWallID);
+            var wall = new Wall(topx, leftx, false, false, false, false);
 
             this.walls.push(wall);
             this.totalWalls++;
@@ -224,7 +223,6 @@ export class SetupService {
     var self = this;
     var size = this.characterSize;
     this.walls.forEach(function (wall) {
-      var radius = size / 2;
 
       var wallLeft = !self.theresAWallThere(wall.position.left - size, wall.position.top);
       var wallTop = !self.theresAWallThere(wall.position.left, wall.position.top - size);
@@ -232,20 +230,16 @@ export class SetupService {
       var wallDown = !self.theresAWallThere(wall.position.left, wall.position.top + size);
 
       if (wallLeft && wallTop) {
-        wall.borderRadius.borderTopLeftRadius = radius;
-        wall.classes.one = true;
+        wall.classes.top_left = true;
       }
       if (wallTop && wallRight) {
-        wall.borderRadius.borderTopRightRadius = radius;
-        wall.classes.two = true;
+        wall.classes.top_right = true;
       }
       if (wallRight && wallDown) {
-        wall.borderRadius.borderBottomRightRadius = radius;
-        wall.classes.three = true;
+        wall.classes.bottom_right = true;
       }
       if (wallDown && wallLeft) {
-        wall.borderRadius.borderBottomLeftRadius = radius;
-        wall.classes.four = true;
+        wall.classes.bottom_left = true;
       }
     });
   }
@@ -605,8 +599,13 @@ export class SetupService {
     yPosition = Math.ceil(yPosition / this.characterSize) * this.characterSize;
 
     //Create a new cloud object
+<<<<<<< HEAD
     var cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
     // this.allClouds.push(cloudPuff);
+=======
+    var cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+    this.allClouds.push(cloudPuff);
+>>>>>>> origin/main
 
     // Create a 5x5 grid in which all future clouds must exist
     var xMax = xPosition + (5 * this.characterSize);
@@ -619,6 +618,7 @@ export class SetupService {
 
     for (let i = 0; i < cloudSize; i++) {
 
+<<<<<<< HEAD
       // var randomDirection = this.getRandomFour(previousDirection);
 
       // if (randomDirection == 1) {
@@ -640,6 +640,21 @@ export class SetupService {
 
 
       cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
+=======
+      if (randomDirection == 1) {
+        yPosition -= this.characterSize;
+      }
+      else if (randomDirection == 2) {
+        xPosition += this.characterSize;
+      }
+      else if (randomDirection == 3) {
+        yPosition += this.characterSize;
+      }
+      else if (randomDirection == 4) {
+        xPosition -= this.characterSize;
+      }
+      cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+>>>>>>> origin/main
       this.allClouds.push(cloudPuff);
     }
   }

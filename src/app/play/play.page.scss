@@ -116,17 +116,38 @@
 	top: 5px;
 	left: -5px;
 }
-.wall.one::after {
+.cloud.top_left,
+.wall.top_left {
 	border-top-left-radius: 7.5px;
 }
-.wall.two::after {
+.cloud.top_right,
+.wall.top_right {
 	border-top-right-radius: 7.5px;
 }
-.wall.three::after {
+.cloud.bottom_left,
+.wall.bottom_left {
+	border-bottom-left-radius: 7.5px;
+}
+.cloud.bottom_right,
+.wall.bottom_right {
 	border-bottom-right-radius: 7.5px;
 }
-.wall.four::after {
+
+.cloud.top_left::after,
+.wall.top_left::after {
+	border-top-left-radius: 7.5px;
+}
+.cloud.top_right::after,
+.wall.top_right::after {
+	border-top-right-radius: 7.5px;
+}
+.cloud.bottom_left::after,
+.wall.bottom_left::after {
 	border-bottom-left-radius: 7.5px;
+}
+.wall.bottom_right::after,
+.wall.bottom_right::after {
+	border-bottom-right-radius: 7.5px;
 }
 .wall-white {
 	position: absolute;
@@ -167,18 +188,6 @@
 	left: -5px;
 	box-shadow: 0, 0, 7.5px, 5px, #FFFFFF80;
 	left: calc(125%);
-}
-.cloud.one::after {
-	border-top-left-radius: 7.5px;
-}
-.cloud.two::after {
-	border-top-right-radius: 7.5px;
-}
-.cloud.three::after {
-	border-bottom-right-radius: 7.5px;
-}
-.cloud.four::after {
-	border-bottom-left-radius: 7.5px;
 }
 .cloud-white {
 	position: absolute;
