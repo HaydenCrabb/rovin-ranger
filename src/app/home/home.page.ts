@@ -3,6 +3,7 @@ import { ScoreService } from '../services/score.service';
 import { Storage } from '@ionic/storage-angular';
 import { SetupService } from '../services/setup.service';
 import { interval, Subscription } from 'rxjs';
+import { Cloud } from '../models/variables';
 
 
 @Component({
@@ -17,25 +18,32 @@ export class HomePage implements OnInit {
   subscription!: Subscription;
   demoTimer = interval(15000);
 
+  
+
 
   constructor(private storage: Storage, private scoreService: ScoreService, public setupService: SetupService) {
     
   }
+  
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
   }
 
   async ngAfterViewInit() {
-    this.setupService.setup(this.currentPath);
+    this.setupService.setup();
     clearInterval(this.setupService.timer);
     clearInterval(this.setupService.enemyTimer);
     window.setTimeout(() => {
       this.startDemo();
     }, 1000);
     
+    // Fire off cowboy after brief delay
     window.setTimeout(() => {
     this.setupService.sendInTheCowboy();
+
+    // set how often to shoot clouds across screen
+
     }, 1000);
 
     this.subscription = this.demoTimer.subscribe(val => this.setupService.sendInTheCowboy());
@@ -47,6 +55,7 @@ export class HomePage implements OnInit {
   }
 
   startDemo (){
+    clearInterval(this.setupService.cloudTimer)
     clearInterval(this.setupService.timer);
     clearInterval(this.setupService.enemyTimer);
     this.setupService.timer = window.setInterval(() => {
@@ -59,6 +68,8 @@ export class HomePage implements OnInit {
       this.setupService.adjustEnemiesDirection();
       this.setupService.demoMoveEnemy();
     }, enemyPlayingInterval);
+
+    this.setupService.cloudTimer;
   }
 
 }

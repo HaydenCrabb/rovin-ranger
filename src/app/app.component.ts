@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ScoreService } from './services/score.service';
+import { SetupService } from './services/setup.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { ScoreService } from './services/score.service';
 
 export class AppComponent {
 
-  constructor(private scoreService: ScoreService) {}
+  constructor(private scoreService: ScoreService, public setupService: SetupService) {}
   ngOnInit() {
 
     if(localStorage.getItem('savedScore')){
