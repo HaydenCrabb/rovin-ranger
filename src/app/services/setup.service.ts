@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Wall, Zone, Point, Character, Cloud } from '../models/variables';
+import { Router } from '@angular/router';
 import { max } from 'rxjs';
+import { interval, Subscription } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +35,11 @@ export class SetupService {
   maxWalls = 0;
   walls: Wall[] = [];
   totalClouds = 0;
-  maxClouds = 30;
 
-  cloudClusters: Cloud[][] = []
+  allClouds: Cloud[] = []
+
+  cloudClusters: Cloud[][] = [];
+  cloudLoop = 0;
 
   playingInterval = 100;
   enemies: Character[] = [];
@@ -43,11 +47,14 @@ export class SetupService {
   timer: number = 0;
   enemyTimer: number = 0;
 
-  constructor() {
+  cloudTimer = setInterval(this.moveClouds, 1000);
+
+  constructor(public router: Router) {
 
   }
 
-  setup(currentPath: string) {
+
+  setup() {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
 
@@ -69,10 +76,8 @@ export class SetupService {
     this.coveringWalls[2] = { top: window.innerHeight - (remaindery / 2), left: 0, height: (remaindery / 2) + 1, width: window.innerWidth };
     this.coveringWalls[3] = { top: 0, left: window.innerWidth - (remainderx / 2), height: window.innerHeight, width: remainderx / 2 };
 
-    this.currentPath = currentPath;
-
     // BOOLEAN IS INTENDED TO SPECIFY IF PLAY PAGE, IF IT ISN'T, IT WON'T MAKE POINTS AREA
-    if (currentPath == '/play') {
+    if (this.router.url == '/play') {
       this.createPointsArea();
       this.createWalls();
       this.roundOffWalls();
@@ -82,7 +87,7 @@ export class SetupService {
     }
     else {
       //Remove default assets from board
-      this.createCloudCluster();
+      // this.createCloudCluster();
       this.upgradePosition.top = -100;
       this.upgradePosition.left = -100;
 
@@ -464,6 +469,13 @@ export class SetupService {
 
   demoMove() {
     this.actuallyMove(this.characterPosition);
+
+    const randomNum = Math.floor(Math.random() * 50) + 1;
+    // Check if the random number is 1
+    if (randomNum === 1) {
+      this.buildCloud();
+    }
+    this.moveClouds(this.allClouds);
   }
 
   demoMoveEnemy() {
@@ -492,8 +504,6 @@ export class SetupService {
     // overwrite location of cowboy
 
     this.enemies = [];
-
-    console.log('sending cowboy');
 
     var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
     var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
@@ -559,72 +569,52 @@ export class SetupService {
 
   }
 
-  //I would like to apply the same logic from wall building to make clouds, with some adjustments of course
-  createCloudCluster() {
+  buildCloud() {
+    var previousDirection = 0
+    // Set strating position of cloud, starts offscreen at random Y value
+    var xPosition = -300;
+    var yPosition = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+    yPosition = Math.ceil(yPosition / this.characterSize) * this.characterSize;
 
-    console.log('creating clouds')
+    //Create a new cloud object
+    var cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
+    this.allClouds.push(cloudPuff);
 
-    var previousDirection = 0;
+    //Maximum cloud size is 50, minimum is 20, pick a random number in that range
+    var cloudSize = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
 
-    for (var i = 0; i < 10; i++) {
-      this.cloudClusters[i] = []
-      console.log('creating new cluster')
-      var topx = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
-      var leftx = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+    for (let i = 0; i < cloudSize; i++) {
+      var randomDirection = this.getRandomFour(previousDirection);
 
-      topx = Math.ceil(topx / this.characterSize) * this.characterSize;
-      leftx = Math.ceil(leftx / this.characterSize) * this.characterSize;
-
-
-      console.log('cluster placed at ' + topx + " " + leftx);
-
-        const newCloudID: string = "cloud" + this.totalClouds;
-        var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
-        this.cloudClusters[i].push(cloud);
-        this.totalClouds++;
-
-        var random2: number = 0;
-        while (this.cloudClusters[i].length < 6) {
-          //then lets add another cloudPuff!
-            random2 = this.getRandomFour(previousDirection)
-
-          if (random2 == 1) {
-            const newCloudID: string = "cloud" + this.totalClouds;
-            topx = topx - this.characterSize;
-            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
-            previousDirection = 1;
-            this.cloudClusters[i].push(cloud);
-            this.totalClouds++;
-          }
-          else if (random2 == 2) {
-            const newCloudID: string = "cloud" + this.totalClouds;
-            leftx = leftx + this.characterSize;
-            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
-            previousDirection = 2;
-            this.cloudClusters[i].push(cloud);
-            this.totalClouds++;
-          }
-          else if (random2 == 3) {
-            const newCloudID: string = "cloud" + this.totalClouds;
-            topx = topx + this.characterSize;
-            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
-            previousDirection = 3;
-            this.cloudClusters[i].push(cloud);
-            this.totalClouds++;
-          }
-          else if (random2 == 4) {
-            const newCloudID: string = "cloud" + this.totalClouds;
-            leftx = leftx - this.characterSize
-            var cloud = new Cloud(topx, leftx, 0, 0, 0, 0, false, false, false, false, newCloudID);
-            previousDirection = 4;
-            this.cloudClusters[i].push(cloud);
-            this.totalClouds++;
-          }
-        }
-
-      console.log(this.cloudClusters);
-
-
+      if (randomDirection == 1) {
+        yPosition -= this.characterSize;
+      }
+      else if (randomDirection == 2) {
+        xPosition += this.characterSize;
+      }
+      else if (randomDirection == 3) {
+        yPosition += this.characterSize;
+      }
+      else if (randomDirection == 4) {
+        xPosition -= this.characterSize;
+      }
+      cloudPuff = new Cloud(yPosition, xPosition, 0, 0, 0, 0, false, false, false, false);
+      this.allClouds.push(cloudPuff);
     }
+  }
+
+  moveClouds(allClouds: Cloud[]) {
+    allClouds = this.allClouds;
+
+    if (allClouds == undefined){
+      return;
+    }
+
+    allClouds.forEach((cloudPuff: Cloud, index: number) => {
+      cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
+      if (cloudPuff.position.left > this.playingWidth) {
+        allClouds.splice(index, 1);
+      }
+    });
   }
 }

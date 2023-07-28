@@ -214,6 +214,8 @@ p {
 	left: 600px;
 }
 
+
+// All my cloud styling + animations
 .cloud {
 	position: absolute;
 	width: 15px;
@@ -222,6 +224,8 @@ p {
 	left: 0px;
 	background-color: #FFFFFF80;
 	border: 1px solid #FFEED6 inset;
+	box-shadow: 0, 0, 7.5px, 5px, #FFFFFF80;
+	border-radius: 7.5px;
 }
 .cloud::after {
 	width: 15px;
@@ -233,6 +237,8 @@ p {
 	z-index: -1;
 	top: 5px;
 	left: -5px;
+	box-shadow: 0, 0, 7.5px, 5px, #FFFFFF80;
+	left: calc(125%);
 }
 .cloud.one::after {
 	border-top-left-radius: 7.5px;
@@ -254,4 +260,14 @@ p {
 	left: 0px;
 	background-color: white;
 	border: 1px solid white inset;
+}
+
+@keyframes moveTheCloud {
+	from {}
+	to {margin-left: 200%;}
+}
+
+.moveCloud {
+	animation-name: moveTheCloud;
+	animation-duration: 30s;
 }

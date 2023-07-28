@@ -31,16 +31,22 @@
       [style.borderTopRightRadius]="wall.borderRadius.borderTopRightRadius + 'px'"
       [style.borderBottomLeftRadius]="wall.borderRadius.borderBottomLeftRadius + 'px'"
       [style.borderBottomRightRadius]="wall.borderRadius.borderBottomRightRadius + 'px'"></div>
-    <div *ngFor="let clouds of setupService.cloudClusters">
-      <div [ngClass]="{cloud: true, one: cloud.classes.one, two: cloud.classes.two, three: cloud.classes.three, four:
+    <div *ngFor="let cloud of setupService.allClouds" [ngClass]=" {cloud: true, one: cloud.classes.one, two: cloud.classes.two, three: cloud.classes.three, four:
+      cloud.classes.four}" [style.top]="cloud.position.top + 'px'"
+      [style.left]="cloud.position.left + 'px'"
+      [style.borderTopLeftRadius]="cloud.borderRadius.borderTopLeftRadius + 'px'"
+      [style.borderTopRightRadius]="cloud.borderRadius.borderTopRightRadius + 'px'"
+      [style.borderBottomLeftRadius]="cloud.borderRadius.borderBottomLeftRadius + 'px'"
+      [style.borderBottomRightRadius]="cloud.borderRadius.borderBottomRightRadius + 'px'">
+      <!-- <div [ngClass]=" {cloud: true, one: cloud.classes.one, two: cloud.classes.two, three: cloud.classes.three, four:
         cloud.classes.four}" *ngFor="let cloud of clouds" [style.top]="cloud.position.top + 'px'"
         [style.left]="cloud.position.left + 'px'"
         [style.borderTopLeftRadius]="cloud.borderRadius.borderTopLeftRadius + 'px'"
         [style.borderTopRightRadius]="cloud.borderRadius.borderTopRightRadius + 'px'"
         [style.borderBottomLeftRadius]="cloud.borderRadius.borderBottomLeftRadius + 'px'"
-        [style.borderBottomRightRadius]="cloud.borderRadius.borderBottomRightRadius + 'px'"></div>
+        [style.borderBottomRightRadius]="cloud.borderRadius.borderBottomRightRadius + 'px'"></div> -->
     </div>
-    </div>
-    <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'"
-      [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
+  </div>
+  <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'"
+    [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
 </ion-content>

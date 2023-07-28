@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ScoreService } from '../services/score.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -10,7 +11,7 @@ import { ScoreService } from '../services/score.service';
 export class ModalPage implements OnInit {
   currentHighScore: any;
 
-  constructor(public myModal: ModalController, public params: NavParams, private scoreService: ScoreService) { 
+  constructor(public myModal: ModalController, public params: NavParams, private scoreService: ScoreService, private router: Router) { 
   }
 
   ngOnInit() {
@@ -48,6 +49,10 @@ export class ModalPage implements OnInit {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.myModal.dismiss();
+  }
+
+  dismissToHome() {
+    this.dismiss();
   }
 
 }

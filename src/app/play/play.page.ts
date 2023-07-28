@@ -30,13 +30,12 @@ export class PlayPage implements OnInit, AfterViewInit {
   async ngOnInit() {
     await this.storage.create();
     this.resetBoard();
-    clearInterval(this.setupService.timer);
-    clearInterval(this.setupService.enemyTimer);
-    this.setupService.setup(this.currentPath);
+    this.setupService.setup();
     
   }
 
   async ngAfterViewInit() {
+
     window.setTimeout(() => {
       console.log("boom starting");
       // this.playBGMusic();
@@ -61,6 +60,13 @@ export class PlayPage implements OnInit, AfterViewInit {
       gestureX.enable();
     
   }
+
+  async ngOnDestroy() {
+    clearInterval(this.setupService.timer);
+    clearInterval(this.setupService.enemyTimer);
+    this.stopBGMusic();
+  }
+
 
   //FUNCTIONS FOR TURNING ON/OFF BACKGROUND MUSIC
   public playBGMusic() {
