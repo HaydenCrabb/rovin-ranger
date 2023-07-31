@@ -139,6 +139,7 @@ export class SetupService {
       if (this.theresAWallThere(topx, leftx) == false) {
         if (this.totalWalls < this.maxWalls) {
           if (!this.inNoGoZone(topx, leftx)) {
+
             var wall = new Wall(topx, leftx, false, false, false, false);
 
             this.walls.push(wall);
@@ -223,6 +224,7 @@ export class SetupService {
     var self = this;
     var size = this.characterSize;
     this.walls.forEach(function (wall) {
+      var radius = size / 2;
 
       var wallLeft = !self.theresAWallThere(wall.position.left - size, wall.position.top);
       var wallTop = !self.theresAWallThere(wall.position.left, wall.position.top - size);
@@ -463,13 +465,6 @@ export class SetupService {
 
   demoMove() {
     this.actuallyMove(this.characterPosition);
-
-    const randomNum = Math.floor(Math.random() * 50) + 1;
-    // Check if the random number is 1
-    if (randomNum === 1) {
-      this.buildCloud();
-    }
-    this.moveClouds(this.allClouds);
   }
 
   demoMoveEnemy() {
@@ -477,6 +472,13 @@ export class SetupService {
     this.enemies.forEach(function (enemy) {
       self.actuallyMove(enemy);
     });
+
+    const randomNum = Math.floor(Math.random() * 50) + 1;
+    // Check if the random number is 1
+    if (randomNum === 1) {
+      this.buildCloud();
+    }
+    this.moveClouds(this.allClouds);
 
   }
 
@@ -563,6 +565,34 @@ export class SetupService {
 
   }
 
+  selectPoint(maxX: number, minX: number, maxY: number, minY: number) {
+
+    const occupiedPositions = new Set();
+
+    const gridMinX = Math.ceil(minX / this.characterSize);
+    const gridMaxX = Math.floor(maxX / this.characterSize);
+    const gridMinY = Math.ceil(minY / this.characterSize);
+    const gridMaxY = Math.floor(maxY / this.characterSize);
+
+    let randomX, randomY, hash;
+    do {
+      // Generate random x and y values within the grid bounds
+      randomX = Math.floor(Math.random() * (gridMaxX - gridMinX + 1) + gridMinX);
+      randomY = Math.floor(Math.random() * (gridMaxY - gridMinY + 1) + gridMinY);
+
+      // Calculate a hash representing the position (x, y)
+      hash = `${randomX}_${randomY}`;
+    } while (occupiedPositions.has(hash));
+
+    // Mark the position as occupied
+    occupiedPositions.add(hash);
+
+    randomX = randomX * this.characterSize;
+    randomY = randomY * this.characterSize;
+
+    return { x: randomX, y: randomY }
+  }
+
   buildCloud() {
     var previousDirection = 0
     // Set strating position of cloud, starts offscreen at random Y value
@@ -572,42 +602,78 @@ export class SetupService {
 
     //Create a new cloud object
     var cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
-    this.allClouds.push(cloudPuff);
 
-    //Maximum cloud size is 50, minimum is 20, pick a random number in that range
-    var cloudSize = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+    // Create a 5x5 grid in which all future clouds must exist
+    var xMax = xPosition + (5 * this.characterSize);
+    var xMin = xPosition;
+    var yMax = yPosition;
+    var yMin = yPosition + (6 * this.characterSize)
+
+    //Maximum cloud size is 20, minimum is 10, pick a random number in that range
+    var cloudSize = Math.floor(Math.random() * (50 - 40 + 1)) + 40;
 
     for (let i = 0; i < cloudSize; i++) {
-      var randomDirection = this.getRandomFour(previousDirection);
 
-      if (randomDirection == 1) {
-        yPosition -= this.characterSize;
+      //function to select a random point within defined space
+      xPosition = this.selectPoint(xMax, xMin, yMax, yMin).x
+      yPosition = this.selectPoint(xMax, xMin, yMax, yMin).y
+
+      if (this.theresACloudThere(xPosition, yPosition) == false){
+        cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+        this.allClouds.push(cloudPuff);
       }
-      else if (randomDirection == 2) {
-        xPosition += this.characterSize;
-      }
-      else if (randomDirection == 3) {
-        yPosition += this.characterSize;
-      }
-      else if (randomDirection == 4) {
-        xPosition -= this.characterSize;
-      }
-      cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
-      this.allClouds.push(cloudPuff);
+
+
     }
+
+    this.roundOffClouds();
+
   }
 
   moveClouds(allClouds: Cloud[]) {
     allClouds = this.allClouds;
 
-    if (allClouds == undefined){
+    if (allClouds == undefined) {
       return;
     }
 
     allClouds.forEach((cloudPuff: Cloud, index: number) => {
       cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
-      if (cloudPuff.position.left > this.playingWidth) {
+      if (cloudPuff.position.left > this.playingWidth + 100) {
         allClouds.splice(index, 1);
+      }
+    });
+  }
+
+  theresACloudThere(x: any, y: any) {
+    for (var i = this.allClouds.length - 1; i >= 0; i--) {
+      if (this.allClouds[i].position.top == y && this.allClouds[i].position.left == x)
+        return true;
+    }
+    return false;
+  }
+
+  roundOffClouds() {
+    var self = this;
+    var size = this.characterSize;
+    this.allClouds.forEach(function (cloud) {
+
+      var cloudLeft = !self.theresACloudThere(cloud.position.left - size, cloud.position.top);
+      var cloudTop = !self.theresACloudThere(cloud.position.left, cloud.position.top - size);
+      var cloudRight = !self.theresACloudThere(cloud.position.left + size, cloud.position.top);
+      var cloudDown = !self.theresACloudThere(cloud.position.left, cloud.position.top + size);
+
+      if (cloudLeft && cloudTop) {
+        cloud.classes.top_left = true;
+      }
+      if (cloudTop && cloudRight) {
+        cloud.classes.top_right = true;
+      }
+      if (cloudRight && cloudDown) {
+        cloud.classes.bottom_right = true;
+      }
+      if (cloudDown && cloudLeft) {
+        cloud.classes.bottom_left = true;
       }
     });
   }
