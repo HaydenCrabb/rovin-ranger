@@ -465,13 +465,6 @@ export class SetupService {
 
   demoMove() {
     this.actuallyMove(this.characterPosition);
-
-    const randomNum = Math.floor(Math.random() * 50) + 1;
-    // Check if the random number is 1
-    if (randomNum === 1) {
-      this.buildCloud();
-    }
-    this.moveClouds(this.allClouds);
   }
 
   demoMoveEnemy() {
@@ -479,6 +472,13 @@ export class SetupService {
     this.enemies.forEach(function (enemy) {
       self.actuallyMove(enemy);
     });
+
+    const randomNum = Math.floor(Math.random() * 50) + 1;
+    // Check if the random number is 1
+    if (randomNum === 1) {
+      this.buildCloud();
+    }
+    this.moveClouds(this.allClouds);
 
   }
 
@@ -610,7 +610,7 @@ export class SetupService {
     var yMin = yPosition + (6 * this.characterSize)
 
     //Maximum cloud size is 20, minimum is 10, pick a random number in that range
-    var cloudSize = Math.floor(Math.random() * (50 - 35 + 1)) + 35;
+    var cloudSize = Math.floor(Math.random() * (50 - 40 + 1)) + 40;
 
     for (let i = 0; i < cloudSize; i++) {
 
@@ -618,10 +618,16 @@ export class SetupService {
       xPosition = this.selectPoint(xMax, xMin, yMax, yMin).x
       yPosition = this.selectPoint(xMax, xMin, yMax, yMin).y
 
+      if (this.theresACloudThere(xPosition, yPosition) == false){
+        cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+        this.allClouds.push(cloudPuff);
+      }
 
-      cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
-      this.allClouds.push(cloudPuff);
+
     }
+
+    this.roundOffClouds();
+
   }
 
   moveClouds(allClouds: Cloud[]) {
@@ -633,8 +639,41 @@ export class SetupService {
 
     allClouds.forEach((cloudPuff: Cloud, index: number) => {
       cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
-      if (cloudPuff.position.left > this.playingWidth) {
+      if (cloudPuff.position.left > this.playingWidth + 100) {
         allClouds.splice(index, 1);
+      }
+    });
+  }
+
+  theresACloudThere(x: any, y: any) {
+    for (var i = this.allClouds.length - 1; i >= 0; i--) {
+      if (this.allClouds[i].position.top == y && this.allClouds[i].position.left == x)
+        return true;
+    }
+    return false;
+  }
+
+  roundOffClouds() {
+    var self = this;
+    var size = this.characterSize;
+    this.allClouds.forEach(function (cloud) {
+
+      var cloudLeft = !self.theresACloudThere(cloud.position.left - size, cloud.position.top);
+      var cloudTop = !self.theresACloudThere(cloud.position.left, cloud.position.top - size);
+      var cloudRight = !self.theresACloudThere(cloud.position.left + size, cloud.position.top);
+      var cloudDown = !self.theresACloudThere(cloud.position.left, cloud.position.top + size);
+
+      if (cloudLeft && cloudTop) {
+        cloud.classes.top_left = true;
+      }
+      if (cloudTop && cloudRight) {
+        cloud.classes.top_right = true;
+      }
+      if (cloudRight && cloudDown) {
+        cloud.classes.bottom_right = true;
+      }
+      if (cloudDown && cloudLeft) {
+        cloud.classes.bottom_left = true;
       }
     });
   }

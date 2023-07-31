@@ -245,9 +245,9 @@ p {
 	height: 15px;
 	top: 0px;
 	left: 0px;
-	background-color: #FFFFFF80;
+	background-color: #ffffffda;
 	border: 1px solid #FFEED6 inset;
-	transition: 200ms;
+	transition: 100ms;
 }
 .cloud::after {
 	width: 15px;
@@ -259,7 +259,6 @@ p {
 	z-index: -1;
 	top: 5px;
 	left: -5px;
-	left: calc(125%);
 }
 // .cloud.one::after {
 // 	border-top-left-radius: 7.5px;
