@@ -31,7 +31,8 @@ export class SetupService {
   numRows = 0;
   numCols = 0;
   visited: boolean[][] = [];
-  countOfSpaces = 0
+  countOfSpaces = 0;
+  
   highscore = 0;
   playing = false;
   noGoZone: Zone[] = [];
@@ -40,7 +41,7 @@ export class SetupService {
   walls: Wall[] = [];
   totalClouds = 0;
 
-  allClouds: Cloud[] = []
+  allClouds: Cloud[] = [];
 
   cloudClusters: Cloud[][] = [];
   cloudLoop = 0;
@@ -82,28 +83,27 @@ export class SetupService {
 
     // BOOLEAN IS INTENDED TO SPECIFY IF PLAY PAGE, IF IT ISN'T, IT WON'T MAKE POINTS AREA
     if (this.router.url == '/play') {
-      this.createPointsArea();
+      var blank_spaces = this.createPointsArea();
       this.createWalls();
       this.roundOffWalls();
       this.createUpgrade();
       this.createEnemy();
       this.moveInCharacter();
 
+      /* FUNCTIONALITY TO CHECK FOR INACCESSIBLE AREAS. (Unecissary on home page.) */
       this.numRows = this.playingHeight / this.characterSize;
       this.numCols = this.playingWidth / this.characterSize;
       this.visited = Array.from({ length: this.numCols }, () => Array(this.numRows).fill(false));
-      console.log(this.isConnectedDFS(this.characterPosition.position.left, this.characterPosition.position.top));
-      
-      console.log(this.noGoZone)
-      console.log(this.playingArea / this.characterSize - this.totalWalls);
-      console.log(this.countOfSpaces);
-      // console.log(this.checkVisited());
 
-      
+      this.isConnectedDFS(0, 0);
+      if ((this.playingArea / this.characterSize - this.totalWalls - blank_spaces)!= this.countOfSpaces)
+      {
+        this.setup_reset();
+        this.setup();
+      }
     }
     else {
-      //Remove default assets from board
-      // this.createCloudCluster();
+      //Position default assets off board
       this.upgradePosition.top = -100;
       this.upgradePosition.left = -100;
 
@@ -156,7 +156,7 @@ export class SetupService {
 
   createAWall(topx: number, leftx: number, previousDirection: number, additionalWall: boolean) {
     if ((topx >= 0 && topx < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      if (this.theresAWallThere(topx, leftx) == false) {
+      if (!this.theresAWallThere(topx, leftx)) {
         if (this.totalWalls < this.maxWalls) {
           if (!this.inNoGoZone(topx, leftx)) {
 
@@ -265,7 +265,7 @@ export class SetupService {
       }
     });
   }
-  createPointsArea() {
+  createPointsArea():number {
     var numberOfSpaces = this.playingWidth / this.characterSize;
     var even = (numberOfSpaces % 2 == 0 ? true : false);
     var numberOfWalls = 0;
@@ -294,10 +294,9 @@ export class SetupService {
     this.createAWall(this.playingHeight - (this.characterSize), firstSpot + (this.characterSize * (i - 1)), 0, false);
     this.createAWall(this.playingHeight - (this.characterSize * 2), firstSpot + (this.characterSize * (i - 1)), 0, false);
 
-    this.totalWalls += numberOfWalls + 4;
-
     var zone = new Zone(this.pointsZone.position.top, this.pointsZone.position.left, this.pointsZone.height, this.pointsZone.width);
     this.noGoZone.push(zone);
+    return (even ? 8 : 10); // if it is an even points area, there will be 8 blank spaces, otherwise there is 10. 
   }
 
   moveInCharacter() {
@@ -698,38 +697,22 @@ export class SetupService {
     });
   }
   //DFS function to make sure all areas of the map are accessible
-  isCoordinateValid(x: number, y: number, numRows: number, numCols: number): boolean {
-    return x >= 0 && x / this.characterSize < numCols && y >= 0 && y / this.characterSize < numRows;
+  isCoordinateValid(x: number, y: number): boolean {
+    return x >= 0 && x < this.playingWidth && y >= 0 && y < this.playingHeight;
   }
 
-  isConnectedDFS(x: number, y: number): boolean {
-    // if (!this.isCoordinateValid(x, y, this.numRows, this.numCols)) {
-    //   console.log('failing at not valid coordinate statement');
-    //   return false;
-    // }
-    //   else if (this.visited[x/this.characterSize][y/this.characterSize])
-    //   {
-    //     console.log("failiing, already visited");
-    //     return false;
-    //   }
-    // if (this.theresAWallThere(x, y))
-    // {
-    //   console.log("failing, wall found.");
-    //   return false;
-    // }
-    // if (this.inNoGoZone(x,y))
-    // {
-    //   console.log("failing, in no go zone.");
-    //   return false;
-    // }
-
-    if (!this.isCoordinateValid(x, y, this.numRows, this.numCols) || this.visited[x/this.characterSize][y/this.characterSize] || this.theresAWallThere(x, y) || this.inNoGoZone(x,y)) {
-      return false;
+  isConnectedDFS(x: number, y: number){
+    if (!this.isCoordinateValid(x, y) || this.visited[x/this.characterSize][y/this.characterSize]) {
+      return;
     }
-    else {
-      this.countOfSpaces++;
+    if (this.theresAWallThere(x, y))
+    {
+      this.visited[x/this.characterSize][y/this.characterSize] = true;
+      return;
     }
 
+    //if they make it to here, we have a valid space. 
+    this.countOfSpaces++;
     this.visited[x /this.characterSize][y / this.characterSize] = true;
 
     const directions: [number, number][] = [
@@ -739,30 +722,42 @@ export class SetupService {
     for (const [dx, dy] of directions) {
       const newX = x + dx;
       const newY = y + dy;
-      if (this.isConnectedDFS(newX, newY)) {
-        return true;
-      }
+      this.isConnectedDFS(newX, newY);
     }
-    return false;
   }
+  setup_reset()
+  {
+      this.characterPosition.position.top = 60;
+      this.characterPosition.position.left = 70;
+      this.characterPosition.direction = 3;
 
-  checkVisited(){
-    for (var i = 0; i < this.visited.length; i++){
-      for (var j = 0; j < this.visited[i].length; j++){
-        if (this.visited[i][j] == false){
-          this.countOfSpaces++;
-        }
-      }
-    }
+      this.upgradePosition.top = 0;
+      this.upgradePosition.left = 0;
 
-    if (this.countOfSpaces == this.totalWalls + this.noGoZone.length){
-      console.log('No off limit areas');
-      return true;
-    }
-    else {
-      console.log(this.countOfSpaces);
-      console.log(this.totalWalls + this.noGoZone.length)
-      return false;
-    }
+      this.playingFieldPosition.top = 0;
+      this.playingFieldPosition.left = 0;
+
+      this.pointsZone.position.top = 0;
+      this.pointsZone.position.left = 0;
+      this.pointsZone.height = 0;
+      this.pointsZone.width = 0;
+      this.pointsValue = 0;
+
+      this.playing = false;
+      this.totalWalls = 0;
+      this.walls = [];
+      this.enemies = [];
+      this.gameOver = false;
+
+      this.visited = [];
+      this.countOfSpaces = 0;
+      this.allClouds = [];
+
+      this.cloudClusters = [];
+      this.cloudLoop = 0;
+
+      clearInterval(this.timer);
+      clearInterval(this.enemyTimer);
+      clearInterval(this.cloudTimer);
   }
 }

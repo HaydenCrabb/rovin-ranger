@@ -29,7 +29,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.storage.create();
-    this.resetBoard();
+    this.setupService.setup_reset();
     this.setupService.setup();
     
   }
@@ -82,16 +82,16 @@ export class PlayPage implements OnInit, AfterViewInit {
   private onMoveX(detail: GestureDetail) {
 
     const { deltaX, velocityX, deltaY, velocityY } = detail;
-    if (deltaX > 0 && velocityX > 1){
+    if (deltaX > 0 && velocityX > 0.75){
       this.setupService.characterPosition.direction = 2;
     }
-    else if ( deltaX < 0 && velocityX < -1){
+    else if ( deltaX < 0 && velocityX < -0.75){
       this.setupService.characterPosition.direction = 4;
     }
-    else if (deltaY > 0 && velocityY > 1){
+    else if (deltaY > 0 && velocityY > 0.75){
       this.setupService.characterPosition.direction = 3;
     }
-    else if ( deltaY < 0 && velocityY < -1){
+    else if ( deltaY < 0 && velocityY < -0.75){
       this.setupService.characterPosition.direction = 1;
     }
 
@@ -139,7 +139,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   checkIfGameOver()
   {
     var self = this;
-    this.setupService.enemies.forEach(function(enemy){
+    self.setupService.enemies.forEach(function(enemy){
       if (self.setupService.characterPosition.position.top == enemy.position.top && self.setupService.characterPosition.position.left == enemy.position.left)
       {
         //Big time game over.
@@ -147,6 +147,7 @@ export class PlayPage implements OnInit, AfterViewInit {
         self.setupService.gameOver = true;
 
         var newHighscore = false;
+        //Current Error, self.setupService.Highscore is always 0!!!
         if (self.setupService.pointsValue > self.setupService.highscore)
           {
             self.storage.set('highscore', self.setupService.pointsValue);
@@ -160,33 +161,6 @@ export class PlayPage implements OnInit, AfterViewInit {
         return;
       }
     });
-  }
-
-  resetBoard()
-  {
-    this.setupService.characterPosition.position.top = 60;
-    this.setupService.characterPosition.position.left = 70;
-    this.setupService.characterPosition.direction = 3;
-
-    this.setupService.upgradePosition.top = 0;
-    this.setupService.upgradePosition.left = 0;
-
-    this.setupService.playingFieldPosition.top = 0;
-    this.setupService.playingFieldPosition.left = 0;
-
-    this.setupService.pointsZone.position.top = 0;
-    this.setupService.pointsZone.position.left = 0;
-    this.setupService.pointsZone.height = 0;
-    this.setupService.pointsZone.width = 0;
-    this.setupService.pointsValue = 0;
-
-    this.setupService.playing = false;
-    this.setupService.totalWalls = 0;
-    this.setupService.walls = [];
-    this.setupService.enemies = [];
-    this.setupService.gameOver = false;
-    clearInterval(this.setupService.timer);
-    clearInterval(this.setupService.enemyTimer);
   }
 
   reset(){
