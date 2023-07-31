@@ -28,6 +28,10 @@ export class SetupService {
   playingWidth = 0;
   playingHeight = 0;
   playingArea = 0;
+  numRows = 0;
+  numCols = 0;
+  visited: boolean[][] = [];
+  countOfSpaces = 0
   highscore = 0;
   playing = false;
   noGoZone: Zone[] = [];
@@ -84,6 +88,18 @@ export class SetupService {
       this.createUpgrade();
       this.createEnemy();
       this.moveInCharacter();
+
+      this.numRows = this.playingHeight / this.characterSize;
+      this.numCols = this.playingWidth / this.characterSize;
+      this.visited = Array.from({ length: this.numCols }, () => Array(this.numRows).fill(false));
+      console.log(this.isConnectedDFS(this.characterPosition.position.left, this.characterPosition.position.top));
+      
+      console.log(this.noGoZone)
+      console.log(this.playingArea / this.characterSize - this.totalWalls);
+      console.log(this.countOfSpaces);
+      // console.log(this.checkVisited());
+
+      
     }
     else {
       //Remove default assets from board
@@ -99,6 +115,10 @@ export class SetupService {
       this.roundOffWalls();
       this.moveInCharacter();
 
+
+      this.numRows = this.playingHeight / this.characterSize;
+      this.numCols = this.playingWidth / this.characterSize;
+      this.visited = Array.from({ length: this.numRows }, () => Array(this.numCols).fill(false));
     }
   }
 
@@ -676,5 +696,73 @@ export class SetupService {
         cloud.classes.bottom_left = true;
       }
     });
+  }
+  //DFS function to make sure all areas of the map are accessible
+  isCoordinateValid(x: number, y: number, numRows: number, numCols: number): boolean {
+    return x >= 0 && x / this.characterSize < numCols && y >= 0 && y / this.characterSize < numRows;
+  }
+
+  isConnectedDFS(x: number, y: number): boolean {
+    // if (!this.isCoordinateValid(x, y, this.numRows, this.numCols)) {
+    //   console.log('failing at not valid coordinate statement');
+    //   return false;
+    // }
+    //   else if (this.visited[x/this.characterSize][y/this.characterSize])
+    //   {
+    //     console.log("failiing, already visited");
+    //     return false;
+    //   }
+    // if (this.theresAWallThere(x, y))
+    // {
+    //   console.log("failing, wall found.");
+    //   return false;
+    // }
+    // if (this.inNoGoZone(x,y))
+    // {
+    //   console.log("failing, in no go zone.");
+    //   return false;
+    // }
+
+    if (!this.isCoordinateValid(x, y, this.numRows, this.numCols) || this.visited[x/this.characterSize][y/this.characterSize] || this.theresAWallThere(x, y) || this.inNoGoZone(x,y)) {
+      return false;
+    }
+    else {
+      this.countOfSpaces++;
+    }
+
+    this.visited[x /this.characterSize][y / this.characterSize] = true;
+
+    const directions: [number, number][] = [
+      [-15, 0], [15, 0], [0, -15], [0, 15]
+    ];
+  
+    for (const [dx, dy] of directions) {
+      const newX = x + dx;
+      const newY = y + dy;
+      if (this.isConnectedDFS(newX, newY)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  checkVisited(){
+    for (var i = 0; i < this.visited.length; i++){
+      for (var j = 0; j < this.visited[i].length; j++){
+        if (this.visited[i][j] == false){
+          this.countOfSpaces++;
+        }
+      }
+    }
+
+    if (this.countOfSpaces == this.totalWalls + this.noGoZone.length){
+      console.log('No off limit areas');
+      return true;
+    }
+    else {
+      console.log(this.countOfSpaces);
+      console.log(this.totalWalls + this.noGoZone.length)
+      return false;
+    }
   }
 }
