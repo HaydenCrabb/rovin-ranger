@@ -3,7 +3,8 @@ import { ScoreService } from '../services/score.service';
 import { Storage } from '@ionic/storage-angular';
 import { SetupService } from '../services/setup.service';
 import { interval, Subscription } from 'rxjs';
-import { Cloud } from '../models/variables';
+import { AdMob, AdOptions } from '@capacitor-community/admob';
+
 
 
 @Component({
@@ -28,6 +29,19 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
+    const { status } = await AdMob.trackingAuthorizationStatus();
+    console.log(status);
+
+    if (status === 'notDetermined'){
+      console.log('Display information before ad loads first time');
+    }
+
+    AdMob.initialize({
+      requestTrackingAuthorization: true,
+      initializeForTesting: true,
+
+    })
+
   }
 
   async ngAfterViewInit() {
@@ -70,6 +84,16 @@ export class HomePage implements OnInit {
     }, enemyPlayingInterval);
 
     this.setupService.cloudTimer;
+  }
+
+  async showInterstitial(){
+    const options: AdOptions = {
+      //this is simply a test ad, we need top use it for development but we will need to change this when we deploy to our code
+      adId: 'ca-app-pub-3940256099942544/4411468910',
+      isTesting: true,
+    }
+    await AdMob.prepareInterstitial(options);
+    await AdMob.showInterstitial();
   }
 
 }
