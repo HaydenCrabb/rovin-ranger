@@ -19,6 +19,10 @@ export const routes: Routes = [
     path: 'modal',
     loadChildren: () => import('./myModal/myModal.module').then( m => m.ModalPageModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  },
 ];
 
 @NgModule({
