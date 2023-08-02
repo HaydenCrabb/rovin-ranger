@@ -1,5 +1,3 @@
-
-
 .points {
 	font-size: 8em;
 	text-align: center;
@@ -7,29 +5,42 @@
 	color: white;
 	width: 100%;
 	height: 50%;
-	-webkit-animation-name: enlarge; /* Safari 4.0 - 8.0 */
-	-webkit-animation-duration: 1.25s; /* Safari 4.0 - 8.0 */
+	-webkit-animation-name: enlarge;
+	/* Safari 4.0 - 8.0 */
+	-webkit-animation-duration: 1.25s;
+	/* Safari 4.0 - 8.0 */
 	animation-name: enlarge;
 	animation-duration: 1.25s;
+	z-index: 10;
 }
 
 .points-2 {
 	font-size: 8em;
-	margin-top: 0.03m;
+	margin-top: 0.03em;
+	margin-left: .03em;
 	text-align: center;
 	position: absolute;
 	color: #c75c58;
 	width: 100%;
 	height: 50%;
-	-webkit-animation-name: enlarge; /* Safari 4.0 - 8.0 */
-	-webkit-animation-duration: 1.25s; /* Safari 4.0 - 8.0 */
+	-webkit-animation-name: enlarge;
+	/* Safari 4.0 - 8.0 */
+	-webkit-animation-duration: 1.25s;
+	/* Safari 4.0 - 8.0 */
 	animation-name: enlarge;
 	animation-duration: 1.25s;
-	z-index: -1;
+	z-index: 5;
+}
+
+.points-container {
+	position: absolute;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .dropin {
-	--ion-background-color: rgba(0,0,0,0.8);
+	--ion-background-color: rgba(0, 0, 0, 0.8);
 }
 
 .main-button {
@@ -39,20 +50,24 @@
 	border-radius: 2em;
 	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
 }
+
 .margin-none {
 	margin: none;
 }
+
 .highscore {
-	margin-top: 0;
+	margin-top: 17%;
 	width: 100%;
 	text-align: center;
 	color: white;
 	font-size: 1.2em;
 }
-button > img {
+
+button>img {
 	height: 50%;
 	width: auto;
 }
+
 .space {
 	margin: 5px;
 	padding: 5px;
@@ -72,12 +87,47 @@ ion-col {
 }
 
 @keyframes enlarge {
-  0%   {font-size: 0px;}
-  60%  {
-  			font-size: 12em; margin-bottom: -.1em;
-  			-ms-transform: rotate(-7deg); /* IE 9 */
-			-webkit-transform: rotate(-7deg); /* Safari 3-8 */
-			transform: rotate(-7deg);
-  		}
-  100% {font-size: 8em}
+	0% {
+		font-size: 0px
+	}
+
+	88% {
+		font-size: 11.5em;
+		margin-bottom: -.95em;
+		-ms-transform: rotate(-6.8deg);
+		/* IE 9 */
+		-webkit-transform: rotate(-6.8deg);
+		/* Safari 3-8 */
+		transform: rotate(-6.8deg);
+
+		transition-timing-function: ease-in;
+	}
+
+	90% {
+		font-size: 12em;
+		margin-bottom: -.1em;
+		-ms-transform: rotate(-7deg);
+		/* IE 9 */
+		-webkit-transform: rotate(-7deg);
+		/* Safari 3-8 */
+		transform: rotate(-7deg);
+
+		transition-timing-function: ease-out;
+	}
+
+	95% {
+		font-size: 7.85em;
+		-ms-transform: rotate(3deg);
+		/* IE 9 */
+		-webkit-transform: rotate(3deg);
+		/* Safari 3-8 */
+		transform: rotate(3deg);
+
+		transition-timing-function: linear;
+	}
+
+	100% {
+		font-size: 8em;
+		transition-timing-function: ease-in;
+	}
 }

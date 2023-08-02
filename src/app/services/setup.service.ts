@@ -32,7 +32,7 @@ export class SetupService {
   numCols = 0;
   visited: boolean[][] = [];
   countOfSpaces = 0;
-  
+
   highscore = 0;
   playing = false;
   noGoZone: Zone[] = [];
@@ -47,12 +47,14 @@ export class SetupService {
   cloudLoop = 0;
 
   playingInterval = 100;
+  currentPlayingInterval = 0;
+  enemyPlayingInterval = 0;
+  cloudPlayingInterval = 0;
   enemies: Character[] = [];
   gameOver = false;
   timer: number = 0;
   enemyTimer: number = 0;
-
-  cloudTimer = setInterval(this.moveClouds, 1000);
+  cloudTimer: number = 0;
 
   constructor(public router: Router) {
 
@@ -96,8 +98,7 @@ export class SetupService {
       this.visited = Array.from({ length: this.numCols }, () => Array(this.numRows).fill(false));
 
       this.isConnectedDFS(0, 0);
-      if ((this.playingArea / this.characterSize - this.totalWalls - blank_spaces)!= this.countOfSpaces)
-      {
+      if ((this.playingArea / this.characterSize - this.totalWalls - blank_spaces) != this.countOfSpaces) {
         this.setup_reset();
         this.setup();
       }
@@ -265,7 +266,7 @@ export class SetupService {
       }
     });
   }
-  createPointsArea():number {
+  createPointsArea(): number {
     var numberOfSpaces = this.playingWidth / this.characterSize;
     var even = (numberOfSpaces % 2 == 0 ? true : false);
     var numberOfWalls = 0;
@@ -492,13 +493,6 @@ export class SetupService {
       self.actuallyMove(enemy);
     });
 
-    const randomNum = Math.floor(Math.random() * 50) + 1;
-    // Check if the random number is 1
-    if (randomNum === 1) {
-      this.buildCloud();
-    }
-    this.moveClouds(this.allClouds);
-
   }
 
   createDemoEnemy() {
@@ -637,7 +631,7 @@ export class SetupService {
       xPosition = this.selectPoint(xMax, xMin, yMax, yMin).x
       yPosition = this.selectPoint(xMax, xMin, yMax, yMin).y
 
-      if (this.theresACloudThere(xPosition, yPosition) == false){
+      if (this.theresACloudThere(xPosition, yPosition) == false) {
         cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
         this.allClouds.push(cloudPuff);
       }
@@ -701,63 +695,76 @@ export class SetupService {
     return x >= 0 && x < this.playingWidth && y >= 0 && y < this.playingHeight;
   }
 
-  isConnectedDFS(x: number, y: number){
-    if (!this.isCoordinateValid(x, y) || this.visited[x/this.characterSize][y/this.characterSize]) {
+  isConnectedDFS(x: number, y: number) {
+    if (!this.isCoordinateValid(x, y) || this.visited[x / this.characterSize][y / this.characterSize]) {
       return;
     }
-    if (this.theresAWallThere(x, y))
-    {
-      this.visited[x/this.characterSize][y/this.characterSize] = true;
+    if (this.theresAWallThere(x, y)) {
+      this.visited[x / this.characterSize][y / this.characterSize] = true;
       return;
     }
 
     //if they make it to here, we have a valid space. 
     this.countOfSpaces++;
-    this.visited[x /this.characterSize][y / this.characterSize] = true;
+    this.visited[x / this.characterSize][y / this.characterSize] = true;
 
     const directions: [number, number][] = [
       [-15, 0], [15, 0], [0, -15], [0, 15]
     ];
-  
+
     for (const [dx, dy] of directions) {
       const newX = x + dx;
       const newY = y + dy;
       this.isConnectedDFS(newX, newY);
     }
   }
-  setup_reset()
-  {
-      this.characterPosition.position.top = 60;
-      this.characterPosition.position.left = 70;
-      this.characterPosition.direction = 3;
+  setup_reset() {
+    this.characterPosition.position.top = 60;
+    this.characterPosition.position.left = 70;
+    this.characterPosition.direction = 3;
 
-      this.upgradePosition.top = 0;
-      this.upgradePosition.left = 0;
+    this.upgradePosition.top = 0;
+    this.upgradePosition.left = 0;
 
-      this.playingFieldPosition.top = 0;
-      this.playingFieldPosition.left = 0;
+    this.playingFieldPosition.top = 0;
+    this.playingFieldPosition.left = 0;
 
-      this.pointsZone.position.top = 0;
-      this.pointsZone.position.left = 0;
-      this.pointsZone.height = 0;
-      this.pointsZone.width = 0;
-      this.pointsValue = 0;
+    this.pointsZone.position.top = 0;
+    this.pointsZone.position.left = 0;
+    this.pointsZone.height = 0;
+    this.pointsZone.width = 0;
+    this.pointsValue = 0;
 
-      this.playing = false;
-      this.totalWalls = 0;
-      this.walls = [];
-      this.enemies = [];
-      this.gameOver = false;
+    this.playing = false;
+    this.totalWalls = 0;
+    this.walls = [];
+    this.enemies = [];
+    this.gameOver = false;
 
-      this.visited = [];
-      this.countOfSpaces = 0;
-      this.allClouds = [];
+    this.visited = [];
+    this.countOfSpaces = 0;
+    this.allClouds = [];
 
-      this.cloudClusters = [];
-      this.cloudLoop = 0;
+    this.cloudClusters = [];
+    this.cloudLoop = 0;
 
-      clearInterval(this.timer);
-      clearInterval(this.enemyTimer);
-      clearInterval(this.cloudTimer);
+    this.clearTimers();
+  }
+
+  //Functions to start all timers at once, player timer, enemy timer, cloud timer
+  clearTimers() {
+    clearInterval(this.timer);
+    clearInterval(this.enemyTimer);
+    clearInterval(this.cloudTimer);
+  }
+
+  setTimers() {
+    this.currentPlayingInterval = this.playingInterval;
+    
+    this.enemyPlayingInterval = (this.playingInterval * 1.4);
+
+    this.cloudPlayingInterval = (this.playingInterval * 2);
   }
 }
+
+

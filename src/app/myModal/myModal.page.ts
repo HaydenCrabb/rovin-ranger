@@ -2,17 +2,23 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ScoreService } from '../services/score.service';
 import { Router } from '@angular/router';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './myModal.page.html',
   styleUrls: ['./myModal.page.scss'],
 })
-export class ModalPage implements OnInit {
+export class ModalPage {
   currentHighScore: any;
 
   constructor(public myModal: ModalController, public params: NavParams, private scoreService: ScoreService, private router: Router) { 
   }
+
+  isDismissed: boolean = false;
+
+  @Output()
+  dismissEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   ngOnInit() {
 
@@ -49,6 +55,8 @@ export class ModalPage implements OnInit {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.myModal.dismiss();
+    this.isDismissed = true;
+    this.dismissEmitter.emit(this.isDismissed);
   }
 
   dismissToHome() {
