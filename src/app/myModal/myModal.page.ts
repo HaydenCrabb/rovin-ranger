@@ -3,6 +3,8 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { ScoreService } from '../services/score.service';
 import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
+import { Share } from '@capacitor/share';
+import { share } from 'rxjs';
 
 @Component({
   selector: 'app-modal',
@@ -44,9 +46,9 @@ export class ModalPage {
       this.currentHighScore = this.theLastScore;;
   		this.highscore = "New High Score: " + this.currentHighScore + "!!!";
   	}
-
-    
   }
+
+  
 
   theLastScore = 0;
   highscore = "Highscore: ";
@@ -61,6 +63,22 @@ export class ModalPage {
 
   dismissToHome() {
     this.dismiss();
+  }
+
+  async share() {
+
+    var canShare = await (await Share.canShare()).value;
+    if (canShare == true){
+      Share.share({
+        title: 'Beat My High Score',
+        text: 'I just got a new high score of ' + this.currentHighScore + ' challenge me now!',
+        url: '/home',
+        dialogTitle: 'Share your score with friends',
+      });
+    }
+    else {
+      alert('Sharing not supported on this device!')
+    }
   }
 
 }
