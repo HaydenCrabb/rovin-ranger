@@ -8,6 +8,7 @@ import { SetupService } from '../services/setup.service';
 
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../myModal/myModal.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-play',
@@ -21,7 +22,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   BGMusic = new Audio('../assets/Sounds/Rovin_Ranger_Mixing_Full.mp3');
 
 
-  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService) { 
+  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public router: Router) { 
     
   }
 
@@ -31,6 +32,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     await this.storage.create();
     this.setupService.setup_reset();
     this.setupService.setup();
+    this.setupService.setTimers();
     
   }
 
@@ -62,8 +64,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   async ngOnDestroy() {
-    clearInterval(this.setupService.timer);
-    clearInterval(this.setupService.enemyTimer);
+    this.setupService.clearTimers();
     this.stopBGMusic();
   }
 
@@ -166,15 +167,18 @@ export class PlayPage implements OnInit, AfterViewInit {
   reset(){
     this.ngOnInit();
     window.setTimeout(() => {
-      console.log("boom starting");
-      // this.playBGMusic();
+      console.log("resetting ");
       this.startOrStop();
     }, 2000);
   }
 
   startOrStop()
   {
-    console.log(this.setupService.playing + " " + this.setupService.gameOver);
+    if (this.router.url != '/play'){
+      this.setupService.setup_reset();
+      this.setupService.setup();
+      return
+    }
     if (this.setupService.playing == false && this.setupService.gameOver == false) // restart
     {
       console.log("Starting up!");
@@ -186,9 +190,7 @@ export class PlayPage implements OnInit, AfterViewInit {
           this.setupService.move();
           this.checkIfTouchedUpgrade();
         }
-      }, this.setupService.playingInterval);
-
-      var enemyPlayingInterval = (this.setupService.playingInterval * 1.4);
+      }, this.setupService.currentPlayingInterval);
 
       this.setupService.enemyTimer = window.setInterval(() => {
         this.checkIfGameOver();
@@ -197,12 +199,20 @@ export class PlayPage implements OnInit, AfterViewInit {
           this.setupService.adjustEnemiesDirection();
           this.setupService.moveEnemy();
         }
-      }, enemyPlayingInterval);
+      }, this.setupService.enemyPlayingInterval);
+
+      this.setupService.cloudTimer = window.setInterval(() => {
+        const randomNum = Math.floor(Math.random() * 75) + 1;
+      // Check if the random number is 1
+      if (randomNum === 1) {
+        this.setupService.buildCloud();
+      }
+      this.setupService.moveClouds(this.setupService.allClouds);
+      }, this.setupService.cloudPlayingInterval)
     }
     else if (this.setupService.playing == true && this.setupService.gameOver == false)  //pause the game. 
     {
-      clearInterval(this.setupService.timer);
-      clearInterval(this.setupService.enemyTimer);
+      this.setupService.clearTimers();
     }
 
     this.setupService.playing = !this.setupService.playing;
@@ -213,19 +223,10 @@ export class PlayPage implements OnInit, AfterViewInit {
     }
   }
 
-  handleTaps(event:any)
-  {
-    if(event.tapCount == 2 && this.setupService.gameOver == false) //double tap
-    {
-      this.startOrStop();
-    }
-  }
-
   async presentModal(newHighscore:boolean) {
 
     this.stopBGMusic();
-    clearInterval(this.setupService.timer);
-    clearInterval(this.setupService.enemyTimer);
+    this.setupService.clearTimers();
     var localHighscore = this.setupService.highscore;
     if (newHighscore)
     {

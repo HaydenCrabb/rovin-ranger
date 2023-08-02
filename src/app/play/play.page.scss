@@ -163,18 +163,16 @@
 	top: 50px;
 	left: 600px;
 }
-
-// All my cloud styling + animations
+// All my cloud styling
 .cloud {
 	position: absolute;
 	width: 15px;
 	height: 15px;
 	top: 0px;
 	left: 0px;
-	background-color: #FFFFFF80;
+	background-color: #ffffffda;
 	border: 1px solid #FFEED6 inset;
-	box-shadow: 0, 0, 7.5px, 5px, #FFFFFF80;
-	border-radius: 7.5px;
+	transition: 250ms;
 }
 .cloud::after {
 	width: 15px;
@@ -186,8 +184,6 @@
 	z-index: -1;
 	top: 5px;
 	left: -5px;
-	box-shadow: 0, 0, 7.5px, 5px, #FFFFFF80;
-	left: calc(125%);
 }
 .cloud-white {
 	position: absolute;
@@ -197,15 +193,5 @@
 	left: 0px;
 	background-color: white;
 	border: 1px solid white inset;
-}
-
-@keyframes moveTheCloud {
-	from {}
-	to {margin-left: 200%;}
-}
-
-.moveCloud {
-	animation-name: moveTheCloud;
-	animation-duration: 30s;
 }
 
