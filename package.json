@@ -34,7 +34,6 @@
     "@ionic/storage-angular": "^4.0.0",
     "0g": "^0.0.9",
     "cocoapods": "^0.0.0",
-    "cordova-admob": "^5.1.0",
     "hammerjs": "^2.0.8",
     "ionicons": "^7.0.0",
     "ios-sim": "^9.0.0",
