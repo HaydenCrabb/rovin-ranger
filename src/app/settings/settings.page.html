@@ -1,13 +1,19 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>settings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="dropin" scroll-y="false">
+  <ion-grid style="height: 100%">
+    <ion-row class="ion-align-items-center ion-justify-content-start">
+      <ion-col size="1"></ion-col>
+      <ion-col><label>Master Volume:</label></ion-col>
+      <ion-col size="8" size-md="6"><ion-range>Master Volume</ion-range></ion-col>
+      <ion-col size="1"></ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-start">
+      <ion-col size="1"></ion-col>
+      <ion-checkbox (ionChange)="toggleMusicState($event)">Toggle Music:</ion-checkbox>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-start">
+      <ion-col size="1"></ion-col>
+      <ion-checkbox (ionChange)="toggleSFXState($event)">Toggle SFX:</ion-checkbox>
+    </ion-row>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  </ion-grid>
+</div>

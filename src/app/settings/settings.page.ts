@@ -12,4 +12,22 @@ export class SettingsPage implements OnInit {
   ngOnInit() {
   }
 
+  toggleMusicState(e: any){
+    if (e.currentTarget.checked) {
+    console.log('Music Toggled');
+    }
+    else {
+      console.log('Toggled Off');
+    }
+  }
+
+  toggleSFXState(e: any){
+    if (e.currentTarget.checked){
+    console.log('SFX Toggled On');
+    }
+    else {
+      console.log('Toggled Off');
+    }
+
+  }
 }
