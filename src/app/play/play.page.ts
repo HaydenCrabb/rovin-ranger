@@ -30,17 +30,19 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.storage.create();
-    this.setupService.setup_reset();
-    this.setupService.setup();
-    this.setupService.setTimers();
+
     
   }
 
   async ngAfterViewInit() {
+    console.log('running view init');
+    this,this.setupService.setBackground();
+    this.setupService.setup_reset();
+    this.setupService.setup();
+    this.setupService.setTimers();
 
     window.setTimeout(() => {
       console.log("boom starting");
-      // this.playBGMusic();
       this.startOrStop();
     }, 2000);
 
@@ -165,11 +167,11 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   reset(){
-    this.ngOnInit();
-    window.setTimeout(() => {
-      console.log("resetting ");
-      this.startOrStop();
-    }, 2000);
+    this.ngAfterViewInit();
+    // window.setTimeout(() => {
+    //   console.log("resetting ");
+    //   this.startOrStop();
+    // }, 2000);
   }
 
   startOrStop()
@@ -202,7 +204,7 @@ export class PlayPage implements OnInit, AfterViewInit {
       }, this.setupService.enemyPlayingInterval);
 
       this.setupService.cloudTimer = window.setInterval(() => {
-        const randomNum = Math.floor(Math.random() * 75) + 1;
+        const randomNum = Math.floor(Math.random() * 150) + 1;
       // Check if the random number is 1
       if (randomNum === 1) {
         this.setupService.buildCloud();

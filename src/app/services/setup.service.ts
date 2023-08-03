@@ -56,6 +56,12 @@ export class SetupService {
   enemyTimer: number = 0;
   cloudTimer: number = 0;
 
+  backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#BF7F40', '#836D84', '#9CC7E8', '#8397A5'];
+  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png','../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
+
+  setBackgroundColor: string = '#FCEFD9';
+  setBackgroundImage: string = '../../assets/backgroundOverlays/layout-01.png';
+
   constructor(public router: Router) {
 
   }
@@ -121,6 +127,35 @@ export class SetupService {
       this.numCols = this.playingWidth / this.characterSize;
       this.visited = Array.from({ length: this.numRows }, () => Array(this.numCols).fill(false));
     }
+  }
+
+  setBackground(){
+    this.setBackgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
+    this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+
+
+    
+    //Select a random background color and overlay
+  //   if (this.router.url == '/play'){
+
+  //   var background = document.getElementById('playingField');
+
+  //   if (background != undefined){
+  //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+  //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
+  //     background.style.backgroundSize = 'cover';
+  //   }
+  //   else {
+  //     console.log('Playing Field is undefined')
+  //     return;
+  //   }
+  // }
+  // else {
+  //   console.log('run again');
+  //   window.setTimeout(() => {
+  //     this.setBackground();
+  //   }, 500);
+  // }
   }
 
   getRandomFour(previousDirection: any): number {

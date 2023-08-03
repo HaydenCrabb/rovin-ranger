@@ -4,7 +4,7 @@
       <img id="logo" src="../../assets/Logo.png">
     </div>
     <ion-row class="ion-align-items-end ion-justify-content-center element">
-      <button id="play-button" shape="round" routerLink="/play"
+      <button id="play-button" shape="round" routerLink="/play" (click)="this.setupService.setBackground()"
         routerDirection="root">PLAY</button>
     </ion-row>
     <ion-row class="ion-align-items-start ion-justify-content-center element second">

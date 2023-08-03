@@ -71,8 +71,8 @@ export class ModalPage {
     if (canShare == true){
       Share.share({
         title: 'Beat My High Score',
-        text: 'I just got a new high score of ' + this.currentHighScore + ' challenge me now!',
-        url: '/home',
+        text: 'I just got a new high score of ' + this.theLastScore + ' challenge me now!',
+        url: 'https://google.com',
         dialogTitle: 'Share your score with friends',
       });
     }
