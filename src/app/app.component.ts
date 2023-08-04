@@ -27,6 +27,7 @@ export class AppComponent {
 
     this.soundService.checkIsMusicOn();
     this.soundService.checkIsSFXOn();
+    this.soundService.checkVolume();
     
   }
 
