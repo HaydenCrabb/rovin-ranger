@@ -94,6 +94,7 @@ export class SoundService {
     }
     else{
       localStorage.setItem('volume', '1');
+      this.volume = Number(localStorage.getItem('volume'));
     }
   }
 
