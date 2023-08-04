@@ -4,6 +4,9 @@ import { Storage } from '@ionic/storage-angular';
 import { SetupService } from '../services/setup.service';
 import { interval, Subscription } from 'rxjs';
 import { AdMob, AdOptions } from '@capacitor-community/admob';
+import { SoundService } from '../services/sound.service';
+import { ModalController } from '@ionic/angular';
+import { SettingsPage } from '../settings/settings.page';
 
 
 
@@ -22,7 +25,7 @@ export class HomePage implements OnInit {
 
 
 
-  constructor(private storage: Storage, private scoreService: ScoreService, public setupService: SetupService) {
+  constructor(private storage: Storage, private scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService, public modalController: ModalController) {
 
   }
 
@@ -49,6 +52,7 @@ export class HomePage implements OnInit {
     this.setupService.clearTimers();
     this.setupService.setTimers();
     window.setTimeout(() => {
+      this.soundService.playMusic(this.soundService.menuMusic)
       this.startDemo();
     }, 1000);
 
@@ -66,6 +70,11 @@ export class HomePage implements OnInit {
 
   async ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  playGame() {
+    this.soundService.stopMusic(this.soundService.menuMusic);
+    this.soundService.playSFX(this.soundService.startButtonSFX);
   }
 
   startDemo() {
@@ -97,6 +106,16 @@ export class HomePage implements OnInit {
     }
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
+  }
+
+  async openSettings(){
+    console.log('opening modal');
+    const settingsModal = await this.modalController.create({
+      component: SettingsPage,
+      cssClass: "small-modal",
+    });
+    console.log(settingsModal);
+    return await settingsModal.present();
   }
 
 }

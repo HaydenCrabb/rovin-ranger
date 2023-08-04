@@ -4,7 +4,7 @@ import { ScoreService } from '../services/score.service';
 import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 import { Share } from '@capacitor/share';
-import { share } from 'rxjs';
+import { SettingsPage } from '../settings/settings.page';
 
 @Component({
   selector: 'app-modal',
@@ -31,7 +31,6 @@ export class ModalPage {
     // CHECK TO SEE IF TOTAL POINTS IS GREATER THAN HIGH SCORE
     if(this.theLastScore > this.currentHighScore){
       // UPDATE HIGH SCORE STORED IN LOCALSTORAGE TO MATCH NEW NUMBER
-      localStorage.clear();
       localStorage.setItem('savedScore', this.theLastScore.toString());
 
       // SET SCORE GLOBALLY
@@ -57,8 +56,8 @@ export class ModalPage {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.myModal.dismiss();
-    this.isDismissed = true;
-    this.dismissEmitter.emit(this.isDismissed);
+    // this.isDismissed = true;
+    // this.dismissEmitter.emit(this.isDismissed);
   }
 
   dismissToHome() {
@@ -79,6 +78,16 @@ export class ModalPage {
     else {
       alert('Sharing not supported on this device!')
     }
+  }
+
+  async openSettings(){
+    console.log('opening modal');
+    const settingsModal = await this.myModal.create({
+      component: SettingsPage,
+      cssClass: "small-modal",
+    });
+    console.log(settingsModal);
+    return await settingsModal.present();
   }
 
 }

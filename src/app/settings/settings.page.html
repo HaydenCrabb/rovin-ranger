@@ -2,18 +2,18 @@
   <ion-grid style="height: 100%">
     <ion-row class="ion-align-items-center ion-justify-content-start">
       <ion-col size="1"></ion-col>
-      <ion-col><label>Master Volume:</label></ion-col>
-      <ion-col size="8" size-md="6"><ion-range>Master Volume</ion-range></ion-col>
+      <ion-col size="8" size-md="6"><label for="volumeSlider">Master Volume: </label><input id="volumeSlider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider (input)="volumeAdjust(volumeSlider.value)"></ion-col>
       <ion-col size="1"></ion-col>
     </ion-row>
     <ion-row class="ion-align-items-center ion-justify-content-start">
       <ion-col size="1"></ion-col>
-      <ion-checkbox (ionChange)="toggleMusicState($event)">Toggle Music:</ion-checkbox>
+      <ion-checkbox [checked]="soundService.musicIsOn" (ionChange)="toggleMusicState($event)">Toggle Music:</ion-checkbox>
     </ion-row>
     <ion-row class="ion-align-items-center ion-justify-content-start">
       <ion-col size="1"></ion-col>
-      <ion-checkbox (ionChange)="toggleSFXState($event)">Toggle SFX:</ion-checkbox>
+      <ion-checkbox [checked]="soundService.sfxIsOn"(ionChange)="toggleSFXState($event)">Toggle SFX:</ion-checkbox>
     </ion-row>
+    <ion-icon id="xButton" name="close-outline" (click)="dismiss()"></ion-icon>
 
   </ion-grid>
 </div>

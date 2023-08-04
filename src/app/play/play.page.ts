@@ -4,6 +4,7 @@ import { GestureController, IonContent } from '@ionic/angular';
 import type { GestureDetail } from '@ionic/angular';
 
 import { SetupService } from '../services/setup.service';
+import { SoundService } from '../services/sound.service';
 
 
 import { ModalController } from '@ionic/angular';
@@ -19,10 +20,8 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
 
-  BGMusic = new Audio('../assets/Sounds/Rovin_Ranger_Mixing_Full.mp3');
 
-
-  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public router: Router) { 
+  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public router: Router, public soundService: SoundService) { 
     
   }
 
@@ -67,18 +66,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnDestroy() {
     this.setupService.clearTimers();
-    this.stopBGMusic();
-  }
-
-
-  //FUNCTIONS FOR TURNING ON/OFF BACKGROUND MUSIC
-  public playBGMusic() {
-    this.BGMusic.play();
-  }
-
-  public stopBGMusic() {
-    this.BGMusic.pause();
-    this.BGMusic.currentTime = 0;
+    this.soundService.stopMusic(this.soundService.gamePlayMusic);
   }
 
   // FUNCTION FOR HORIZONTAL MOVEMENT 
@@ -136,7 +124,7 @@ export class PlayPage implements OnInit, AfterViewInit {
       this.setupService.pointsValue++;
       this.setupService.createUpgrade();
       this.setupService.createEnemy();
-      pickupAudio.play();
+      this.soundService.playSFX(this.soundService.pickupSFX);
     }
   }
   checkIfGameOver()
@@ -184,9 +172,9 @@ export class PlayPage implements OnInit, AfterViewInit {
     if (this.setupService.playing == false && this.setupService.gameOver == false) // restart
     {
       console.log("Starting up!");
+      this.soundService.playMusic(this.soundService.gamePlayMusic);
       this.setupService.timer = window.setInterval(() => {
         this.checkIfGameOver();
-        this.playBGMusic();
         if (this.setupService.gameOver == false)
         {
           this.setupService.move();
@@ -227,7 +215,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async presentModal(newHighscore:boolean) {
 
-    this.stopBGMusic();
+    this.soundService.stopMusic(this.soundService.gamePlayMusic);
     this.setupService.clearTimers();
     var localHighscore = this.setupService.highscore;
     if (newHighscore)

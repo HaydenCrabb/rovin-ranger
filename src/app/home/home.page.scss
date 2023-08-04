@@ -74,6 +74,24 @@ p {
   width: 100%;
 }
 
+ion-col {
+	display: flex;
+	align-items: center;
+}
+
+.icon-button {
+	width: 3.5em;
+	height: 3.5em;
+	text-align: center;
+	background-color: white;
+	border-radius: 15px;
+}
+
+ion-button {
+	--border-color:var(--ion-background-color);
+	--border-style: solid;
+}
+
 
 
 
