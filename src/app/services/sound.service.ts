@@ -37,7 +37,6 @@ export class SoundService {
       musicFile.play();
       musicFile.loop = true;
       musicFile.volume = this.volume;
-      console.log('Playing ' + musicFile);
     }
   }
   pauseMusic(musicFile: HTMLAudioElement) {

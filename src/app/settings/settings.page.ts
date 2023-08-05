@@ -58,6 +58,7 @@ export class SettingsPage implements OnInit {
     localStorage.setItem('volume', volumeSetting.toString());
     this.soundService.volume = volumeSetting;
     this.soundService.playMusic(this.soundService.menuMusic);
+    console.log(this.soundService.volume);
     
     // console.log(this.emittedValue);
     // this.soundService.volume = (this.emittedValue * .01);
