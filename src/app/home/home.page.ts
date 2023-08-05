@@ -60,8 +60,6 @@ export class HomePage implements OnInit {
     window.setTimeout(() => {
       this.setupService.sendInTheCowboy();
 
-      // set how often to shoot clouds across screen
-
     }, 1000);
 
     this.subscription = this.demoTimer.subscribe(val => this.setupService.sendInTheCowboy());
@@ -89,6 +87,19 @@ export class HomePage implements OnInit {
     }, this.setupService.enemyPlayingInterval);
 
     this.setupService.cloudTimer = window.setInterval(() => {
+
+      //set random number for chance of playing sound effect
+      const randomSound = Math.floor(Math.random() * 300) + 1;
+      if (randomSound === 1){
+        const pickSound = Math.floor(Math.random() * 2) + 1;
+        if (pickSound == 1){
+          this.soundService.playSFX(this.soundService.horseSnortSFX);
+        }
+        if (pickSound == 2){
+          this.soundService.playSFX(this.soundService.horseWhinee);
+        }
+      }
+      //Set random number for chance of cloud form
       const randomNum = Math.floor(Math.random() * 50) + 1;
     // Check if the random number is 1
     if (randomNum === 1) {

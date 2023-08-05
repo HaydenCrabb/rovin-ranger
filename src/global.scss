@@ -29,6 +29,13 @@
     font-family: fairplex-narrow, serif;
 }
 
+body {
+    margin-top: constant(safe-area-inset-top);
+    margin-top: env(safe-area-inset-top);
+    margin-bottom: calc(4px + env(safe-area-inset-top));
+}
+
+
 ion-modal {
     --background: transparent !important;
     }
