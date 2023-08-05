@@ -2,6 +2,9 @@
 	--ion-background-color:#28364A;
 }
 .playingField {
+	margin-top: constant(safe-area-inset-top);
+    margin-top: env(safe-area-inset-top);
+    margin-bottom: calc(4px + env(safe-area-inset-top));
 	position: relative;
 	z-index: 1;
 	background-color: #FFEED6;
