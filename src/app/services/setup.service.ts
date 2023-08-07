@@ -75,8 +75,7 @@ export class SetupService {
   setup() {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
-    var playZone = document.getElementById('#playZone');
-    playZone?.clientWidth
+    
 
 
     //make playwidth divisable by character size;
@@ -141,7 +140,6 @@ export class SetupService {
   setBackground(){
     this.setBackgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
     this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
-
 
     
     //Select a random background color and overlay

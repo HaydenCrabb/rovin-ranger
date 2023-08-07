@@ -74,16 +74,16 @@ export class PlayPage implements OnInit, AfterViewInit {
   private onMoveX(detail: GestureDetail) {
 
     const { deltaX, velocityX, deltaY, velocityY } = detail;
-    if (deltaX > 0 && velocityX > 0.75) {
+    if (deltaX > 0 && velocityX > 0.25) {
       this.setupService.characterPosition.direction = 2;
     }
-    else if (deltaX < 0 && velocityX < -0.75) {
+    else if (deltaX < 0 && velocityX < -0.25) {
       this.setupService.characterPosition.direction = 4;
     }
-    else if (deltaY > 0 && velocityY > 0.75) {
+    else if (deltaY > 0 && velocityY > 0.25) {
       this.setupService.characterPosition.direction = 3;
     }
-    else if (deltaY < 0 && velocityY < -0.75) {
+    else if (deltaY < 0 && velocityY < -0.25) {
       this.setupService.characterPosition.direction = 1;
     }
 
@@ -94,16 +94,16 @@ export class PlayPage implements OnInit, AfterViewInit {
   private onMoveY(detail: GestureDetail) {
 
     const { deltaY, velocityY, deltaX, velocityX } = detail;
-    if (deltaY > 0 && velocityY > 1) {
+    if (deltaY > 0 && velocityY > 0.25) {
       this.setupService.characterPosition.direction = 3;
     }
-    else if (deltaY < 0 && velocityY < -1) {
+    else if (deltaY < 0 && velocityY < -0.25) {
       this.setupService.characterPosition.direction = 1;
     }
-    else if (deltaX > 0 && velocityX > 1) {
+    else if (deltaX > 0 && velocityX > 0.25) {
       this.setupService.characterPosition.direction = 2;
     }
-    else if (deltaX < 0 && velocityX < -1) {
+    else if (deltaX < 0 && velocityX < -0.25) {
       this.setupService.characterPosition.direction = 4;
     }
 
