@@ -85,9 +85,6 @@ export class SetupService {
     this.playingWidth = window.innerWidth - remainderx;
     this.playingHeight = window.innerHeight - remaindery;
 
-    this.playingHeight = this.playingHeight / 2;
-    this.playingWidth = this.playingWidth / 2;
-
 
     this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
 
