@@ -15,6 +15,11 @@ export class SetupService {
     { top: 0, left: 0, height: 0, width: 0 }
   ]
 
+  safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
+  safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
+  safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
+  safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
+
   currentPath: string = window.location.pathname;
 
   characterPosition: Character = new Character(60, 70, 3);
@@ -70,12 +75,19 @@ export class SetupService {
   setup() {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
+    var playZone = document.getElementById('#playZone');
+    playZone?.clientWidth
+
 
     //make playwidth divisable by character size;
     var remainderx = window.innerWidth % this.characterSize;
     var remaindery = window.innerHeight % this.characterSize;
     this.playingWidth = window.innerWidth - remainderx;
     this.playingHeight = window.innerHeight - remaindery;
+
+    this.playingHeight = this.playingHeight / 2;
+    this.playingWidth = this.playingWidth / 2;
+
 
     this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
 
