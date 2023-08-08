@@ -166,29 +166,6 @@ export class SetupService {
   setBackground() {
     this.setBackgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
     this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)] + ') no-repeat';
-
-
-    //Select a random background color and overlay
-    //   if (this.router.url == '/play'){
-
-    //   var background = document.getElementById('playingField');
-
-    //   if (background != undefined){
-    //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
-    //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
-    //     background.style.backgroundSize = 'cover';
-    //   }
-    //   else {
-    //     console.log('Playing Field is undefined')
-    //     return;
-    //   }
-    // }
-    // else {
-    //   console.log('run again');
-    //   window.setTimeout(() => {
-    //     this.setBackground();
-    //   }, 500);
-    // }
   }
 
   getRandomFour(previousDirection: any): number {
@@ -279,11 +256,8 @@ export class SetupService {
         inRange = true;
         return inRange;
       }
-
     };
-    return false;
     return inRange;
-
   }
   createWalls() {
     var leftx = this.characterSize; //start at first spot, don't put anything in 1st position;
