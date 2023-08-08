@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Wall, Zone, Point, Character, Cloud } from '../models/variables';
 import { Router } from '@angular/router';
-import { max } from 'rxjs';
-import { interval, Subscription } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
