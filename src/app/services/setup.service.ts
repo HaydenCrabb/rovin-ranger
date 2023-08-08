@@ -15,10 +15,10 @@ export class SetupService {
     { top: 0, left: 0, height: 0, width: 0 }
   ]
 
-  safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
-  safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
-  safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
-  safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
+  safeZoneTop: any;
+  safeZoneRight: any
+  safeZoneBottom: any;
+  safeZoneLeft: any;
 
   currentPath: string = window.location.pathname;
 
@@ -26,7 +26,6 @@ export class SetupService {
   upgradePosition: Point = new Point(0, 0);
   playingFieldPosition: Point = new Point(0, 0);
 
-  pointsZone = new Zone(0, 0, 0, 0);
   pointsValue = 0;
 
   characterSize = 15;
@@ -62,7 +61,7 @@ export class SetupService {
   cloudTimer: number = 0;
 
   backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#BF7F40', '#836D84', '#9CC7E8', '#8397A5'];
-  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png','../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
+  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png', '../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
 
   setBackgroundColor: string = '#FCEFD9';
   setBackgroundImage: string = '../../assets/backgroundOverlays/layout-01.png';
@@ -75,22 +74,49 @@ export class SetupService {
   setup() {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
-    
 
 
-    //make playwidth divisable by character size;
-    var remainderx = window.innerWidth % this.characterSize;
-    var remaindery = window.innerHeight % this.characterSize;
-    this.playingWidth = window.innerWidth - remainderx;
-    this.playingHeight = window.innerHeight - remaindery;
+
+    //Check safe zones
+    this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
+    this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
+    this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
+    this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
+
+    //
+    var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
+    var adjustedHeight = window.innerHeight - this.safeZoneBottom - this.safeZoneTop;
+
+    var remainderx = 0;
+    var remaindery = 0;
+
+    if (this.router.url == '/play') {
+      //make playwidth divisable by character size;
+      remainderx = adjustedWidth % this.characterSize;
+      remaindery = adjustedHeight % this.characterSize;
+      this.playingWidth = adjustedWidth - remainderx;
+      this.playingHeight = adjustedHeight - remaindery;
 
 
-    this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+      this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+
+      this.playingFieldPosition.top = (remaindery / 2) + this.safeZoneTop;
+    this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
+    }
+    else {
+      remainderx = window.innerWidth % this.characterSize;
+      remaindery = window.innerHeight % this.characterSize;
+      this.playingWidth = window.innerWidth - remainderx;
+      this.playingHeight = window.innerHeight - remaindery;
+
+      this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+
+      this.playingFieldPosition.top = (remaindery / 2);
+    this.playingFieldPosition.left = (remainderx / 2);
+    }
 
     this.maxWalls = Math.floor(this.playingArea / 165);
 
-    this.playingFieldPosition.top = remaindery / 2;
-    this.playingFieldPosition.left = remainderx / 2;
 
     this.coveringWalls[0] = { top: 0, left: 0, height: (remaindery / 2), width: window.innerWidth };
     this.coveringWalls[1] = { top: 0, left: - 1, height: window.innerHeight, width: (remainderx / 2) + 1 };
@@ -137,32 +163,32 @@ export class SetupService {
     }
   }
 
-  setBackground(){
+  setBackground() {
     this.setBackgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
-    this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+    this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)] + ') no-repeat';
 
-    
+
     //Select a random background color and overlay
-  //   if (this.router.url == '/play'){
+    //   if (this.router.url == '/play'){
 
-  //   var background = document.getElementById('playingField');
+    //   var background = document.getElementById('playingField');
 
-  //   if (background != undefined){
-  //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
-  //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
-  //     background.style.backgroundSize = 'cover';
-  //   }
-  //   else {
-  //     console.log('Playing Field is undefined')
-  //     return;
-  //   }
-  // }
-  // else {
-  //   console.log('run again');
-  //   window.setTimeout(() => {
-  //     this.setBackground();
-  //   }, 500);
-  // }
+    //   if (background != undefined){
+    //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+    //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
+    //     background.style.backgroundSize = 'cover';
+    //   }
+    //   else {
+    //     console.log('Playing Field is undefined')
+    //     return;
+    //   }
+    // }
+    // else {
+    //   console.log('run again');
+    //   window.setTimeout(() => {
+    //     this.setBackground();
+    //   }, 500);
+    // }
   }
 
   getRandomFour(previousDirection: any): number {
@@ -255,7 +281,9 @@ export class SetupService {
       }
 
     };
+    return false;
     return inRange;
+
   }
   createWalls() {
     var leftx = this.characterSize; //start at first spot, don't put anything in 1st position;
@@ -323,10 +351,10 @@ export class SetupService {
       firstSpot = firstSpot * this.characterSize;
       numberOfWalls = 7;
     }
-    this.pointsZone.height = this.characterSize * 2;
-    this.pointsZone.width = this.characterSize * (numberOfWalls - 2);
-    this.pointsZone.position.top = this.playingHeight - (this.characterSize * 2);
-    this.pointsZone.position.left = firstSpot + this.characterSize;
+    var pointsZone_height = this.characterSize * 2;
+    var pointsZone_width = this.characterSize * (numberOfWalls - 2);
+    var pointsZone_top = this.playingHeight - (this.characterSize * 2);
+    var pointsZone_left = firstSpot + this.characterSize;
 
     var i;
     for (i = 0; i < numberOfWalls; i++) {
@@ -337,7 +365,7 @@ export class SetupService {
     this.createAWall(this.playingHeight - (this.characterSize), firstSpot + (this.characterSize * (i - 1)), 0, false);
     this.createAWall(this.playingHeight - (this.characterSize * 2), firstSpot + (this.characterSize * (i - 1)), 0, false);
 
-    var zone = new Zone(this.pointsZone.position.top, this.pointsZone.position.left, this.pointsZone.height, this.pointsZone.width);
+    var zone = new Zone(pointsZone_top, pointsZone_left, pointsZone_height, pointsZone_width);
     this.noGoZone.push(zone);
     return (even ? 8 : 10); // if it is an even points area, there will be 8 blank spaces, otherwise there is 10. 
   }
@@ -771,10 +799,6 @@ export class SetupService {
     this.playingFieldPosition.top = 0;
     this.playingFieldPosition.left = 0;
 
-    this.pointsZone.position.top = 0;
-    this.pointsZone.position.left = 0;
-    this.pointsZone.height = 0;
-    this.pointsZone.width = 0;
     this.pointsValue = 0;
 
     this.playing = false;
@@ -802,7 +826,7 @@ export class SetupService {
 
   setTimers() {
     this.currentPlayingInterval = this.playingInterval;
-    
+
     this.enemyPlayingInterval = (this.playingInterval * 1.4);
 
     this.cloudPlayingInterval = (this.playingInterval * 2);

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, AfterViewInit, OnChanges } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { GestureController, IonContent } from '@ionic/angular';
 import type { GestureDetail } from '@ionic/angular';
@@ -35,6 +35,14 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
+
+    //Reset safe zone values
+    this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
+    this.setupService.safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
+    this.setupService.safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
+    this.setupService.safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
+
+
     console.log('running view init');
     this, this.setupService.setBackground();
     this.setupService.setup_reset();
