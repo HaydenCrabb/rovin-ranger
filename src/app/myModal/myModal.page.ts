@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ScoreService } from '../services/score.service';
 import { Router } from '@angular/router';
