@@ -26,7 +26,6 @@ export class SetupService {
   upgradePosition: Point = new Point(0, 0);
   playingFieldPosition: Point = new Point(0, 0);
 
-  pointsZone = new Zone(0, 0, 0, 0);
   pointsValue = 0;
 
   characterSize = 15;
@@ -91,7 +90,7 @@ export class SetupService {
     var remainderx = 0;
     var remaindery = 0;
 
-    if (this.router.url == '/play' || this.router.url == '/modal') {
+    if (this.router.url == '/play') {
       //make playwidth divisable by character size;
       remainderx = adjustedWidth % this.characterSize;
       remaindery = adjustedHeight % this.characterSize;
@@ -100,6 +99,9 @@ export class SetupService {
 
 
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+
+      this.playingFieldPosition.top = (remaindery / 2) + this.safeZoneTop;
+    this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
     }
     else {
       remainderx = window.innerWidth % this.characterSize;
@@ -108,12 +110,13 @@ export class SetupService {
       this.playingHeight = window.innerHeight - remaindery;
 
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+
+      this.playingFieldPosition.top = (remaindery / 2);
+    this.playingFieldPosition.left = (remainderx / 2);
     }
 
     this.maxWalls = Math.floor(this.playingArea / 165);
 
-    this.playingFieldPosition.top = remaindery / 2;
-    this.playingFieldPosition.left = remainderx / 2;
 
     this.coveringWalls[0] = { top: 0, left: 0, height: (remaindery / 2), width: window.innerWidth };
     this.coveringWalls[1] = { top: 0, left: - 1, height: window.innerHeight, width: (remainderx / 2) + 1 };
@@ -128,26 +131,6 @@ export class SetupService {
       this.createUpgrade();
       this.createEnemy();
       this.moveInCharacter();
-
-
-      //Testing something, feel free to remove this late
-      var numberOfSpaces = this.playingWidth / this.characterSize;
-    var even = (numberOfSpaces % 2 == 0 ? true : false);
-    var numberOfWalls = 0;
-
-    if (even) {
-      var firstSpot = (numberOfSpaces / 2) - 3;
-      firstSpot = firstSpot * this.characterSize;
-      numberOfWalls = 6;
-    }
-    else {
-      var firstSpot = Math.floor(numberOfSpaces / 2) - 3;
-      firstSpot = firstSpot * this.characterSize;
-      numberOfWalls = 7;
-    }
-
-      this.createAWall(this.playingHeight - (this.characterSize), firstSpot, 0, false);
-      this.createAWall(this.playingHeight - (this.characterSize * 2), firstSpot, 0, false);
 
       /* FUNCTIONALITY TO CHECK FOR INACCESSIBLE AREAS. (Unecissary on home page.) */
       this.numRows = this.playingHeight / this.characterSize;
@@ -368,10 +351,10 @@ export class SetupService {
       firstSpot = firstSpot * this.characterSize;
       numberOfWalls = 7;
     }
-    this.pointsZone.height = this.characterSize * 2;
-    this.pointsZone.width = this.characterSize * (numberOfWalls - 2);
-    this.pointsZone.position.top = this.playingHeight - (this.characterSize * 2);
-    this.pointsZone.position.left = firstSpot + this.characterSize;
+    var pointsZone_height = this.characterSize * 2;
+    var pointsZone_width = this.characterSize * (numberOfWalls - 2);
+    var pointsZone_top = this.playingHeight - (this.characterSize * 2);
+    var pointsZone_left = firstSpot + this.characterSize;
 
     var i;
     for (i = 0; i < numberOfWalls; i++) {
@@ -382,7 +365,7 @@ export class SetupService {
     this.createAWall(this.playingHeight - (this.characterSize), firstSpot + (this.characterSize * (i - 1)), 0, false);
     this.createAWall(this.playingHeight - (this.characterSize * 2), firstSpot + (this.characterSize * (i - 1)), 0, false);
 
-    var zone = new Zone(this.pointsZone.position.top, this.pointsZone.position.left, this.pointsZone.height, this.pointsZone.width);
+    var zone = new Zone(pointsZone_top, pointsZone_left, pointsZone_height, pointsZone_width);
     this.noGoZone.push(zone);
     return (even ? 8 : 10); // if it is an even points area, there will be 8 blank spaces, otherwise there is 10. 
   }
@@ -816,10 +799,6 @@ export class SetupService {
     this.playingFieldPosition.top = 0;
     this.playingFieldPosition.left = 0;
 
-    this.pointsZone.position.top = 0;
-    this.pointsZone.position.left = 0;
-    this.pointsZone.height = 0;
-    this.pointsZone.width = 0;
     this.pointsValue = 0;
 
     this.playing = false;
