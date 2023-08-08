@@ -86,7 +86,6 @@ export class ModalPage {
       component: SettingsPage,
       cssClass: "small-modal",
     });
-    console.log(settingsModal);
     return await settingsModal.present();
   }
 

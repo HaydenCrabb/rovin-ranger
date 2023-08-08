@@ -15,10 +15,10 @@ export class SetupService {
     { top: 0, left: 0, height: 0, width: 0 }
   ]
 
-  safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
-  safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
-  safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
-  safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
+  safeZoneTop: any;
+  safeZoneRight: any
+  safeZoneBottom: any;
+  safeZoneLeft: any;
 
   currentPath: string = window.location.pathname;
 
@@ -62,7 +62,7 @@ export class SetupService {
   cloudTimer: number = 0;
 
   backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#BF7F40', '#836D84', '#9CC7E8', '#8397A5'];
-  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png','../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
+  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png', '../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
 
   setBackgroundColor: string = '#FCEFD9';
   setBackgroundImage: string = '../../assets/backgroundOverlays/layout-01.png';
@@ -75,17 +75,40 @@ export class SetupService {
   setup() {
     //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
-    
 
 
-    //make playwidth divisable by character size;
-    var remainderx = window.innerWidth % this.characterSize;
-    var remaindery = window.innerHeight % this.characterSize;
-    this.playingWidth = window.innerWidth - remainderx;
-    this.playingHeight = window.innerHeight - remaindery;
+
+    //Check safe zones
+    this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
+    this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
+    this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
+    this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
+
+    //
+    var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
+    var adjustedHeight = window.innerHeight - this.safeZoneBottom - this.safeZoneTop;
+
+    var remainderx = 0;
+    var remaindery = 0;
+
+    if (this.router.url == '/play' || this.router.url == '/modal') {
+      //make playwidth divisable by character size;
+      remainderx = adjustedWidth % this.characterSize;
+      remaindery = adjustedHeight % this.characterSize;
+      this.playingWidth = adjustedWidth - remainderx;
+      this.playingHeight = adjustedHeight - remaindery;
 
 
-    this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+      this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+    }
+    else {
+      remainderx = window.innerWidth % this.characterSize;
+      remaindery = window.innerHeight % this.characterSize;
+      this.playingWidth = window.innerWidth - remainderx;
+      this.playingHeight = window.innerHeight - remaindery;
+
+      this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
+    }
 
     this.maxWalls = Math.floor(this.playingArea / 165);
 
@@ -105,6 +128,26 @@ export class SetupService {
       this.createUpgrade();
       this.createEnemy();
       this.moveInCharacter();
+
+
+      //Testing something, feel free to remove this late
+      var numberOfSpaces = this.playingWidth / this.characterSize;
+    var even = (numberOfSpaces % 2 == 0 ? true : false);
+    var numberOfWalls = 0;
+
+    if (even) {
+      var firstSpot = (numberOfSpaces / 2) - 3;
+      firstSpot = firstSpot * this.characterSize;
+      numberOfWalls = 6;
+    }
+    else {
+      var firstSpot = Math.floor(numberOfSpaces / 2) - 3;
+      firstSpot = firstSpot * this.characterSize;
+      numberOfWalls = 7;
+    }
+
+      this.createAWall(this.playingHeight - (this.characterSize), firstSpot, 0, false);
+      this.createAWall(this.playingHeight - (this.characterSize * 2), firstSpot, 0, false);
 
       /* FUNCTIONALITY TO CHECK FOR INACCESSIBLE AREAS. (Unecissary on home page.) */
       this.numRows = this.playingHeight / this.characterSize;
@@ -137,32 +180,32 @@ export class SetupService {
     }
   }
 
-  setBackground(){
+  setBackground() {
     this.setBackgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
-    this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+    this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)] + ') no-repeat';
 
-    
+
     //Select a random background color and overlay
-  //   if (this.router.url == '/play'){
+    //   if (this.router.url == '/play'){
 
-  //   var background = document.getElementById('playingField');
+    //   var background = document.getElementById('playingField');
 
-  //   if (background != undefined){
-  //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
-  //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
-  //     background.style.backgroundSize = 'cover';
-  //   }
-  //   else {
-  //     console.log('Playing Field is undefined')
-  //     return;
-  //   }
-  // }
-  // else {
-  //   console.log('run again');
-  //   window.setTimeout(() => {
-  //     this.setBackground();
-  //   }, 500);
-  // }
+    //   if (background != undefined){
+    //     background.style.background = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)]  +') no-repeat';
+    //     background.style.backgroundColor = this.backgroundColors[Math.floor(Math.random() * this.backgroundColors.length)];
+    //     background.style.backgroundSize = 'cover';
+    //   }
+    //   else {
+    //     console.log('Playing Field is undefined')
+    //     return;
+    //   }
+    // }
+    // else {
+    //   console.log('run again');
+    //   window.setTimeout(() => {
+    //     this.setBackground();
+    //   }, 500);
+    // }
   }
 
   getRandomFour(previousDirection: any): number {
@@ -255,7 +298,9 @@ export class SetupService {
       }
 
     };
+    return false;
     return inRange;
+
   }
   createWalls() {
     var leftx = this.characterSize; //start at first spot, don't put anything in 1st position;
@@ -802,7 +847,7 @@ export class SetupService {
 
   setTimers() {
     this.currentPlayingInterval = this.playingInterval;
-    
+
     this.enemyPlayingInterval = (this.playingInterval * 1.4);
 
     this.cloudPlayingInterval = (this.playingInterval * 2);
