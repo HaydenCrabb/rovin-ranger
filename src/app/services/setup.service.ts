@@ -29,6 +29,7 @@ export class SetupService {
   pointsValue = 0;
 
   characterSize = 15;
+  characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
   playingWidth = 0;
   playingHeight = 0;
   playingArea = 0;
@@ -281,7 +282,6 @@ export class SetupService {
       }
 
     };
-    return false;
     return inRange;
 
   }
