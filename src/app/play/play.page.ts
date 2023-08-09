@@ -90,15 +90,19 @@ export class PlayPage implements OnInit, AfterViewInit {
     const { deltaX, velocityX, deltaY, velocityY } = detail;
     if (deltaX > 0 && velocityX > 0.25) {
       this.setupService.characterPosition.direction = 2;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Right.png)";
     }
     else if (deltaX < 0 && velocityX < -0.25) {
       this.setupService.characterPosition.direction = 4;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Left.png)";
     }
     else if (deltaY > 0 && velocityY > 0.25) {
       this.setupService.characterPosition.direction = 3;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
     }
     else if (deltaY < 0 && velocityY < -0.25) {
       this.setupService.characterPosition.direction = 1;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Up.png)";
     }
 
 
@@ -110,15 +114,19 @@ export class PlayPage implements OnInit, AfterViewInit {
     const { deltaY, velocityY, deltaX, velocityX } = detail;
     if (deltaY > 0 && velocityY > 0.25) {
       this.setupService.characterPosition.direction = 3;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
     }
     else if (deltaY < 0 && velocityY < -0.25) {
       this.setupService.characterPosition.direction = 1;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Up.png)";
     }
     else if (deltaX > 0 && velocityX > 0.25) {
       this.setupService.characterPosition.direction = 2;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Right.png)";
     }
     else if (deltaX < 0 && velocityX < -0.25) {
       this.setupService.characterPosition.direction = 4;
+      this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Left.png)";
     }
 
 
