@@ -31,6 +31,8 @@
     --sar: env(safe-area-inset-right);
     --sab: env(safe-area-inset-bottom);
     --sal: env(safe-area-inset-left);
+
+    --rangerRed: #c75c58;
 }
 
 * {
@@ -49,7 +51,7 @@ ion-modal {
     }
 
     :root {
-        --ion-color-rangerRed: #c75c58;;
+        --ion-color-rangerRed: #c75c58;
         --ion-color-rangerRed-rgb: 199,92,88;
         --ion-color-rangerRed-contrast: #ffffff;
         --ion-color-rangerRed-contrast-rgb: 255,255,255;

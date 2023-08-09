@@ -1,19 +1,37 @@
 <div class="dropin" scroll-y="false">
   <ion-grid style="height: 100%">
-    <ion-row class="ion-align-items-center ion-justify-content-start">
-      <ion-col size="1"></ion-col>
-      <ion-col size="8" size-md="6"><label for="volumeSlider">Master Volume: </label><input id="volumeSlider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider (input)="volumeAdjust(volumeSlider.value)"></ion-col>
-      <ion-col size="1"></ion-col>
-    </ion-row>
-    <ion-row class="ion-align-items-center ion-justify-content-start">
-      <ion-col size="1"></ion-col>
-      <ion-checkbox [checked]="soundService.musicIsOn" (ionChange)="toggleMusicState($event)">Toggle Music:</ion-checkbox>
-    </ion-row>
-    <ion-row class="ion-align-items-center ion-justify-content-start">
-      <ion-col size="1"></ion-col>
-      <ion-checkbox [checked]="soundService.sfxIsOn"(ionChange)="toggleSFXState($event)">Toggle SFX:</ion-checkbox>
-    </ion-row>
-    <ion-icon id="xButton" name="close-outline" (click)="dismiss()"></ion-icon>
-
+    <div class="settingsContainer">
+      <ion-row class="ion-justify-content-center">
+        <div class="optionsBox">
+          <br>
+          <ion-row class="ion-align-items-center ion-justify-content-center">
+            <label id="sliderLabel" for="volumeSlider">Master Volume:</label>
+            <img class="icon-small" src="../../assets/sounds_black_Main_Volume.png">
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <input id="volumeSlider" class="styled-slider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider
+              (input)="volumeAdjust(volumeSlider.value)">
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="2">
+              <button class="muteButton buttonPurple" (click)="toggleSFXState()"><img class="icon-small"
+                  [src]="sfxIconToggle()"></button>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+            <ion-col size="2" class="ion-justify-content-center">
+              <button class="muteButton buttonBlue" (click)="toggleMusicState()"><img class="icon-small"
+                  [src]="musicIconToggle()"></button>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-row>
+      <div>
+        <button id="closeButton" (click)="dismiss()">
+          <img class="icon" src="../../assets/back_button-02.png" />
+        </button>
+      </div>
+    </div>
   </ion-grid>
 </div>
+
+<script src="range-input.js"></script>
