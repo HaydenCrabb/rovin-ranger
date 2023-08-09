@@ -1,15 +1,31 @@
-
 <ion-content id="playZone" scroll-y="false" class="background1">
-  <div class="playingField" id="playingField" [style.background]="setupService.setBackgroundColor + ' ' + setupService.setBackgroundImage" [style.background-size]="'cover'" [style.width]="setupService.playingWidth + 'px'" [style.height]="setupService.playingHeight + 'px'" [style.top]="setupService.playingFieldPosition.top + 'px'" [style.left]="setupService.playingFieldPosition.left + 'px'">
-    <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'" [style.left]="setupService.characterPosition.position.left + 'px'"></div>
-    <div id="upgrade" class="upgrade" [style.top]="setupService.upgradePosition.top + 'px'" [style.left]="setupService.upgradePosition.left + 'px'"></div>
-    <div id="points" class="points" ><div class="points-inner">{{ setupService.pointsValue }}</div></div>
-    <div class="enemy" *ngFor="let enemy of setupService.enemies" [style.top]="enemy.position.top + 'px'" [style.left]="enemy.position.left + 'px'"></div>
-    <div [ngClass]="{wall: true, top_left: wall.classes.top_left, top_right: wall.classes.top_right, bottom_left: wall.classes.bottom_left, bottom_right: wall.classes.bottom_right}" *ngFor="let wall of setupService.walls" [style.top]="wall.position.top + 'px'" [style.left]="wall.position.left + 'px'"></div>
+  <div class="playingField" id="playingField"
+    [style.background]="setupService.setBackgroundColor + ' ' + setupService.setBackgroundImage"
+    [style.background-size]="'cover'" [style.width]="setupService.playingWidth + 'px'"
+    [style.height]="setupService.playingHeight + 'px'" [style.top]="setupService.playingFieldPosition.top + 'px'"
+    [style.left]="setupService.playingFieldPosition.left + 'px'">
+    <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'"
+      [style.left]="setupService.characterPosition.position.left + 'px'"></div>
+    <div id="upgrade" class="upgrade" [style.top]="setupService.upgradePosition.top + 'px'"
+      [style.left]="setupService.upgradePosition.left + 'px'"></div>
+    <div id="points" class="points">
+      <div class="points-inner">{{ setupService.pointsValue }}</div>
+    </div>
+    <div class="enemy" *ngFor="let enemy of setupService.enemies" [style.top]="enemy.position.top + 'px'"
+      [style.left]="enemy.position.left + 'px'"></div>
+    <div
+      [ngClass]="{wall: true, top_left: wall.classes.top_left, top_right: wall.classes.top_right, bottom_left: wall.classes.bottom_left, bottom_right: wall.classes.bottom_right}"
+      *ngFor="let wall of setupService.walls" [style.top]="wall.position.top + 'px'"
+      [style.left]="wall.position.left + 'px'"></div>
     <div *ngFor="let cloud of setupService.allClouds" [ngClass]=" {cloud: true, top_left: cloud.classes.top_left, top_right: cloud.classes.top_right, bottom_left: cloud.classes.bottom_left, bottom_right:
-      cloud.classes.bottom_right}" [style.top]="cloud.position.top + 'px'"
-      [style.left]="cloud.position.left + 'px'">
+      cloud.classes.bottom_right}" [style.top]="cloud.position.top + 'px'" [style.left]="cloud.position.left + 'px'">
     </div>
   </div>
-  <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'" [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
+  <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'"
+    [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
+  <div id="loadingCover">
+    <div class="loadingImageContainer">
+      <img id="loadingLogo" class="rotate-center" src="../../assets/CowboyHat-01.png">
+    </div>
+  </div>
 </ion-content>
