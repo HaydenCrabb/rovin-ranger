@@ -100,8 +100,6 @@ export class SetupService {
 
       this.playingFieldPosition.top = (remaindery / 2) + this.safeZoneTop;
       this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
-
-      console.log(this.playingFieldPosition);
     }
     else {
       remainderx = window.innerWidth % this.characterSize;
