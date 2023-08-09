@@ -1,77 +1,77 @@
 #container {
-  text-align: center;
+	text-align: center;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 #container strong {
-  font-size: 20px;
-  line-height: 26px;
+	font-size: 20px;
+	line-height: 26px;
 }
 
 #container p {
-  font-size: 16px;
-  line-height: 22px;
+	font-size: 16px;
+	line-height: 22px;
 
-  color: #8c8c8c;
+	color: #8c8c8c;
 
-  margin: 0;
+	margin: 0;
 }
 
 #container a {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 .logo-container {
-  width: 100%;
-  bottom: 20%;
+	width: 100%;
+	bottom: 20%;
 }
 
 #logo {
-  width: 40%;
-  height: auto;
-  margin-left:30%;
-  margin-right:30%;
+	width: 40%;
+	height: auto;
+	margin-left: 30%;
+	margin-right: 30%;
 }
 
 #play-button {
-  width: 30% !important;
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: .7em;
-  padding-bottom: .7em;
-  font-size: 2rem;
-  background: #2b3648 !important;
-  border-radius: 2em;
-  color: white;
+	width: 30% !important;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: .7em;
+	padding-bottom: .7em;
+	font-size: 2rem;
+	background: #2b3648 !important;
+	border-radius: 2em;
+	color: white;
 
-  box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
+	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
 }
 
 #play-button:active {
-	box-shadow: inset 5px -5px rgba(137, 137, 137, 0.5) !important;
+	box-shadow: -1px 1px rgba(137, 137, 137, 0.5) !important;
 	background: rgb(25, 32, 42) !important;
 }
 
 p {
-  font-size: large;
+	font-size: large;
 }
 
 .UI {
-  position: absolute;
-  z-index: 15;
+	position: absolute;
+	z-index: 15;
 }
 
 .playFieldOverlay {
-  position: fixed;
-  z-index: 12;
-  background: #FFFFFF40;
-  height: 100%;
-  width: 100%;
+	position: fixed;
+	z-index: 12;
+	background: #FFFFFF40;
+	height: 100%;
+	width: 100%;
 }
 
 ion-col {
@@ -88,7 +88,7 @@ ion-col {
 }
 
 ion-button {
-	--border-color:var(--ion-background-color);
+	--border-color: var(--ion-background-color);
 	--border-style: solid;
 }
 
@@ -97,17 +97,20 @@ ion-button {
 
 // CSS to display game components
 .background1 {
-	--ion-background-color:#28364A;
+	--ion-background-color: #28364A;
 }
+
 .playingField {
 	position: relative;
 	z-index: 1;
 	background-color: #FFEED6;
 }
+
 .playingField-black {
 	border: 1px solid black;
 	background-color: black;
 }
+
 .player {
 	position: absolute;
 	width: 15px;
@@ -117,6 +120,7 @@ ion-button {
 	left: 0px;
 	background-color: #2D5C5C;
 }
+
 .player::after {
 	width: 15px;
 	height: 15px;
@@ -129,6 +133,7 @@ ion-button {
 	left: -3px;
 	border-radius: 7.5px;
 }
+
 .enemy {
 	position: absolute;
 	width: 15px;
@@ -139,6 +144,7 @@ ion-button {
 	border: 1px solid #FFEED6 inset;
 	background-color: #D65353;
 }
+
 .enemy::after {
 	width: 15px;
 	height: 15px;
@@ -151,6 +157,7 @@ ion-button {
 	left: -3px;
 	border-radius: 7.5px;
 }
+
 .points {
 	position: absolute;
 	bottom: 0;
@@ -158,7 +165,8 @@ ion-button {
 	right: 45%;
 	text-align: center;
 }
-.points-inner{
+
+.points-inner {
 	position: relative;
 	text-align: center;
 	margin: 0px;
@@ -166,6 +174,7 @@ ion-button {
 	font-size: 18px;
 	font-weight: bold;
 }
+
 .upgrade {
 	position: absolute;
 	width: 15px;
@@ -175,6 +184,7 @@ ion-button {
 	left: 0px;
 	background-color: #F7C45F;
 }
+
 .upgrade::after {
 	width: 15px;
 	height: 15px;
@@ -187,11 +197,13 @@ ion-button {
 	left: -3px;
 	border-radius: 7.5px;
 }
+
 .cover {
 	position: absolute;
 	background-color: #28364A;
 	z-index: 10;
 }
+
 .wall {
 	position: absolute;
 	width: 15px;
@@ -201,6 +213,7 @@ ion-button {
 	background-color: #28364A;
 	border: 1px solid #FFEED6 inset;
 }
+
 .wall::after {
 	width: 15px;
 	height: 15px;
@@ -217,14 +230,17 @@ ion-button {
 .wall.top_left {
 	border-top-left-radius: 7.5px;
 }
+
 .cloud.top_right,
 .wall.top_right {
 	border-top-right-radius: 7.5px;
 }
+
 .cloud.bottom_left,
 .wall.bottom_left {
 	border-bottom-left-radius: 7.5px;
 }
+
 .cloud.bottom_right,
 .wall.bottom_right {
 	border-bottom-right-radius: 7.5px;
@@ -234,14 +250,17 @@ ion-button {
 .wall.top_left::after {
 	border-top-left-radius: 7.5px;
 }
+
 .cloud.top_right::after,
 .wall.top_right::after {
 	border-top-right-radius: 7.5px;
 }
+
 .cloud.bottom_left::after,
 .wall.bottom_left::after {
 	border-bottom-left-radius: 7.5px;
 }
+
 .wall.bottom_right::after,
 .wall.bottom_right::after {
 	border-bottom-right-radius: 7.5px;
@@ -256,6 +275,7 @@ ion-button {
 	background-color: white;
 	border: 1px solid white inset;
 }
+
 .highScore {
 	position: absolute;
 	top: 50px;
@@ -274,6 +294,7 @@ ion-button {
 	border: 1px solid #FFEED6 inset;
 	transition: 250ms;
 }
+
 .cloud::after {
 	width: 15px;
 	height: 15px;
@@ -285,18 +306,7 @@ ion-button {
 	top: 5px;
 	left: -5px;
 }
-// .cloud.one::after {
-// 	border-top-left-radius: 7.5px;
-// }
-// .cloud.two::after {
-// 	border-top-right-radius: 7.5px;
-// }
-// .cloud.three::after {
-// 	border-bottom-right-radius: 7.5px;
-// }
-// .cloud.four::after {
-// 	border-bottom-left-radius: 7.5px;
-// }
+
 .cloud-white {
 	position: absolute;
 	width: 15px;
@@ -305,4 +315,57 @@ ion-button {
 	left: 0px;
 	background-color: white;
 	border: 1px solid white inset;
+}
+
+#loadingCover {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	top: 0;
+	background-color: #FFEED6;
+}
+
+.loadingImageContainer{
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+#loadingLogo {
+	display: block;
+	width: 25%;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.rotate-center {
+	-webkit-animation: rotate-center 3s linear infinite both;
+	animation: rotate-center 3s linear infinite both;
+}
+
+@-webkit-keyframes rotate-center {
+	0% {
+		-webkit-transform: rotate(0);
+		transform: rotate(0);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotate-center {
+	0% {
+		-webkit-transform: rotate(0);
+		transform: rotate(0);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }

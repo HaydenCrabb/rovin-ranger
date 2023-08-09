@@ -51,16 +51,23 @@ export class HomePage implements OnInit {
     this.setupService.setup();
     this.setupService.clearTimers();
     this.setupService.setTimers();
+
     window.setTimeout(() => {
-      this.soundService.playMusic(this.soundService.menuMusic)
+      var loadScreen = document.getElementById('loadingCover');
+    if(loadScreen != undefined){
+      loadScreen.style.display = 'none';
+    }
+    }, 2000);
+
+    window.setTimeout(() => {
       this.startDemo();
     }, 1000);
 
     // Fire off cowboy after brief delay
     window.setTimeout(() => {
+      this.soundService.playMusic(this.soundService.menuMusic)
       this.setupService.sendInTheCowboy();
-
-    }, 1000);
+    }, 2000);
 
     this.subscription = this.demoTimer.subscribe(val => this.setupService.sendInTheCowboy());
 

@@ -37,4 +37,9 @@
   </div>
   <div class="cover" *ngFor="let cover of setupService.coveringWalls" [style.top]="cover.top + 'px'"
     [style.left]="cover.left + 'px'" [style.width]="cover.width + 'px'" [style.height]="cover.height + 'px'"></div>
+  <div id="loadingCover">
+    <div class="loadingImageContainer">
+    <img id="loadingLogo" class="rotate-center" src="../../assets/CowboyHat-01.png">
+  </div>
+  </div>
 </ion-content>

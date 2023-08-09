@@ -100,7 +100,7 @@ export class SetupService {
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
 
       this.playingFieldPosition.top = (remaindery / 2) + this.safeZoneTop;
-    this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
+      this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
     }
     else {
       remainderx = window.innerWidth % this.characterSize;
@@ -111,7 +111,7 @@ export class SetupService {
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
 
       this.playingFieldPosition.top = (remaindery / 2);
-    this.playingFieldPosition.left = (remainderx / 2);
+      this.playingFieldPosition.left = (remainderx / 2);
     }
 
     this.maxWalls = Math.floor(this.playingArea / 165);

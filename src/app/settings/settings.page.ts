@@ -18,12 +18,36 @@ export class SettingsPage implements OnInit {
   constructor(public soundService: SoundService, public settingsModal: ModalController) { }
 
   ngOnInit() {
-    // document.getElementById('volumeSlider').value = 
     
   }
 
-  toggleMusicState(e: any) {
-    if (e.currentTarget.checked) {
+  sfxIconToggle(){
+    var src: string = '';
+    if(localStorage.getItem('sfxIsOn') == 'true'){
+      src = '../../assets/sounds_Main_Volume.png';
+      return src;
+    }
+    else{
+      src = '../../assets/sounds_Volume Off.png';
+      return src;
+    }
+
+  }
+
+  musicIconToggle(){
+    var src: string = '';
+    if(localStorage.getItem('musicIsOn') == 'true'){
+      src = '../../assets/sounds_Music.png';
+      return src;
+    }
+    else {
+      src = '../../assets/sounds_Music Off.png'
+      return src;
+    }
+  }
+
+  toggleMusicState() {
+    if (localStorage.getItem('musicIsOn') == 'false') {
       localStorage.setItem('musicIsOn', 'true');
       this.soundService.musicIsOn = true;
       this.soundService.playMusic(this.soundService.menuMusic);
@@ -32,12 +56,11 @@ export class SettingsPage implements OnInit {
       this.soundService.pauseMusic(this.soundService.menuMusic);
       localStorage.setItem('musicIsOn', 'false');
       this.soundService.musicIsOn = false;
-
     }
   }
 
-  toggleSFXState(e: any) {
-    if (e.currentTarget.checked) {
+  toggleSFXState() {
+    if (localStorage.getItem('sfxIsOn') == 'false') {
       localStorage.setItem('sfxIsOn', 'true');
       this.soundService.sfxIsOn = true;
       this.soundService.playSFX(this.soundService.horseSnortSFX);
@@ -58,10 +81,6 @@ export class SettingsPage implements OnInit {
     localStorage.setItem('volume', volumeSetting.toString());
     this.soundService.volume = volumeSetting;
     this.soundService.playMusic(this.soundService.menuMusic);
-    console.log(this.soundService.volume);
-    
-    // console.log(this.emittedValue);
-    // this.soundService.volume = (this.emittedValue * .01);
   }
 
   dismiss(){

@@ -44,10 +44,16 @@ export class PlayPage implements OnInit, AfterViewInit {
 
 
     console.log('running view init');
-    this, this.setupService.setBackground();
+    this.setupService.setBackground();
     this.setupService.setup_reset();
     this.setupService.setup();
     this.setupService.setTimers();
+    window.setTimeout(() => {
+      var loadScreen = document.getElementById('loadingCover');
+    if(loadScreen != undefined){
+      loadScreen.style.display = 'none';
+    }
+    }, 1000);
 
     window.setTimeout(() => {
       console.log("boom starting");
@@ -229,7 +235,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     if (newHighscore) {
       localHighscore = this.setupService.pointsValue;
     }
-    const randomNum = Math.floor(Math.random() * 6) + 1;
+    const randomNum = Math.floor(Math.random() * 3) + 1;
     if (randomNum == 1) {
       this.showInterstitial();
     }
