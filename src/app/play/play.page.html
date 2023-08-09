@@ -1,7 +1,7 @@
 
 <ion-content id="playZone" scroll-y="false" class="background1">
   <div class="playingField" id="playingField" [style.background]="setupService.setBackgroundColor + ' ' + setupService.setBackgroundImage" [style.background-size]="'cover'" [style.width]="setupService.playingWidth + 'px'" [style.height]="setupService.playingHeight + 'px'" [style.top]="setupService.playingFieldPosition.top + 'px'" [style.left]="setupService.playingFieldPosition.left + 'px'">
-    <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'" [style.left]="setupService.characterPosition.position.left + 'px'"></div>
+    <div id="player" class="player" [style.top]="setupService.characterPosition.position.top + 'px'" [style.left]="setupService.characterPosition.position.left + 'px'" [style.background-image]="setupService.characterBackgroundImage"></div>
     <div id="upgrade" class="upgrade" [style.top]="setupService.upgradePosition.top + 'px'" [style.left]="setupService.upgradePosition.left + 'px'"></div>
     <div id="points" class="points" ><div class="points-inner">{{ setupService.pointsValue }}</div></div>
     <div class="enemy" *ngFor="let enemy of setupService.enemies" [style.top]="enemy.position.top + 'px'" [style.left]="enemy.position.left + 'px'"></div>
