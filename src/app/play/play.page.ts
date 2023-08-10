@@ -229,15 +229,16 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async presentModal(newHighscore: boolean) {
 
+    const randomNum = Math.floor(Math.random() * 3) + 1;
+    if (randomNum == 1) {
+      this.showInterstitial();
+    }
+    
     this.soundService.stopMusic(this.soundService.gamePlayMusic);
     this.setupService.clearTimers();
     var localHighscore = this.setupService.highscore;
     if (newHighscore) {
       localHighscore = this.setupService.pointsValue;
-    }
-    const randomNum = Math.floor(Math.random() * 3) + 1;
-    if (randomNum == 1) {
-      this.showInterstitial();
     }
 
     const myModal = await this.modalController.create({

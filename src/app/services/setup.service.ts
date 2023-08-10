@@ -76,11 +76,11 @@ export class SetupService {
 
 
 
-    //Check safe zones
-    this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
-    this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
-    this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
-    this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
+    //Check safe zones don't need to be 
+    // this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
+    // this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
+    // this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
+    // this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
 
     //
     var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
@@ -201,9 +201,9 @@ export class SetupService {
 
   createAWall(topx: number, leftx: number, previousDirection: number, additionalWall: boolean) {
     if ((topx >= 0 && topx < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      if (!this.theresAWallThere(topx, leftx)) {
+      if (this.theresAWallThere(topx, leftx) != true) {
         if (this.totalWalls < this.maxWalls) {
-          if (!this.inNoGoZone(topx, leftx)) {
+          if (this.inNoGoZone(topx, leftx) != true) {
 
             var wall = new Wall(topx, leftx, false, false, false, false);
 
@@ -668,6 +668,9 @@ export class SetupService {
     //Maximum cloud size is 20, minimum is 10, pick a random number in that range
     var cloudSize = Math.floor(Math.random() * (50 - 40 + 1)) + 40;
 
+    var last_index = this.allClouds.length - 1;
+    (last_index < 0 ? last_index = 0 : last_index = last_index);
+
     for (let i = 0; i < cloudSize; i++) {
 
       //function to select a random point within defined space
@@ -681,8 +684,11 @@ export class SetupService {
 
 
     }
-
-    this.roundOffClouds();
+    //call round off clouds on the newest additions to the array only. 
+    for (var i = last_index; i < this.allClouds.length; i++){
+      this.roundOffClouds(this.allClouds[i]);
+    }
+    
 
   }
 
@@ -709,29 +715,27 @@ export class SetupService {
     return false;
   }
 
-  roundOffClouds() {
+  roundOffClouds(cloud: Cloud) {
     var self = this;
     var size = this.characterSize;
-    this.allClouds.forEach(function (cloud) {
 
-      var cloudLeft = !self.theresACloudThere(cloud.position.left - size, cloud.position.top);
-      var cloudTop = !self.theresACloudThere(cloud.position.left, cloud.position.top - size);
-      var cloudRight = !self.theresACloudThere(cloud.position.left + size, cloud.position.top);
-      var cloudDown = !self.theresACloudThere(cloud.position.left, cloud.position.top + size);
+    var cloudLeft = !self.theresACloudThere(cloud.position.left - size, cloud.position.top);
+    var cloudTop = !self.theresACloudThere(cloud.position.left, cloud.position.top - size);
+    var cloudRight = !self.theresACloudThere(cloud.position.left + size, cloud.position.top);
+    var cloudDown = !self.theresACloudThere(cloud.position.left, cloud.position.top + size);
 
-      if (cloudLeft && cloudTop) {
-        cloud.classes.top_left = true;
-      }
-      if (cloudTop && cloudRight) {
-        cloud.classes.top_right = true;
-      }
-      if (cloudRight && cloudDown) {
-        cloud.classes.bottom_right = true;
-      }
-      if (cloudDown && cloudLeft) {
-        cloud.classes.bottom_left = true;
-      }
-    });
+    if (cloudLeft && cloudTop) {
+      cloud.classes.top_left = true;
+    }
+    if (cloudTop && cloudRight) {
+      cloud.classes.top_right = true;
+    }
+    if (cloudRight && cloudDown) {
+      cloud.classes.bottom_right = true;
+    }
+    if (cloudDown && cloudLeft) {
+      cloud.classes.bottom_left = true;
+    }
   }
   //DFS function to make sure all areas of the map are accessible
   isCoordinateValid(x: number, y: number): boolean {
