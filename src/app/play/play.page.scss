@@ -2,9 +2,9 @@
 	--ion-background-color:#28364A;
 }
 .playingField {
-	margin-top: constant(safe-area-inset-top) !important;
-    margin-top: env(safe-area-inset-top) !important;
-    margin-bottom: calc(4px + env(safe-area-inset-top)) !important;
+	// margin-top: constant(safe-area-inset-top) !important;
+    // margin-top: env(safe-area-inset-top) !important;
+    // margin-bottom: calc(4px + env(safe-area-inset-top)) !important;
 	position: relative;
 	z-index: 1;
 	background-color: #FFEED6;
