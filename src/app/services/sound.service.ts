@@ -20,6 +20,8 @@ export class SoundService {
   horseWhinee = new Audio('../assets/Sounds/Rovin_Isolated_Horse_Whinee.mp3');
   //Upgrade Pickup Sound
   pickupSFX = new Audio('../assets/Sounds/UpgradeAquired.mp3');
+  //Death Sound
+  deathSFX = new Audio('../assets/Sounds/Death.mp3');
 
   musicIsOn!: boolean;
   sfxIsOn!: boolean;
@@ -52,6 +54,7 @@ export class SoundService {
       return;
     }
     else {
+      sfxFile.currentTime = 0;
       sfxFile.volume = this.volume;
       sfxFile.play();
     }

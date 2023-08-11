@@ -173,10 +173,16 @@ export class PlayPage implements OnInit, AfterViewInit {
           console.log("New Highscore set.")
           newHighscore = true;
         }
+        self.soundService.stopMusic(self.soundService.gamePlayMusic);
+
+        window.setTimeout(() => {
+          self.soundService.playSFX(self.soundService.deathSFX);
+        }, 500);
+        
 
         window.setTimeout(() => {
           self.presentModal(newHighscore);
-        }, 1000);
+        }, 2000);
         return;
       }
     });
