@@ -34,9 +34,9 @@ export class SoundService {
       return;
     }
     else {
-      musicFile.play();
       musicFile.loop = true;
       musicFile.volume = this.volume;
+      musicFile.play();
     }
   }
   pauseMusic(musicFile: HTMLAudioElement) {
@@ -52,8 +52,8 @@ export class SoundService {
       return;
     }
     else {
-      sfxFile.play();
       sfxFile.volume = this.volume;
+      sfxFile.play();
     }
   }
 

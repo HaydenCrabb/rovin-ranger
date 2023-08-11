@@ -71,18 +71,17 @@ export class SetupService {
 
 
   setup() {
-    //console.log(this.screen_orientation.type);
     //supposedly screen_orientation has been locked on config.xml page
 
 
 
-    //Check safe zones don't need to be 
-    // this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
-    // this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
-    // this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
-    // this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
+    // Check safe zones don't need to be 
+    this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
+    this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
+    this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
+    this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
 
-    //
+    
     var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
     var adjustedHeight = window.innerHeight - this.safeZoneBottom - this.safeZoneTop;
 
@@ -199,13 +198,13 @@ export class SetupService {
     return false;
   }
 
-  createAWall(topx: number, leftx: number, previousDirection: number, additionalWall: boolean) {
-    if ((topx >= 0 && topx < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      if (this.theresAWallThere(topx, leftx) != true) {
+  createAWall(topy: number, leftx: number, previousDirection: number, additionalWall: boolean) {
+    if ((topy >= 0 && topy < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
+      if (this.theresAWallThere(leftx, topy) != true) {
         if (this.totalWalls < this.maxWalls) {
-          if (this.inNoGoZone(topx, leftx) != true) {
+          if (this.inNoGoZone(topy, leftx) != true) {
 
-            var wall = new Wall(topx, leftx, false, false, false, false);
+            var wall = new Wall(topy, leftx, false, false, false, false);
 
             this.walls.push(wall);
             this.totalWalls++;
@@ -226,21 +225,26 @@ export class SetupService {
                 }
 
                 if (random2 == 1) {
-                  this.createAWall(topx - this.characterSize, leftx, 1, true);
+                  this.createAWall(topy - this.characterSize, leftx, 1, true);
                 }
                 else if (random2 == 2) {
-                  this.createAWall(topx, leftx + this.characterSize, 2, true);
+                  this.createAWall(topy, leftx + this.characterSize, 2, true);
                 }
                 else if (random2 == 3) {
-                  this.createAWall(topx + this.characterSize, leftx, 3, true);
+                  this.createAWall(topy + this.characterSize, leftx, 3, true);
                 }
                 else if (random2 == 4) {
-                  this.createAWall(topx, leftx - this.characterSize, 4, true);
+                  this.createAWall(topy, leftx - this.characterSize, 4, true);
                 }
               }
             }
           }
         }
+      }
+      else {
+        console.log(this.walls);
+        console.log(this.theresAWallThere(topy, leftx));
+        console.log('already a wall at ' + topy + ', ' + leftx);
       }
     }
   }
@@ -451,7 +455,6 @@ export class SetupService {
       else if (canMoveVertical) {
         enemy.direction = verticalDirection;
       }
-      //console.log("directions: H " + horizontalDirection + " V " + verticalDirection + " Distances: H " + horizontalDistance + " V " + verticalDistance);
     });
   }
 
