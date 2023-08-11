@@ -42,8 +42,6 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
     this.setupService.safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
 
-
-    console.log('running view init');
     this.setupService.setBackground();
     this.setupService.setup_reset();
     this.setupService.setup();
@@ -77,6 +75,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     gestureY.enable();
     gestureX.enable();
 
+    console.log(this.setupService.walls);
   }
 
   async ngOnDestroy() {
@@ -174,10 +173,6 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   reset() {
     this.ngAfterViewInit();
-    // window.setTimeout(() => {
-    //   console.log("resetting ");
-    //   this.startOrStop();
-    // }, 2000);
   }
 
   startOrStop() {
@@ -233,7 +228,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     if (randomNum == 1) {
       this.showInterstitial();
     }
-    
+
     this.soundService.stopMusic(this.soundService.gamePlayMusic);
     this.setupService.clearTimers();
     var localHighscore = this.setupService.highscore;
