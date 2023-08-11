@@ -36,6 +36,14 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
 
+    //prepare the ad to be shown on game end
+    const options: AdOptions = {
+      //this is simply a test ad, we need top use it for development but we will need to change this when we deploy to our code
+      adId: 'ca-app-pub-3940256099942544/4411468910',
+      isTesting: true,
+    }
+    await AdMob.prepareInterstitial(options);
+
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
     this.setupService.safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
@@ -251,12 +259,6 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   async showInterstitial() {
-    const options: AdOptions = {
-      //this is simply a test ad, we need top use it for development but we will need to change this when we deploy to our code
-      adId: 'ca-app-pub-3940256099942544/4411468910',
-      isTesting: true,
-    }
-    await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
   }
 
