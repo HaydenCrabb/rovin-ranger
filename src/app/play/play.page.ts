@@ -85,8 +85,6 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     gestureY.enable();
     gestureX.enable();
-
-    console.log(this.setupService.walls);
   }
 
   async ngOnDestroy() {
