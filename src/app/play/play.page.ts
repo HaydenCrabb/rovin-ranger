@@ -44,6 +44,9 @@ export class PlayPage implements OnInit, AfterViewInit {
     }
     await AdMob.prepareInterstitial(options);
 
+    //load pickup sound
+    this.soundService.pickupSFX.load();
+
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
     this.setupService.safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
