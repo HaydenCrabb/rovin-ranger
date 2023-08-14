@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SoundService } from '../services/sound.service';
-import { IonRange, ModalController, RangeCustomEvent } from '@ionic/angular';
-import { RangeValue } from '@ionic/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
