@@ -241,11 +241,6 @@ export class SetupService {
           }
         }
       }
-      else {
-        console.log(this.walls);
-        console.log(this.theresAWallThere(topy, leftx));
-        console.log('already a wall at ' + topy + ', ' + leftx);
-      }
     }
   }
   inNoGoZone(top: number, left: number) {
@@ -363,27 +358,20 @@ export class SetupService {
   }
 
   createUpgrade() {
-    //we need to edit these random functions so that the upgrade is always on a mulitple of 10. Currently it can go anywhere. 
-    var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
-    var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+    //we need to edit these random functions so that the upgrade is always on a mulitple of 15.
+    var satisfied = false;
+    while (satisfied == false)
+    {
+      var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
+      var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
 
-    randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
-    randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
-    if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX)) {
-      this.upgradePosition.top = randomY;
-      this.upgradePosition.left = randomX;
-      /* if (randomX == 350)
-      {
-        document.getElementById("playingField").className = "playingField-black"
-        this.walls.forEach(function(theWall)
-        {
-          document.getElementById(theWall.wallId).className = "wall-white";
-        });
-        //easterTimer = window.setTimeout(resetEaster, 30000);
-      } */
-    }
-    else {
-      this.createUpgrade();
+      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
+      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
+      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX)) {
+        this.upgradePosition.top = randomY;
+        this.upgradePosition.left = randomX;
+        satisfied = true;
+      }
     }
   }
 
@@ -653,6 +641,7 @@ export class SetupService {
   }
 
   buildCloud() {
+    console.log("Cloud being built");
     var previousDirection = 0
     // Set strating position of cloud, starts offscreen at random Y value
     var xPosition = -300;
@@ -695,19 +684,30 @@ export class SetupService {
 
   }
 
-  moveClouds(allClouds: Cloud[]) {
-    allClouds = this.allClouds;
+  moveClouds() {
+    var allClouds = this.allClouds;
 
     if (allClouds == undefined) {
       return;
     }
 
-    allClouds.forEach((cloudPuff: Cloud, index: number) => {
-      cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
-      if (cloudPuff.position.left > this.playingWidth + 100) {
-        allClouds.splice(index, 1);
+    for (var i = allClouds.length - 1; i >= 0; i--)
+    {
+      if(allClouds[i].position.left > this.playingWidth + 100)
+      {
+        allClouds.splice(i,1);
       }
-    });
+      else {
+        allClouds[i].position.left = allClouds[i].position.left + (this.characterSize/2);
+
+      }
+    }
+    // allClouds.forEach((cloudPuff: Cloud, index: number) => {
+    //   cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
+    //   if (cloudPuff.position.left > this.playingWidth + 100) {
+    //     allClouds.splice(index, 1);
+    //   }
+    // });
   }
 
   theresACloudThere(x: any, y: any) {
@@ -809,7 +809,7 @@ export class SetupService {
 
     this.enemyPlayingInterval = (this.playingInterval * 1.4);
 
-    this.cloudPlayingInterval = (this.playingInterval * 2);
+    this.cloudPlayingInterval = (this.playingInterval * 1.7);
   }
 }
 

@@ -17,7 +17,7 @@
     width: 65%;
     background-color: #f0c56f;
     border-radius: 50px;
-    box-shadow: -6px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: -5px 5px rgba(0, 0, 0, 0.25);
 }
 
 #closeButton {
@@ -28,12 +28,12 @@
     height: 60px;
     width: 12%;
     border-radius: 10px;
-    box-shadow: -7px 7px rgba(0, 0, 0, 0.15);
+    box-shadow: -5px 5px rgba(0, 0, 0, 0.25);
     background-color: #2b3648;
 }
 
 #closeButton:active {
-    box-shadow: -3px 3px rgba(0, 0, 0, 0.30);
+    box-shadow: -3px 3px rgba(0, 0, 0, 0.35);
     background-color: #000000;
 }
 .icon {
@@ -62,7 +62,7 @@ ion-col {
     height: 65px;
     width: 65px;
     border-radius: 6px;
-    box-shadow: -3px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: -5px 5px rgba(0, 0, 0, 0.25);
 }
 
 .buttonPurple {
@@ -70,7 +70,7 @@ ion-col {
 }
 .buttonPurple:active {
     background-color: #664c67;
-    box-shadow: -1px 1px rgba(0, 0, 0, 0.30);
+    box-shadow: -1px 1px rgba(0, 0, 0, 0.35);
 }
 
 .buttonBlue {
@@ -78,7 +78,7 @@ ion-col {
 }
 .buttonBlue:active {
     background-color: #6085a1;
-    box-shadow: -1px 1px rgba(0, 0, 0, 0.30);
+    box-shadow: -1px 1px rgba(0, 0, 0, 0.35);
 }
 
 input[type=range] {

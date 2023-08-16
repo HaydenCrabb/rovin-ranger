@@ -4,15 +4,18 @@
       <img id="logo" src="../../assets/Logo.png">
     </div>
     <ion-row class="ion-align-items-end ion-justify-content-center element">
-      <button id="play-button" shape="round" routerLink="/play" (click)="playGame()"
-        routerDirection="root">PLAY</button>
+      <div class="button-container">
+        <button id="play-button" shape="round" routerLink="/play" (click)="playGame()"
+          routerDirection="root">PLAY
+        </button>
+        <div class="high-score">High Score: {{ currentHighScore }}</div>
+      </div>
     </ion-row>
     <ion-row class="ion-align-items-start ion-justify-content-center element second">
-      <br>
-      <p>High Score = {{ currentHighScore }}</p>
-      <ion-col size="2" class="ion-justify-content-center"><ion-button color="light" (click)="openSettings()"><ion-icon name="cog" color="rangerRed"></ion-icon></ion-button></ion-col>
     </ion-row>
-    <!-- <ion-button (click)="showInterstitial()" expand="full">Show Intertitial</ion-button> -->
+      <ion-row class="ion-justify-content-center">
+        <ion-button color="light" (click)="openSettings()"><ion-icon name="cog" color="rangerRed"></ion-icon></ion-button>
+      </ion-row>
   </div>
   <div class="playFieldOverlay">
   </div>

@@ -7,57 +7,68 @@ export class SoundService {
 
 
   //Audio for background of gameplay
-  gamePlayMusic = new Audio('../assets/Sounds/Rovin_Ranger_Mixing_Full.mp3');
+  gamePlayMusic = '../assets/Sounds/Rovin_Ranger_Mixing_Full.mp3';
   //Audio for menu background music
-  menuMusic = new Audio('../assets/Sounds/Rovin_Ranger_Menu.mp3');
+  menuMusic = '../assets/Sounds/Rovin_Ranger_Menu.mp3';
   //Hawk sound for play button
-  startButtonSFX = new Audio('../assets/Sounds/Rovin_Isolated_Hawk.mp3');
+  startButtonSFX = '../assets/Sounds/Rovin_Isolated_Hawk.mp3';
   //Gallup Sound Effect
-  gallupSFX = new Audio('../assets/Sounds/Rovin_Isolated_Gallup.mp3');
+  gallupSFX = '../assets/Sounds/Rovin_Isolated_Gallup.mp3';
   //Gallup Sound Effect
-  horseSnortSFX = new Audio('../assets/Sounds/Rovin_Isolated_Horse_Snort.mp3');
+  horseSnortSFX = '../assets/Sounds/Rovin_Isolated_Horse_Snort.mp3';
   //Gallup Sound Effect
-  horseWhinee = new Audio('../assets/Sounds/Rovin_Isolated_Horse_Whinee.mp3');
+  horseWhinee = '../assets/Sounds/Rovin_Isolated_Horse_Whinee.mp3';
   //Upgrade Pickup Sound
-  pickupSFX = new Audio('../assets/Sounds/UpgradeAquired.mp3');
+  pickupSFX = '../assets/Sounds/UpgradeAquired.mp3';
   //Death Sound
-  deathSFX = new Audio('../assets/Sounds/Death.mp3');
+  deathSFX = '../assets/Sounds/Death.mp3';
 
   musicIsOn!: boolean;
   sfxIsOn!: boolean;
-
+  player:any;
+  sfxPlayer:any;
   volume!: number;
 
-  constructor() { }
+  constructor() { 
+    this.player = document.createElement("audio");
+    this.sfxPlayer = document.createElement("audio");
+  }
 
   //Music Functions
-  playMusic(musicFile: HTMLAudioElement) {
+  playMusic(musicFile: String) {
     if (this.musicIsOn == false) {
       return;
     }
     else {
-      musicFile.loop = true;
-      musicFile.volume = this.volume;
-      musicFile.play();
+      this.player.loop = true;
+      this.player.src = musicFile
+      this.player.volume = this.volume;
+      this.player.play();
     }
   }
-  pauseMusic(musicFile: HTMLAudioElement) {
-    musicFile.pause();
+  pauseMusic() {
+    this.player.pause();
   }
-  stopMusic(musicFile: HTMLAudioElement) {
-    musicFile.pause();
-    musicFile.currentTime = 0;
+  stopMusic() {
+    this.player.pause();
+    this.player.currentTime = 0;
   }
 
-  playSFX(sfxFile: HTMLAudioElement) {
+  playSFX(sfxFile: string) {
     if (this.sfxIsOn == false) {
       return;
     }
     else {
-      sfxFile.currentTime = 0;
-      sfxFile.volume = this.volume;
-      sfxFile.play();
+      this.sfxPlayer.currentTime = 0;
+      this.sfxPlayer.src = sfxFile;
+      this.sfxPlayer.volume = this.volume;
+      this.sfxPlayer.play();
     }
+  }
+  changeVolume()
+  {
+    this.sfxPlayer.volume = this.volume;
+    this.player.volume = this.volume;
   }
 
   //these functions run when opening settings to check whether music or audio is muted

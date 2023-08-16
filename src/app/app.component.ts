@@ -15,10 +15,10 @@ export class AppComponent {
   ngOnInit() {
 
     if(localStorage.getItem('savedScore')){
-      console.log("found savedScore")
+      console.log("found savedScore");
     }
     else {
-      localStorage.setItem('savedScore','0')
+      localStorage.setItem('savedScore','0');
     }
 
     

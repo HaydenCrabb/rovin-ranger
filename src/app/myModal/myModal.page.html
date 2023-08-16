@@ -12,9 +12,15 @@
 			<p class="highscore">{{ highscore }}</p>
 		</ion-row>
 		<ion-row class="ion-justify-content-center">
-			<ion-col size="2" class="ion-justify-content-center"><ion-button color="light" routerLink="/home" (click)="dismissToHome()" routerDirection="root"><ion-icon name="home" color="rangerRed"></ion-icon></ion-button></ion-col>
-			<ion-col size="2" class="ion-justify-content-center"><ion-button color="light" (click)="openSettings()"><ion-icon name="cog" color="rangerRed"></ion-icon></ion-button></ion-col>
-			<ion-col size="2" class="ion-justify-content-center"><ion-button color="light" (click)="share()"><ion-icon name="share" color="rangerRed"></ion-icon></ion-button></ion-col>
+			<ion-col size="2" class="ion-justify-content-center">
+				<ion-button routerLink="/home" (click)="dismissToHome()" routerDirection="root"><ion-icon name="home" color="cowboyBoot"></ion-icon></ion-button>
+			</ion-col>
+			<ion-col size="2" class="ion-justify-content-center">
+				<ion-button (click)="openSettings()"><ion-icon name="cog" color="sunsetPurple"></ion-icon></ion-button>
+			</ion-col>
+			<ion-col size="2" class="ion-justify-content-center">
+				<ion-button (click)="share()"><ion-icon name="share" color="deepGreen"></ion-icon></ion-button>
+			</ion-col>
 		</ion-row>
 	 	<ion-row class="ion-align-items-center ion-justify-content-center">
 	 		<div class="space">

@@ -1,3 +1,21 @@
+.button-container {
+	padding-top: 0.75em;
+	padding-bottom: 0.75em;
+	min-width: 100%;
+	justify-content: center;
+	position: relative;
+	display: flex;
+}
+.high-score {
+	background-color: #EFC56F;
+	padding: 5px 15px;
+	border-radius: 20px;
+	position: absolute;
+	top: 0px;
+	left: 52%;
+	transform: rotate(13deg);
+	animation: bobUpDown 2s ease-in-out infinite;
+}
 #container {
 	text-align: center;
 
@@ -69,7 +87,7 @@ p {
 .playFieldOverlay {
 	position: fixed;
 	z-index: 12;
-	background: #FFFFFF40;
+	background: rgba(0,0,0, 0.20);
 	height: 100%;
 	width: 100%;
 }
@@ -88,14 +106,20 @@ ion-col {
 }
 
 ion-button {
-	--border-color: var(--ion-background-color);
-	--border-style: solid;
+  --background: #ffffff;
+  --background-activated: #cccccc;
+
+  --color: #222222;
+
+  --border-radius: 10px;
+
+  --box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
 }
 
 
 
 
-// CSS to display game components
+/* CSS to display game components */
 .background1 {
 	--ion-background-color: #28364A;
 }
@@ -283,7 +307,7 @@ ion-button {
 }
 
 
-// All my cloud styling
+/* All my cloud styling */
 .cloud {
 	position: absolute;
 	width: 15px;
@@ -324,6 +348,10 @@ ion-button {
 	z-index: 100;
 	top: 0;
 	background-color: #FFEED6;
+}
+
+.loading-hidden {
+	display: none !important;
 }
 
 .loadingImageContainer{
@@ -367,5 +395,13 @@ ion-button {
 	100% {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
+	}
+}
+@keyframes bobUpDown {
+	50% {
+		transform: translate(0px, -5px) rotate(13deg);
+	}
+	100% {
+		transform: translate(0px, 0px) rotate(13deg);
 	}
 }

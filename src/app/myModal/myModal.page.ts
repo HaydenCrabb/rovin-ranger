@@ -34,7 +34,7 @@ export class ModalPage {
       localStorage.setItem('savedScore', this.theLastScore.toString());
 
       // SET SCORE GLOBALLY
-      this.scoreService.highScore = localStorage.getItem('savedScore');
+      this.scoreService.highScore = this.theLastScore;
     }
 
     this.highscore = "High Score: " + this.currentHighScore;
@@ -70,7 +70,7 @@ export class ModalPage {
     if (canShare == true){
       Share.share({
         title: 'Beat My High Score',
-        text: 'I just got a new high score of ' + this.theLastScore + ' challenge me now!',
+        text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', challenge me now!',
         url: 'https://google.com',
         dialogTitle: 'Share your score with friends',
       });

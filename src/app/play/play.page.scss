@@ -204,7 +204,7 @@
 	top: 50px;
 	left: 600px;
 }
-// All my cloud styling
+/* All my cloud styling ---------------------------------- */
 .cloud {
 	position: absolute;
 	width: 15px;
@@ -231,11 +231,11 @@
 	height: 15px;
 	display: inline-block;
 	content: " ";
-	background-color: #b2a59a97;
+	background-color: rgba(0, 0, 0, .25);
 	position: absolute;
 	z-index: 3;
-	top: 5px;
-	left: -5px;
+	top: 52px;
+	left: -52px;
 }
 .cloud-white {
 	position: absolute;
@@ -268,7 +268,7 @@
 	}
 }
 
-//Loading screen
+/* Loading screen ___________________________  */
 
 #loadingCover {
 	position: absolute;
@@ -278,7 +278,9 @@
 	top: 0;
 	background-color: #FFEED6;
 }
-
+.loading-hidden {
+	display: none !important;
+}
 .loadingImageContainer{
 	height: 100%;
 	display: flex;

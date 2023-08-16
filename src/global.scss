@@ -32,7 +32,10 @@
     --sab: env(safe-area-inset-bottom);
     --sal: env(safe-area-inset-left);
 
-    --rangerRed: #c75c58;
+    --rangerRed: #C75C58;
+    --cowboyBoot: #BF7F40;
+    --sunsetPurple: #836D84;
+    --deepGreen: #395B5B;
 }
 
 * {
@@ -51,19 +54,21 @@ ion-modal {
     }
 
     :root {
-        --ion-color-rangerRed: #c75c58;
-        --ion-color-rangerRed-rgb: 199,92,88;
-        --ion-color-rangerRed-contrast: #ffffff;
-        --ion-color-rangerRed-contrast-rgb: 255,255,255;
-        --ion-color-rangerRed-shade: #af514d;
-        --ion-color-rangerRed-tint: #cd6c69;
+        --ion-color-rangerRed: #C75C58;
+        --ion-color-cowboyBoot: #BF7F40;
+        --ion-color-sunsetPurple: #836D84;
+        --ion-color-deepGreen: #395B5B;
     }
     
     .ion-color-rangerRed {
         --ion-color-base: var(--ion-color-rangerRed);
-        --ion-color-base-rgb: var(--ion-color-rangerRed-rgb);
-        --ion-color-contrast: var(--ion-color-rangerRed-contrast);
-        --ion-color-contrast-rgb: var(--ion-color-rangerRed-contrast-rgb);
-        --ion-color-shade: var(--ion-color-rangerRed-shade);
-        --ion-color-tint: var(--ion-color-rangerRed-tint);
+    }
+    .ion-color-cowboyBoot {
+        --ion-color-base: var(--ion-color-cowboyBoot);
+    }
+    .ion-color-sunsetPurple {
+        --ion-color-base: var(--ion-color-sunsetPurple);
+    }
+    .ion-color-deepGreen {
+        --ion-color-base: var(--ion-color-deepGreen);
     }

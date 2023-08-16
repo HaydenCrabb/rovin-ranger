@@ -5,6 +5,7 @@ import type { GestureDetail } from '@ionic/angular';
 
 import { SetupService } from '../services/setup.service';
 import { SoundService } from '../services/sound.service';
+import { ScoreService } from '../services/score.service';
 
 
 import { ModalController } from '@ionic/angular';
@@ -22,7 +23,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
 
 
-  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public router: Router, public soundService: SoundService) {
+  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public scoreService: ScoreService, public router: Router, public soundService: SoundService) {
 
   }
 
@@ -30,7 +31,6 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     await this.storage.create();
-
 
   }
 
@@ -44,25 +44,17 @@ export class PlayPage implements OnInit, AfterViewInit {
     }
     await AdMob.prepareInterstitial(options);
 
-    //load pickup sound
-    this.soundService.pickupSFX.load();
-
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
     this.setupService.safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
     this.setupService.safeZoneBottom = getComputedStyle(document.documentElement).getPropertyValue('--sab');
     this.setupService.safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
 
+    this.LoadingCover();
     this.setupService.setBackground();
     this.setupService.setup_reset();
     this.setupService.setup();
     this.setupService.setTimers();
-    window.setTimeout(() => {
-      var loadScreen = document.getElementById('loadingCover');
-    if(loadScreen != undefined){
-      loadScreen.style.display = 'none';
-    }
-    }, 1000);
 
     window.setTimeout(() => {
       console.log("boom starting");
@@ -86,10 +78,31 @@ export class PlayPage implements OnInit, AfterViewInit {
     gestureY.enable();
     gestureX.enable();
   }
+  LoadingCover()
+  {
+    console.log("we're loading it alright");
+      var loadingScreen = document.getElementById('loadingCover')!;
+      if (loadingScreen.classList.contains('loading-hidden') == false)
+      {
+        console.log("status of loading screen... not hidden");
+        window.setTimeout(() => {
+          if(loadingScreen != undefined){
+            var loadScreen = document.getElementById('loadingCover')!;
+            console.log("adding hidden status...");
+            loadScreen.classList.add('loading-hidden');
+          }
+        }, 1000);
+      }
+      else {
+        console.log("status of loading screen: Apparently hidden");
+        loadingScreen.classList.remove('loading-hidden');
+        this.LoadingCover();
+      }
+  }
 
   async ngOnDestroy() {
     this.setupService.clearTimers();
-    this.soundService.stopMusic(this.soundService.gamePlayMusic);
+    this.soundService.stopMusic();
   }
 
   // FUNCTION FOR HORIZONTAL MOVEMENT 
@@ -145,15 +158,12 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   checkIfTouchedUpgrade() {
 
-    const pickupAudio = new Audio('../assets/Sounds/UpgradeAquired.mp3');
-
-
     if (this.setupService.characterPosition.position.top == this.setupService.upgradePosition.top && this.setupService.characterPosition.position.left == this.setupService.upgradePosition.left) {
       //then we got em.
+      this.soundService.playSFX(this.soundService.pickupSFX);
       this.setupService.pointsValue++;
       this.setupService.createUpgrade();
       this.setupService.createEnemy();
-      this.soundService.playSFX(this.soundService.pickupSFX);
     }
   }
   checkIfGameOver() {
@@ -166,13 +176,13 @@ export class PlayPage implements OnInit, AfterViewInit {
 
         var newHighscore = false;
         //Current Error, self.setupService.Highscore is always 0!!!
-        if (self.setupService.pointsValue > self.setupService.highscore) {
+        console.log(self.setupService.highscore);
+        if (self.setupService.pointsValue > self.scoreService.highScore) {
           self.storage.set('highscore', self.setupService.pointsValue);
           console.log("New Highscore set.")
           newHighscore = true;
         }
-        self.soundService.stopMusic(self.soundService.gamePlayMusic);
-
+        self.soundService.stopMusic();
         window.setTimeout(() => {
           self.soundService.playSFX(self.soundService.deathSFX);
         }, 500);
@@ -217,12 +227,12 @@ export class PlayPage implements OnInit, AfterViewInit {
       }, this.setupService.enemyPlayingInterval);
 
       this.setupService.cloudTimer = window.setInterval(() => {
-        const randomNum = Math.floor(Math.random() * 150) + 1;
+        const random_generate_cloud = Math.floor(Math.random() * 140) + 1;
         // Check if the random number is 1
-        if (randomNum === 1) {
+        if (random_generate_cloud === 1) {
           this.setupService.buildCloud();
         }
-        this.setupService.moveClouds(this.setupService.allClouds);
+        this.setupService.moveClouds();
       }, this.setupService.cloudPlayingInterval)
     }
     else if (this.setupService.playing == true && this.setupService.gameOver == false)  //pause the game. 
@@ -244,7 +254,7 @@ export class PlayPage implements OnInit, AfterViewInit {
       this.showInterstitial();
     }
 
-    this.soundService.stopMusic(this.soundService.gamePlayMusic);
+    this.soundService.stopMusic();
     this.setupService.clearTimers();
     var localHighscore = this.setupService.highscore;
     if (newHighscore) {

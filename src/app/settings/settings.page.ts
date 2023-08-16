@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SoundService } from '../services/sound.service';
+import { RangeCustomEvent } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -52,7 +53,7 @@ export class SettingsPage implements OnInit {
       this.soundService.playMusic(this.soundService.menuMusic);
     }
     else {
-      this.soundService.pauseMusic(this.soundService.menuMusic);
+      this.soundService.pauseMusic();
       localStorage.setItem('musicIsOn', 'false');
       this.soundService.musicIsOn = false;
     }
@@ -65,21 +66,19 @@ export class SettingsPage implements OnInit {
       this.soundService.playSFX(this.soundService.horseSnortSFX);
     }
     else {
-
-      this.soundService.horseSnortSFX.pause();
-      this.soundService.horseSnortSFX.currentTime = 0;
       localStorage.setItem('sfxIsOn', 'false');
       this.soundService.sfxIsOn = false;
     }
 
   }
-
-  volumeAdjust(value: string){
-    var volumeSetting = Number(value);
-    volumeSetting = volumeSetting * .01;
+  whenChangeSlide(event: Event)
+  {
+    var volumeSetting = Number((event as RangeCustomEvent).detail.value);
+    volumeSetting = volumeSetting / 100;
     localStorage.setItem('volume', volumeSetting.toString());
-    this.soundService.volume = volumeSetting;
-    this.soundService.playMusic(this.soundService.menuMusic);
+    this.soundService.volume = Number(volumeSetting);
+    this.soundService.changeVolume();
+    console.log((event as RangeCustomEvent).detail.value);
   }
 
   dismiss(){

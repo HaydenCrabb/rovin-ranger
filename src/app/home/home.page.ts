@@ -16,7 +16,7 @@ import { SettingsPage } from '../settings/settings.page';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  currentHighScore: any;
+  currentHighScore = 0;
   currentPath: string = window.location.pathname;
 
   subscription!: Subscription;
@@ -54,9 +54,9 @@ export class HomePage implements OnInit {
 
     window.setTimeout(() => {
       var loadScreen = document.getElementById('loadingCover');
-    if(loadScreen != undefined){
-      loadScreen.style.display = 'none';
-    }
+      if(loadScreen != undefined){
+        loadScreen.classList.add('loading-hidden');
+      }
     }, 2000);
 
     window.setTimeout(() => {
@@ -78,7 +78,7 @@ export class HomePage implements OnInit {
   }
 
   playGame() {
-    this.soundService.stopMusic(this.soundService.menuMusic);
+    this.soundService.stopMusic();
     this.soundService.playSFX(this.soundService.startButtonSFX);
   }
 
@@ -107,12 +107,12 @@ export class HomePage implements OnInit {
         }
       }
       //Set random number for chance of cloud form
-      const randomNum = Math.floor(Math.random() * 50) + 1;
+      const randomNum = Math.floor(Math.random() * 90) + 1;
     // Check if the random number is 1
     if (randomNum === 1) {
       this.setupService.buildCloud();
     }
-    this.setupService.moveClouds(this.setupService.allClouds);
+    this.setupService.moveClouds();
     }, this.setupService.cloudPlayingInterval)
   }
 

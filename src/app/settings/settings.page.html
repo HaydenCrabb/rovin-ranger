@@ -9,8 +9,8 @@
             <img class="icon-small" src="../../assets/sounds_black_Main_Volume.png">
           </ion-row>
           <ion-row class="ion-justify-content-center">
-            <input id="volumeSlider" class="styled-slider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider
-              (input)="volumeAdjust(volumeSlider.value)">
+            <ion-range id="volumeSlider" [value]="this.sliderPosition" min="0" max="100" (ionChange)="whenChangeSlide($event)"></ion-range>
+            <!-- <input id="volumeSlider" class="styled-slider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider (input)="volumeAdjust(volumeSlider.value)"> -->
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-col size="2">
