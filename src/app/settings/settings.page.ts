@@ -78,7 +78,6 @@ export class SettingsPage implements OnInit {
     localStorage.setItem('volume', volumeSetting.toString());
     this.soundService.volume = Number(volumeSetting);
     this.soundService.changeVolume();
-    console.log((event as RangeCustomEvent).detail.value);
   }
 
   dismiss(){

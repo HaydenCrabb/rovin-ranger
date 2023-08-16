@@ -33,10 +33,8 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
     const { status } = await AdMob.trackingAuthorizationStatus();
-    console.log(status);
 
     if (status === 'notDetermined') {
-      console.log('Display information before ad loads first time');
     }
 
     AdMob.initialize({
@@ -127,12 +125,10 @@ export class HomePage implements OnInit {
   }
 
   async openSettings(){
-    console.log('opening modal');
     const settingsModal = await this.modalController.create({
       component: SettingsPage,
       cssClass: "small-modal",
     });
-    console.log(settingsModal);
     return await settingsModal.present();
   }
 

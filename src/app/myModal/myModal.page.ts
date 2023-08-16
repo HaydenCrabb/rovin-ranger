@@ -81,7 +81,6 @@ export class ModalPage {
   }
 
   async openSettings(){
-    console.log('opening modal');
     const settingsModal = await this.myModal.create({
       component: SettingsPage,
       cssClass: "small-modal",

@@ -57,7 +57,6 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.setTimers();
 
     window.setTimeout(() => {
-      console.log("boom starting");
       this.startOrStop();
     }, 2000);
 
@@ -80,21 +79,17 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
   LoadingCover()
   {
-    console.log("we're loading it alright");
       var loadingScreen = document.getElementById('loadingCover')!;
       if (loadingScreen.classList.contains('loading-hidden') == false)
       {
-        console.log("status of loading screen... not hidden");
         window.setTimeout(() => {
           if(loadingScreen != undefined){
             var loadScreen = document.getElementById('loadingCover')!;
-            console.log("adding hidden status...");
             loadScreen.classList.add('loading-hidden');
           }
         }, 1000);
       }
       else {
-        console.log("status of loading screen: Apparently hidden");
         loadingScreen.classList.remove('loading-hidden');
         this.LoadingCover();
       }
@@ -175,11 +170,8 @@ export class PlayPage implements OnInit, AfterViewInit {
         self.setupService.gameOver = true;
 
         var newHighscore = false;
-        //Current Error, self.setupService.Highscore is always 0!!!
-        console.log(self.setupService.highscore);
         if (self.setupService.pointsValue > self.scoreService.highScore) {
           self.storage.set('highscore', self.setupService.pointsValue);
-          console.log("New Highscore set.")
           newHighscore = true;
         }
         self.soundService.stopMusic();
@@ -208,7 +200,6 @@ export class PlayPage implements OnInit, AfterViewInit {
     }
     if (this.setupService.playing == false && this.setupService.gameOver == false) // restart
     {
-      console.log("Starting up!");
       this.soundService.playMusic(this.soundService.gamePlayMusic);
       this.setupService.timer = window.setInterval(() => {
         this.checkIfGameOver();
