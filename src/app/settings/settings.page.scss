@@ -3,6 +3,13 @@
     height: 100%;
 }
 
+ion-range {
+  --bar-background-active: var(--ion-color-rangerRed);
+  --bar-height: 4px;
+  --bar-border-radius: 8px;
+  --knob-size: 20px;
+}
+
 .settingsContainer {
     margin-top: var(--sat);
     margin-bottom: var(--sab);
@@ -18,6 +25,8 @@
     background-color: #f0c56f;
     border-radius: 50px;
     box-shadow: -5px 5px rgba(0, 0, 0, 0.25);
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 #closeButton {
