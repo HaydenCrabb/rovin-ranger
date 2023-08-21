@@ -283,22 +283,44 @@
 }
 .loadingImageContainer{
 	height: 100%;
-	display: flex;
-	align-items: center;
+	position: relative;
+	width: 100%;
 }
 
 #loadingLogo {
-	display: block;
-	width: 25%;
+	position: absolute;
+	bottom: -1em;
+	left: 0;
+	width: 50%;
 	height: auto;
-	margin-left: auto;
-	margin-right: auto;
 }
 
-
-.rotate-center {
+.load-animation {
+	-webkit-animation: load-animation 2s ease;
+	animation: load-animation 2s ease;
+}
+/*.load-animation {
 	-webkit-animation: rotate-center 3s linear infinite both;
 	animation: rotate-center 3s linear infinite both;
+}*/
+
+@keyframes load-animation {
+	0% {
+		-webkit-transform: translateX(-10em);
+		transform: translateX(-10em);
+	}
+	30% {
+		-webkit-transform: translateX(0.5em);
+		transform: translateX(0.5em);
+	}
+	50%{
+		-webkit-transform: translateX(2em) rotate(6deg);
+		transform: translateX(2em) rotate(6deg);
+	}
+	100% {
+		-webkit-transform: translateX(130em);
+		transform: translateX(130em);
+	}
 }
 
 @-webkit-keyframes rotate-center {
@@ -324,3 +346,141 @@
 		transform: rotate(360deg);
 	}
 }
+
+/* Arrow for Tutorial */
+
+#arrow {
+	position: absolute;
+	top: -2em;
+	left: -2em;
+	height: 2em;
+	width: 2em;
+	z-index: 90;
+
+	animation: arrow-animation 1s ease-in-out;
+	animation-iteration-count: infinite;
+}
+
+/* Gloved Hand for Training  */
+
+#gloved_hand_container{
+	background: transparent;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+
+#gloved_hand {
+	position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 7em;
+    height: auto;
+    z-index: 90;
+}
+
+#swipe_mark {
+	position: absolute;
+	height: 1em;
+	width: 2em;
+	bottom: 50%;
+	border-radius: 500px;
+	left: 50%;
+	z-index: 89;
+	background-color: rgba(255, 255, 255, 0.5);
+	transform: translateX(-4.5em) translateY(4em);
+}
+
+.glove-animation {
+	animation: glove-animation 1.2s ease-out;
+    animation-iteration-count: infinite;
+}
+.glove-animation-up {
+	animation: glove-animation-up 1.2s ease-out;
+    animation-iteration-count: infinite;
+}
+
+.swipe-animation {
+	animation: swipe-animation 1.2s ease-out;
+	animation-iteration-count: infinite;
+}
+.swipe-animation-up {
+	animation: swipe-animation-up 1.2s ease-out;
+	animation-iteration-count: infinite;
+}
+
+
+@keyframes arrow-animation {
+	0% {
+		-webkit-transform: translateX(0px) translateY(0px);
+		transform: translateX(0px) translateY(0px);
+	}
+	50% {
+		-webkit-transform: translateX(5px) translateY(-5px);
+		transform: translateX(5px) translateY(-5px);
+	}
+	100% {
+		-webkit-transform: translateX(0px) translateY(0px);
+		transform: translateX(0px) translateY(0px);
+	}
+}
+
+@keyframes swipe-animation {
+	0% {
+		/* -webkit-transform: translateX(-10.5em) translateY(4.5em); */
+		transform: translateX(-9.5em) translateY(4em);
+		opacity: 1;
+		width: 2em;
+
+	}
+
+	100% {
+		-webkit-transform: translateX(-9.5em) translateY(4em);
+		transform: translateX(-9.5em) translateY(4em);
+		width: 6.5em;
+		opacity: 0;
+	}
+}
+@keyframes glove-animation {
+	0% {
+		-webkit-transform: translateX(-9.5em) translateY(3.5em);
+		transform: translateX(-9.5em) translateY(3.5em);
+	}
+
+	100% {
+		-webkit-transform: translateX(-3.5em) translateY(3.5em);
+		transform: translateX(-3.5em) translateY(3.5em);
+	}
+}
+@keyframes swipe-animation-up {
+	0% {
+		/* -webkit-transform: translateX(-10.5em) translateY(4.5em); */
+		transform: translateX(-4em) translateY(4em);
+		opacity: 1;
+		height: 2em;
+		width: 1em;
+
+	}
+
+	100% {
+		-webkit-transform: translateX(-4em) translateY(4em);
+		transform: translateX(-4em) translateY(4em);
+		opacity: 0;
+		height: 7.5em;
+		width: 1em;
+	}
+}
+@keyframes glove-animation-up {
+	0% {
+		-webkit-transform: translateX(-3.5em) translateY(3.5em);
+		transform: translateX(-3.5em) translateY(3.5em);
+	}
+
+	100% {
+		-webkit-transform: translateX(-3.5em) translateY(-3em);
+		transform:  translateX(-3.5em) translateY(-3em);
+	}
+}
+

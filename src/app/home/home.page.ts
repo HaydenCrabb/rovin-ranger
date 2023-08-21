@@ -77,7 +77,6 @@ export class HomePage implements OnInit {
 
   playGame() {
     this.soundService.stopMusic();
-    this.soundService.playSFX(this.soundService.startButtonSFX);
   }
 
   startDemo() {
@@ -90,6 +89,9 @@ export class HomePage implements OnInit {
       this.setupService.adjustEnemiesDirection();
       this.setupService.demoMoveEnemy();
     }, this.setupService.enemyPlayingInterval);
+
+    //create one cloud right away just for the fun of it. 
+    this.setupService.buildCloud(); 
 
     this.setupService.cloudTimer = window.setInterval(() => {
 
@@ -105,9 +107,10 @@ export class HomePage implements OnInit {
         }
       }
       //Set random number for chance of cloud form
-      const randomNum = Math.floor(Math.random() * 90) + 1;
+      const randomNum = Math.floor(Math.random() * 70) + 1;
     // Check if the random number is 1
     if (randomNum === 1) {
+      console.log("clouds Inbound");
       this.setupService.buildCloud();
     }
     this.setupService.moveClouds();

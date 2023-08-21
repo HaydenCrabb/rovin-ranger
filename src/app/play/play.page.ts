@@ -28,6 +28,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   currentPath: string = window.location.pathname;
+  firstTime: Boolean = true;
 
   async ngOnInit() {
     await this.storage.create();
@@ -51,6 +52,8 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
 
     this.LoadingCover();
+    //give us a nice little ca caw.
+    this.soundService.playSFX(this.soundService.startButtonSFX);
     this.setupService.setBackground();
     this.setupService.setup_reset();
     this.setupService.setup();
@@ -58,7 +61,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     window.setTimeout(() => {
       this.startOrStop();
-    }, 2000);
+    }, 2500);
 
     // CREATING FUNCTIONALITY TO READ HORIZONTAL AND VERTICAL GESTURES
     const gestureX = this.gestureCtrl.create({
@@ -74,12 +77,36 @@ export class PlayPage implements OnInit, AfterViewInit {
       gestureName: 'example',
     });
 
+
+    /* Tutorial if it is the very first time opening the app */
+    if(this.firstTime)
+    {
+      const swipeX = this.gestureCtrl.create({
+        el: this.playspace.nativeElement.closest("ion-content"),
+        onMove: (detail) => this.first_timeX(detail),
+        gestureName: 'swipeX',
+      });
+
+      const swipeY = this.gestureCtrl.create({
+        el: this.playspace.nativeElement.closest("ion-content"),
+        direction: 'y',
+        onMove: (detail) => this.first_timeY(detail),
+        gestureName: 'swipeY',
+      });
+
+
+      swipeY.enable();
+      swipeX.enable();
+    }
+
     gestureY.enable();
     gestureX.enable();
   }
   LoadingCover()
   {
       var loadingScreen = document.getElementById('loadingCover')!;
+      //var cowboy = document.getElementById('loadingLogo')!;
+      //cowboy.classList.add('load-animation');
       if (loadingScreen.classList.contains('loading-hidden') == false)
       {
         window.setTimeout(() => {
@@ -87,7 +114,7 @@ export class PlayPage implements OnInit, AfterViewInit {
             var loadScreen = document.getElementById('loadingCover')!;
             loadScreen.classList.add('loading-hidden');
           }
-        }, 1000);
+        }, 2000);
       }
       else {
         loadingScreen.classList.remove('loading-hidden');
@@ -100,23 +127,75 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.soundService.stopMusic();
   }
 
+  private first_timeX(detail: GestureDetail)
+  {
+    const { deltaX, velocityX, deltaY, velocityY } = detail;
+    if (deltaX != 0 && (velocityX > 0.2 || velocityX < -0.2) && this.firstTime)
+    {
+      if (document.getElementById("gloved_hand"))
+      {
+        var glove = document.getElementById("gloved_hand")!;
+        if (glove.classList.contains('glove-animation'))
+        {
+          var swipe = document.getElementById("swipe_mark")!;
+          glove.classList.remove('glove-animation');
+          swipe.classList.remove('swipe-animation');
+
+          glove.classList.add('glove-animation-up');
+          swipe.classList.add('swipe-animation-up');
+
+        }
+      }
+    }
+    this.onMoveX(detail);
+  }
+
+  private first_timeY(detail: GestureDetail)
+  {
+    const { deltaX, velocityX, deltaY, velocityY } = detail;
+    if (deltaY != 0 && (velocityY > 0.2 || velocityY < -0.2) && this.firstTime)
+    {
+      if (document.getElementById("gloved_hand"))
+      {
+        var glove = document.getElementById("gloved_hand")!;
+        if (glove.classList.contains('glove-animation-up'))
+        {
+          var swipe = document.getElementById("swipe_mark")!;
+          glove.remove();
+          swipe.remove();
+          //set local storage to false here.
+
+          //set arrow
+          const arrow = document.getElementById("arrow")! ;
+          arrow.style.top = String(this.setupService.upgradePosition.top - 35) + "px";
+          arrow.style.left = String(this.setupService.upgradePosition.left + this.setupService.characterSize) + "px";
+
+          console.log(this.setupService.upgradePosition.top);
+          console.log(this.setupService.upgradePosition.left);
+
+        }
+      }
+    }
+    this.onMoveY(detail);
+  }
+
   // FUNCTION FOR HORIZONTAL MOVEMENT 
   private onMoveX(detail: GestureDetail) {
 
     const { deltaX, velocityX, deltaY, velocityY } = detail;
-    if (deltaX > 0 && velocityX > 0.25) {
+    if (deltaX > 0 && velocityX > 0.2) {
       this.setupService.characterPosition.direction = 2;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Right.png)";
     }
-    else if (deltaX < 0 && velocityX < -0.25) {
+    else if (deltaX < 0 && velocityX < -0.2) {
       this.setupService.characterPosition.direction = 4;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Left.png)";
     }
-    else if (deltaY > 0 && velocityY > 0.25) {
+    else if (deltaY > 0 && velocityY > 0.2) {
       this.setupService.characterPosition.direction = 3;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
     }
-    else if (deltaY < 0 && velocityY < -0.25) {
+    else if (deltaY < 0 && velocityY < -0.2) {
       this.setupService.characterPosition.direction = 1;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Up.png)";
     }
@@ -128,19 +207,19 @@ export class PlayPage implements OnInit, AfterViewInit {
   private onMoveY(detail: GestureDetail) {
 
     const { deltaY, velocityY, deltaX, velocityX } = detail;
-    if (deltaY > 0 && velocityY > 0.25) {
+    if (deltaY > 0 && velocityY > 0.2) {
       this.setupService.characterPosition.direction = 3;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
     }
-    else if (deltaY < 0 && velocityY < -0.25) {
+    else if (deltaY < 0 && velocityY < -0.2) {
       this.setupService.characterPosition.direction = 1;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Up.png)";
     }
-    else if (deltaX > 0 && velocityX > 0.25) {
+    else if (deltaX > 0 && velocityX > 0.2) {
       this.setupService.characterPosition.direction = 2;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Right.png)";
     }
-    else if (deltaX < 0 && velocityX < -0.25) {
+    else if (deltaX < 0 && velocityX < -0.2) {
       this.setupService.characterPosition.direction = 4;
       this.setupService.characterBackgroundImage = "url(../../assets/Cowboy_Left.png)";
     }
@@ -159,6 +238,11 @@ export class PlayPage implements OnInit, AfterViewInit {
       this.setupService.pointsValue++;
       this.setupService.createUpgrade();
       this.setupService.createEnemy();
+
+      if (this.firstTime)
+      {
+        this.firstTime = false;
+      }
     }
   }
   checkIfGameOver() {
@@ -189,7 +273,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   reset() {
-    this.ngAfterViewInit();
+    window.location.reload();
   }
 
   startOrStop() {

@@ -254,38 +254,36 @@ ion-button {
 .wall.top_left {
 	border-top-left-radius: 7.5px;
 }
-
 .cloud.top_right,
 .wall.top_right {
 	border-top-right-radius: 7.5px;
 }
-
 .cloud.bottom_left,
 .wall.bottom_left {
 	border-bottom-left-radius: 7.5px;
 }
-
 .cloud.bottom_right,
 .wall.bottom_right {
 	border-bottom-right-radius: 7.5px;
 }
 
 .cloud.top_left::after,
+.cloud.top_left::before,
 .wall.top_left::after {
 	border-top-left-radius: 7.5px;
 }
-
 .cloud.top_right::after,
+.cloud.top_right::before,
 .wall.top_right::after {
 	border-top-right-radius: 7.5px;
 }
-
 .cloud.bottom_left::after,
+.cloud.bottom_left::before,
 .wall.bottom_left::after {
 	border-bottom-left-radius: 7.5px;
 }
-
-.wall.bottom_right::after,
+.cloud.bottom_right::after,
+.cloud.bottom_right::before,
 .wall.bottom_right::after {
 	border-bottom-right-radius: 7.5px;
 }
@@ -314,23 +312,32 @@ ion-button {
 	height: 15px;
 	top: 0px;
 	left: 0px;
-	background-color: #ffffffda;
+	background-color: rgba(255,255,255,0.95);
 	border: 1px solid #FFEED6 inset;
 	transition: 250ms;
 }
-
+.cloud::before{
+	width: 15px;
+	height: 15px;
+	content: " ";
+	top: 0px;
+	left: 0px;
+	display: inline-block;
+	background-color: #ffffff91;
+	position: absolute;
+	z-index: 14;
+}
 .cloud::after {
 	width: 15px;
 	height: 15px;
 	display: inline-block;
 	content: " ";
-	background-color: #B2A59A;
+	background-color: rgba(0, 0, 0, .25);
 	position: absolute;
-	z-index: -1;
-	top: 5px;
-	left: -5px;
+	z-index: 14;
+	top: 52px;
+	left: -52px;
 }
-
 .cloud-white {
 	position: absolute;
 	width: 15px;

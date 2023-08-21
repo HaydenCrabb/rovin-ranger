@@ -73,8 +73,10 @@ export class SettingsPage implements OnInit {
   }
   whenChangeSlide(event: Event)
   {
+    console.log("event: " + event);
     var volumeSetting = Number((event as RangeCustomEvent).detail.value);
     volumeSetting = volumeSetting / 100;
+    console.log("volumeSetting: " + volumeSetting);
     localStorage.setItem('volume', volumeSetting.toString());
     this.soundService.volume = Number(volumeSetting);
     this.soundService.changeVolume();

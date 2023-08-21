@@ -21,7 +21,7 @@ export class SoundService {
   //Upgrade Pickup Sound
   pickupSFX = '../assets/Sounds/UpgradeAquired.mp3';
   //Death Sound
-  deathSFX = '../assets/Sounds/Death.mp3';
+  deathSFX = '../assets/Sounds/RR_End_Game.mp3';
 
   musicIsOn!: boolean;
   sfxIsOn!: boolean;
@@ -69,6 +69,8 @@ export class SoundService {
   {
     this.sfxPlayer.volume = this.volume;
     this.player.volume = this.volume;
+    console.log("SFX: " + this.sfxPlayer.volume);
+    console.log("Player: " + this.player.volume);
   }
 
   //these functions run when opening settings to check whether music or audio is muted
