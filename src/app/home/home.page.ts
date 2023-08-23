@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ScoreService } from '../services/score.service';
-import { Storage } from '@ionic/storage-angular';
 import { SetupService } from '../services/setup.service';
 import { interval, Subscription } from 'rxjs';
 import { AdMob, AdOptions } from '@capacitor-community/admob';
@@ -25,7 +24,7 @@ export class HomePage implements OnInit {
 
 
 
-  constructor(private storage: Storage, private scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService, public modalController: ModalController) {
+  constructor( private scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService, public modalController: ModalController) {
 
   }
 
@@ -110,7 +109,6 @@ export class HomePage implements OnInit {
       const randomNum = Math.floor(Math.random() * 70) + 1;
     // Check if the random number is 1
     if (randomNum === 1) {
-      console.log("clouds Inbound");
       this.setupService.buildCloud();
     }
     this.setupService.moveClouds();

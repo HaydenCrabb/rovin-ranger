@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SoundService } from '../services/sound.service';
 import { RangeCustomEvent } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -13,11 +14,18 @@ export class SettingsPage implements OnInit {
   emittedValue!: any;
   setVolume: any = localStorage.getItem('volume')?.valueOf();
 
+  isIOS: boolean = false;
+
   sliderPosition = this.setVolume * 100;
 
-  constructor(public soundService: SoundService, public settingsModal: ModalController) { }
+  constructor(public soundService: SoundService, public settingsModal: ModalController, private platform: Platform) { }
 
   ngOnInit() {
+    this.platform.ready().then(() => {
+      if (this.platform.is('ios')) {
+        this.isIOS = true;
+      }
+    });
     
   }
 
@@ -73,10 +81,8 @@ export class SettingsPage implements OnInit {
   }
   whenChangeSlide(event: Event)
   {
-    console.log("event: " + event);
     var volumeSetting = Number((event as RangeCustomEvent).detail.value);
     volumeSetting = volumeSetting / 100;
-    console.log("volumeSetting: " + volumeSetting);
     localStorage.setItem('volume', volumeSetting.toString());
     this.soundService.volume = Number(volumeSetting);
     this.soundService.changeVolume();

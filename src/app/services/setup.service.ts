@@ -343,17 +343,19 @@ export class SetupService {
   }
 
   moveInCharacter() {
-    var randomX = Math.floor(Math.random() * (this.playingWidth / 4 - this.characterSize));
-    var randomY = Math.floor(Math.random() * (this.playingHeight / 4 - this.characterSize));
+    var satisfied = false;
+    while (satisfied == false)
+    {
+      var randomX = Math.floor(Math.random() * (this.playingWidth / 4 - this.characterSize));
+      var randomY = Math.floor(Math.random() * (this.playingHeight / 4 - this.characterSize));
 
-    randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
-    randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
-    if (!this.theresAWallThere(randomX, randomY)) {
-      this.characterPosition.position.top = randomY;
-      this.characterPosition.position.left = randomX;
-    }
-    else {
-      this.moveInCharacter();
+      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
+      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
+      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX)) {
+        this.characterPosition.position.top = randomY;
+        this.characterPosition.position.left = randomX;
+        satisfied = true;
+      }
     }
   }
 
@@ -387,6 +389,15 @@ export class SetupService {
 
     var Enemy = new Character(enemyTop, enemyLeft, 1);
     this.enemies.push(Enemy);
+  }
+  allEnemiesReset()
+  {
+    //This function is only called after a rewarded ad. From the play page.
+    var self = this;
+    this.enemies.forEach(function (enemy) {
+      enemy.position.top = self.playingHeight - self.characterSize;
+      enemy.position.left = self.playingWidth - self.characterSize;
+    });
   }
 
   adjustEnemiesDirection() {

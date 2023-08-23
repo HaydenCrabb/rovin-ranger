@@ -4,14 +4,16 @@
       <ion-row class="ion-justify-content-center">
         <div class="optionsBox">
           <br>
-          <ion-row class="ion-align-items-center ion-justify-content-center">
-            <label id="sliderLabel" for="volumeSlider">Master Volume:</label>
-            <img class="icon-small" src="../../assets/sounds_black_Main_Volume.png">
-          </ion-row>
-          <ion-row class="ion-justify-content-center">
-            <ion-range id="volumeSlider" [value]="this.sliderPosition" min="0" max="100" (ionChange)="whenChangeSlide($event)"></ion-range>
-            <!-- <input id="volumeSlider" class="styled-slider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider (input)="volumeAdjust(volumeSlider.value)"> -->
-          </ion-row>
+          <div *ngIf="!isIOS">
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+              <label id="sliderLabel" for="volumeSlider">Master Volume:</label>
+              <img class="icon-small" src="../../assets/sounds_black_Main_Volume.png">
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+              <ion-range id="volumeSlider" [value]="this.sliderPosition" min="0" max="100" (ionChange)="whenChangeSlide($event)"></ion-range>
+              <!-- <input id="volumeSlider" class="styled-slider" type="range" [value]="this.sliderPosition" min="0" max="100" #volumeSlider (input)="volumeAdjust(volumeSlider.value)"> -->
+            </ion-row>
+          </div>
           <ion-row class="ion-justify-content-center">
             <ion-col size="2">
               <button class="muteButton buttonPurple" (click)="toggleSFXState()"><img class="icon-small"

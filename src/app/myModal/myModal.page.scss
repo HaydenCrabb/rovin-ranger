@@ -50,6 +50,33 @@
 	border-radius: 2em;
 	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
 }
+.reward-button {
+	width: 5em;
+	height: 7em;
+	background-color: #EFC56F;
+	border-radius: 2em;
+	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
+}
+.reward {
+	background-color: #EFC56F;
+	padding: 5px 15px;
+	border-radius: 20px;
+	position: absolute;
+	top: 0px;
+	left: 52%;
+	transform: rotate(13deg);
+	animation: bobUpDown 2s ease-in-out infinite;
+}
+.reward button {
+	background-color: transparent;
+	height: 1.5em;
+	display: flex;
+	align-items: center;
+	color: black !important;
+}
+.element {
+	position: relative;
+}
 
 .margin-none {
 	margin: none;
@@ -140,5 +167,14 @@ ion-button {
 	100% {
 		font-size: 8em;
 		transition-timing-function: ease-in;
+	}
+}
+
+@keyframes bobUpDown {
+	50% {
+		transform: translate(0px, -5px) rotate(13deg);
+	}
+	100% {
+		transform: translate(0px, 0px) rotate(13deg);
 	}
 }

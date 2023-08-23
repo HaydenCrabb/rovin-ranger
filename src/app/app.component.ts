@@ -21,6 +21,7 @@ export class AppComponent {
       localStorage.setItem('savedScore','0');
     }
 
+
     
 
     this.scoreService.highScore = localStorage.getItem('savedScore');

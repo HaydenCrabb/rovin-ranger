@@ -22,12 +22,14 @@
 				<ion-button (click)="share()"><ion-icon name="share" color="deepGreen"></ion-icon></ion-button>
 			</ion-col>
 		</ion-row>
-	 	<ion-row class="ion-align-items-center ion-justify-content-center">
-	 		<div class="space">
-		    	<button class="main-button" (click)="dismiss()">
-		    		<img src="../../assets/RedoButton.png">
-		    	</button>
-	   		</div>
+		<br>
+	 	<ion-row class="ion-justify-content-center element">
+	    	<button class="main-button" (click)="dismiss()">
+	    		<img src="../../assets/RedoButton.png">
+	    	</button>
+	    	<div *ngIf="allow_rewarded_ad" class="reward">
+	    		<button (click)="showRewardVideo()">Continue?&nbsp;<ion-icon name="caret-forward-circle-outline" color="rangerRed"></ion-icon></button>
+	    	</div>
 	 	</ion-row>
 	</ion-grid>
 	

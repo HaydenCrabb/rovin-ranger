@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { SettingsPage } from '../settings/settings.page';
+import { SetupService } from '../services/setup.service';
+import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem, AdMobError } from '@capacitor-community/admob';
+
 
 @Component({
   selector: 'app-modal',
@@ -14,19 +17,25 @@ import { SettingsPage } from '../settings/settings.page';
 export class ModalPage {
   currentHighScore: any;
 
-  constructor(public myModal: ModalController, public params: NavParams, private scoreService: ScoreService, private router: Router) { 
+  constructor(public setupService: SetupService, public myModal: ModalController, public params: NavParams, private scoreService: ScoreService, private router: Router) { 
   }
 
   isDismissed: boolean = false;
+  allow_rewarded_ad = true;
 
   @Output()
   dismissEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   ngOnInit() {
 
+    //prepare the ad to be shown on game end
+    this.initializeAd();
+
     this.currentHighScore = this.scoreService.highScore;
 
   	this.theLastScore = this.params.get('points');
+
+    this.allow_rewarded_ad = this.params.get('rewarded');
   	
     // CHECK TO SEE IF TOTAL POINTS IS GREATER THAN HIGH SCORE
     if(this.theLastScore > this.currentHighScore){
@@ -64,6 +73,21 @@ export class ModalPage {
     this.dismiss();
   }
 
+
+  rewardedAd()
+  {
+    this.setupService.moveInCharacter();
+    this.setupService.allEnemiesReset();
+
+    //set game over to false and playing to false;
+    this.setupService.gameOver = false;
+    this.setupService.playing = false;
+    //and continue playing
+    
+
+    this.myModal.dismiss('rewards');
+  }
+
   async share() {
 
     var canShare = await (await Share.canShare()).value;
@@ -86,6 +110,35 @@ export class ModalPage {
       cssClass: "small-modal",
     });
     return await settingsModal.present();
+  }
+
+  async initializeAd()
+  {
+    AdMob.addListener(RewardAdPluginEvents.Dismissed, () => {
+      //reward add is done. Dissmis and reset.
+      this.rewardedAd();
+    });
+    AdMob.addListener(RewardAdPluginEvents.FailedToShow, (error: AdMobError) => {
+      //reward add is done. Dissmis and reset.
+      console.log(error);
+      this.dismiss();
+    });
+
+    AdMob.initialize({
+      requestTrackingAuthorization: true,
+      initializeForTesting: true,
+    })
+  }
+  async showRewardVideo()
+  {
+    const options: RewardAdOptions = {
+      adId: 'ca-app-pub-6718720783731169/1073210490',
+      isTesting: true
+    };
+
+    await AdMob.prepareRewardVideoAd(options);
+    await AdMob.showRewardVideoAd();
+    
   }
 
 }

@@ -11,13 +11,14 @@ import { ScoreService } from '../services/score.service';
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../myModal/myModal.page';
 import { Router } from '@angular/router';
-import { AdMob, AdOptions } from '@capacitor-community/admob';
 
 @Component({
   selector: 'app-play',
   templateUrl: './play.page.html',
   styleUrls: ['./play.page.scss'],
 })
+
+
 export class PlayPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
@@ -28,7 +29,8 @@ export class PlayPage implements OnInit, AfterViewInit {
   }
 
   currentPath: string = window.location.pathname;
-  firstTime: Boolean = true;
+  firstTime: Boolean = false;
+  rewardedAdGranted = false;
 
   async ngOnInit() {
     await this.storage.create();
@@ -37,13 +39,8 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
 
-    //prepare the ad to be shown on game end
-    const options: AdOptions = {
-      //this is simply a test ad, we need top use it for development but we will need to change this when we deploy to our code
-      adId: 'ca-app-pub-3940256099942544/4411468910',
-      isTesting: true,
-    }
-    await AdMob.prepareInterstitial(options);
+
+    //await AdMob.prepareInterstitial(options);
 
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
@@ -58,6 +55,13 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.setup_reset();
     this.setupService.setup();
     this.setupService.setTimers();
+
+    if(await this.storage.get('first_time') != null){
+      this.firstTime = false;
+    }
+    else {
+      this.firstTime = true;
+    }
 
     window.setTimeout(() => {
       this.startOrStop();
@@ -170,9 +174,6 @@ export class PlayPage implements OnInit, AfterViewInit {
           arrow.style.top = String(this.setupService.upgradePosition.top - 35) + "px";
           arrow.style.left = String(this.setupService.upgradePosition.left + this.setupService.characterSize) + "px";
 
-          console.log(this.setupService.upgradePosition.top);
-          console.log(this.setupService.upgradePosition.left);
-
         }
       }
     }
@@ -242,6 +243,7 @@ export class PlayPage implements OnInit, AfterViewInit {
       if (this.firstTime)
       {
         this.firstTime = false;
+        this.storage.set('first_time', "No");
       }
     }
   }
@@ -324,10 +326,10 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async presentModal(newHighscore: boolean) {
 
-    const randomNum = Math.floor(Math.random() * 3) + 1;
-    if (randomNum == 1) {
-      this.showInterstitial();
-    }
+    // const randomNum = Math.floor(Math.random() * 3) + 1;
+    // if (randomNum == 1) {
+    //   this.showInterstitial();
+    // }
 
     this.soundService.stopMusic();
     this.setupService.clearTimers();
@@ -338,20 +340,24 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     const myModal = await this.modalController.create({
       component: ModalPage,
-      componentProps: { points: this.setupService.pointsValue, highscore: localHighscore, newHighscore: newHighscore },
+      componentProps: { rewarded: !this.rewardedAdGranted, points: this.setupService.pointsValue, highscore: localHighscore, newHighscore: newHighscore },
       cssClass: "small-modal"
     });
 
     myModal.onDidDismiss()
       .then((data) => {
         const theData = data['data'];
-        this.startOrStop();
+        if (data['data'] == 'rewards')
+        {
+          //do reward stuff
+          this.rewardedAdGranted = true;
+          this.startOrStop();
+        }
+        else {
+          this.startOrStop();
+        }
       });
     return await myModal.present();
-  }
-
-  async showInterstitial() {
-    await AdMob.showInterstitial();
   }
 
 }
