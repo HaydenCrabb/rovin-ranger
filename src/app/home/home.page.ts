@@ -20,6 +20,7 @@ export class HomePage implements OnInit {
 
   subscription!: Subscription;
   demoTimer = interval(15000);
+  loading = true;
 
 
 
@@ -38,7 +39,7 @@ export class HomePage implements OnInit {
 
     AdMob.initialize({
       requestTrackingAuthorization: true,
-      initializeForTesting: true,
+      initializeForTesting: false,
 
     })
 
@@ -50,10 +51,7 @@ export class HomePage implements OnInit {
     this.setupService.setTimers();
 
     window.setTimeout(() => {
-      var loadScreen = document.getElementById('loadingCover');
-      if(loadScreen != undefined){
-        loadScreen.classList.add('loading-hidden');
-      }
+      this.loading = false;
     }, 2000);
 
     window.setTimeout(() => {

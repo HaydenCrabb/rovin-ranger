@@ -65,7 +65,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     window.setTimeout(() => {
       this.startOrStop();
-    }, 2500);
+    }, 3000);
 
     // CREATING FUNCTIONALITY TO READ HORIZONTAL AND VERTICAL GESTURES
     const gestureX = this.gestureCtrl.create({

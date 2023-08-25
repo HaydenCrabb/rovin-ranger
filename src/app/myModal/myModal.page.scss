@@ -69,10 +69,16 @@
 }
 .reward button {
 	background-color: transparent;
-	height: 1.5em;
+	height: 2em;
 	display: flex;
 	align-items: center;
 	color: black !important;
+}
+.reward button:visited {
+	color: #C75C58;
+}
+.reward button:active {
+	color: #C75C58;
 }
 .element {
 	position: relative;

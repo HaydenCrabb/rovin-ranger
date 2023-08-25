@@ -22,6 +22,8 @@ export class ModalPage {
 
   isDismissed: boolean = false;
   allow_rewarded_ad = true;
+  active = true;
+  button_color = '#000000';
 
   @Output()
   dismissEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -62,20 +64,30 @@ export class ModalPage {
   highscore = "Highscore: ";
 
   dismiss() {
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
-    this.myModal.dismiss();
-    // this.isDismissed = true;
-    // this.dismissEmitter.emit(this.isDismissed);
+    if (this.active == true) // only allow a dismiss if we're not loading an ad.
+    {
+      // using the injected ModalController this page
+      // can "dismiss" itself and optionally pass back data
+      this.myModal.dismiss();
+      // this.isDismissed = true;
+      // this.dismissEmitter.emit(this.isDismissed);
+    }
   }
 
   dismissToHome() {
-    this.dismiss();
+    if (this.active == true)
+    {
+      this.dismiss(); 
+      this.router.navigate(['/home'], {replaceUrl: true});
+    }
   }
 
 
   rewardedAd()
   {
+    //reset ability to do stuff.
+    this.active = true;
+
     this.setupService.moveInCharacter();
     this.setupService.allEnemiesReset();
 
@@ -90,26 +102,33 @@ export class ModalPage {
 
   async share() {
 
-    var canShare = await (await Share.canShare()).value;
-    if (canShare == true){
-      Share.share({
-        title: 'Beat My High Score',
-        text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', challenge me now!',
-        url: 'https://google.com',
-        dialogTitle: 'Share your score with friends',
-      });
-    }
-    else {
-      alert('Sharing not supported on this device!')
+    if (this.active == true)
+    {
+
+      var canShare = await (await Share.canShare()).value;
+      if (canShare == true){
+        Share.share({
+          title: 'Beat My High Score',
+          text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', challenge me now!',
+          url: 'https://google.com',
+          dialogTitle: 'Share your score with friends',
+        });
+      }
+      else {
+        alert('Sharing not supported on this device!')
+      }
     }
   }
 
   async openSettings(){
-    const settingsModal = await this.myModal.create({
-      component: SettingsPage,
-      cssClass: "small-modal",
-    });
-    return await settingsModal.present();
+    if (this.active == true)
+    {
+      const settingsModal = await this.myModal.create({
+        component: SettingsPage,
+        cssClass: "small-modal",
+      });
+      return await settingsModal.present();
+    }
   }
 
   async initializeAd()
@@ -120,24 +139,30 @@ export class ModalPage {
     });
     AdMob.addListener(RewardAdPluginEvents.FailedToShow, (error: AdMobError) => {
       //reward add is done. Dissmis and reset.
-      console.log(error);
+      this.active = false;
       this.dismiss();
     });
 
     AdMob.initialize({
       requestTrackingAuthorization: true,
-      initializeForTesting: true,
+      initializeForTesting: false,
     })
   }
   async showRewardVideo()
   {
-    const options: RewardAdOptions = {
-      adId: 'ca-app-pub-6718720783731169/1073210490',
-      isTesting: true
-    };
+    if (this.active == true) { //only allow this button to be clicked once.
+      //disable other buttons while loading...
+      this.active = false;
 
-    await AdMob.prepareRewardVideoAd(options);
-    await AdMob.showRewardVideoAd();
+      document.getElementById("reward_button")!.style.backgroundColor = '#C75C58';
+      const options: RewardAdOptions = {
+        adId: 'ca-app-pub-6718720783731169/1073210490',
+        isTesting: true
+      };
+
+      await AdMob.prepareRewardVideoAd(options);
+      await AdMob.showRewardVideoAd();
+    }
     
   }
 

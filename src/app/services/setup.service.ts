@@ -652,7 +652,6 @@ export class SetupService {
   }
 
   buildCloud() {
-    console.log("Cloud being built");
     var previousDirection = 0
     // Set strating position of cloud, starts offscreen at random Y value
     var xPosition = -300;
