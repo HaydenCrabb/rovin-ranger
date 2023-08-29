@@ -55,6 +55,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.setup_reset();
     this.setupService.setup();
     this.setupService.setTimers();
+    console.log("The upgrade is rendered: " + this.setupService.upgradePosition.left)
 
     if(await this.storage.get('first_time') != null){
       this.firstTime = false;
@@ -171,9 +172,8 @@ export class PlayPage implements OnInit, AfterViewInit {
 
           //set arrow
           const arrow = document.getElementById("arrow")! ;
-          arrow.style.top = String(this.setupService.upgradePosition.top - 35) + "px";
-          arrow.style.left = String(this.setupService.upgradePosition.left + this.setupService.characterSize) + "px";
-
+          arrow.style.top = String(this.setupService.upgradePosition.top - 25) + "px";
+          arrow.style.left = String(this.setupService.upgradePosition.left + this.setupService.characterSize + this.setupService.safeZoneLeft) + "px";
         }
       }
     }
