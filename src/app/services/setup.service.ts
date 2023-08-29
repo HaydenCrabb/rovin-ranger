@@ -377,6 +377,24 @@ export class SetupService {
     }
   }
 
+  createFirstUpgrade() {
+    //we need to edit these random functions so that the upgrade is always on a mulitple of 15.
+    var satisfied = false;
+    while (satisfied == false)
+    {
+      var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
+      var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
+
+      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
+      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
+      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX) && randomY > (this.characterSize * 3)) {
+        this.upgradePosition.top = randomY;
+        this.upgradePosition.left = randomX;
+        satisfied = true;
+      }
+    }
+  }
+
   createEnemy() {
     var enemyLeft = this.playingWidth - this.characterSize;
     var enemyTop = this.playingHeight - this.characterSize;

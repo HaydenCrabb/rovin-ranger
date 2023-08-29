@@ -24,7 +24,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   @ViewChild(IonContent, { read: ElementRef }) playspace: any | ElementRef<HTMLIonContentElement>;
 
 
-  constructor(private storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public scoreService: ScoreService, public router: Router, public soundService: SoundService) {
+  constructor(public storage: Storage, public modalController: ModalController, private el: ElementRef, private gestureCtrl: GestureController, private cdRef: ChangeDetectorRef, public setupService: SetupService, public scoreService: ScoreService, public router: Router, public soundService: SoundService) {
 
   }
 
@@ -55,13 +55,17 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.setup_reset();
     this.setupService.setup();
     this.setupService.setTimers();
-    console.log("The upgrade is rendered: " + this.setupService.upgradePosition.left)
 
     if(await this.storage.get('first_time') != null){
       this.firstTime = false;
     }
     else {
       this.firstTime = true;
+    }
+
+    if(this.firstTime){
+      this.setupService.createFirstUpgrade();
+      console.log('generating first upgrade');
     }
 
     window.setTimeout(() => {
