@@ -117,7 +117,7 @@ export class HomePage implements OnInit {
     const options: AdOptions = {
       //this is simply a test ad, we need top use it for development but we will need to change this when we deploy to our code
       adId: 'ca-app-pub-3940256099942544/4411468910',
-      isTesting: true,
+      isTesting: false,
     }
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();

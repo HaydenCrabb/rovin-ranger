@@ -157,7 +157,7 @@ export class ModalPage {
       document.getElementById("reward_button")!.style.backgroundColor = '#C75C58';
       const options: RewardAdOptions = {
         adId: 'ca-app-pub-6718720783731169/1073210490',
-        isTesting: true
+        isTesting: false
       };
 
       await AdMob.prepareRewardVideoAd(options);
