@@ -602,6 +602,7 @@ export class SetupService {
         this.characterPosition.position.top = this.characterSize * -1;
         this.characterPosition.position.left = randomX;
         this.characterPosition.direction = 3;
+        this.characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
 
         for (var l = 0; l < 2; l++) {
           var Enemy = new Character(this.characterSize * -2 * (l + 1), randomX, 1);
@@ -628,6 +629,7 @@ export class SetupService {
         this.characterPosition.position.top = randomY;
         this.characterPosition.position.left = this.characterSize * -1;
         this.characterPosition.direction = 2
+        this.characterBackgroundImage = "url(../../assets/Cowboy_Right.png)";
 
         for (var l = 0; l < 2; l++) {
           var Enemy = new Character(randomY, this.characterSize * -2 * (l + 1), 1);

@@ -31,6 +31,8 @@ export class PlayPage implements OnInit, AfterViewInit {
   currentPath: string = window.location.pathname;
   firstTime: Boolean = false;
   rewardedAdGranted = false;
+  upgradeSfxPlayer:any;
+  sfx_is_on: Boolean = true;
 
   async ngOnInit() {
     await this.storage.create();
@@ -40,7 +42,13 @@ export class PlayPage implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
 
 
-    //await AdMob.prepareInterstitial(options);
+    //setup upgrade SFX Player
+    this.upgradeSfxPlayer = document.createElement("audio");
+    this.upgradeSfxPlayer.src = '../assets/Sounds/UpgradeAquired_2.mp3';
+    this.upgradeSfxPlayer.volume = this.soundService.volume;
+    this.upgradeSfxPlayer.preload = 'auto';
+
+    this.sfx_is_on = this.soundService.musicIsOn;
 
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
@@ -65,7 +73,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     if(this.firstTime){
       this.setupService.createFirstUpgrade();
-      console.log('generating first upgrade');
+      //console.log('generating first upgrade');
     }
 
     window.setTimeout(() => {
@@ -239,7 +247,12 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     if (this.setupService.characterPosition.position.top == this.setupService.upgradePosition.top && this.setupService.characterPosition.position.left == this.setupService.upgradePosition.left) {
       //then we got em.
-      this.soundService.playSFX(this.soundService.pickupSFX);
+
+      if (this.sfx_is_on)
+      {
+        this.upgradeSfxPlayer.play();
+        console.log(this.upgradeSfxPlayer);
+      }
       this.setupService.pointsValue++;
       this.setupService.createUpgrade();
       this.setupService.createEnemy();

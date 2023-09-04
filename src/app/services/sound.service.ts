@@ -11,7 +11,7 @@ export class SoundService {
   //Audio for menu background music
   menuMusic = '../assets/Sounds/Rovin_Ranger_Menu.mp3';
   //Hawk sound for play button
-  startButtonSFX = '../assets/Sounds/Rovin_Isolated_Hawk.mp3';
+  startButtonSFX = '../assets/Sounds/Rovin_Isolated_screech.mp3';
   //Gallup Sound Effect
   gallupSFX = '../assets/Sounds/Rovin_Isolated_Gallup.mp3';
   //Gallup Sound Effect

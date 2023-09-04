@@ -110,7 +110,7 @@ export class ModalPage {
         Share.share({
           title: 'Beat My High Score',
           text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', challenge me now!',
-          url: 'https://google.com',
+          url: 'https://apps.apple.com/us/app/rovin-ranger/id6463441345',
           dialogTitle: 'Share your score with friends',
         });
       }
@@ -139,7 +139,13 @@ export class ModalPage {
     });
     AdMob.addListener(RewardAdPluginEvents.FailedToShow, (error: AdMobError) => {
       //reward add is done. Dissmis and reset.
-      this.active = false;
+      this.active = true;
+      this.dismiss();
+    });
+    AdMob.addListener(RewardAdPluginEvents.FailedToLoad, (error: AdMobError) => {
+      console.log("failed to load")
+      //reward add is done. Dissmis and reset.
+      this.active = true;
       this.dismiss();
     });
 
