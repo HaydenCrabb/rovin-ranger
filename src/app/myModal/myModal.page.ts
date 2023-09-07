@@ -16,6 +16,7 @@ import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardIt
 })
 export class ModalPage {
   currentHighScore: any;
+  current_score: any;
 
   constructor(public setupService: SetupService, public myModal: ModalController, public params: NavParams, private scoreService: ScoreService, private router: Router) { 
   }
@@ -24,6 +25,8 @@ export class ModalPage {
   allow_rewarded_ad = true;
   active = true;
   button_color = '#000000';
+  theLastScore = 0;
+  highscore = "Highscore: ";
 
   @Output()
   dismissEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -57,11 +60,6 @@ export class ModalPage {
   		this.highscore = "New High Score: " + this.currentHighScore + "!!!";
   	}
   }
-
-  
-
-  theLastScore = 0;
-  highscore = "Highscore: ";
 
   dismiss() {
     if (this.active == true) // only allow a dismiss if we're not loading an ad.

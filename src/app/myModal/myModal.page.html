@@ -1,36 +1,59 @@
 <div class="dropin" scroll-y="false">
 	<ion-grid style="height: 100%">
-		<ion-row class="points-container">
-			<div class="points">
-				{{ theLastScore }}
+		<div class="column-container">
+			<div class="column" style="width: 40%">
+				<ion-row class="points-container">
+					<div class="points">
+						{{ theLastScore }}
+					</div>
+					<div class="points-2">
+						{{ theLastScore }}
+					</div>
+				</ion-row>
 			</div>
-			<div class="points-2">
-				{{ theLastScore }}
+			<div class="column" style="width: 60%">
+				<ion-row>
+					<div class="buckle ion-justify-content-center" *ngIf="theLastScore < 9">
+						<img src="../../assets/Buckles/Buckles_None.png">
+					</div>
+					<div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 9 && theLastScore < 13">
+						<img src="../../assets/Buckles/Buckles_Bronze.png">
+					</div>
+					<div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 13 && theLastScore < 17">
+						<img src="../../assets/Buckles/Buckles_Silver.png">
+					</div>
+					<div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 17 && theLastScore < 21">
+						<img src="../../assets/Buckles/Buckles_Gold.png">
+					</div>
+					<div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 21">
+						<img src="../../assets/Buckles/Buckles_Platinum.png">
+					</div>
+				</ion-row>
+				<ion-row>
+					<p class="highscore">{{ highscore }}</p>
+				</ion-row>
+				<ion-row class="ion-justify-content-center gap">
+					<ion-col size="2" class="ion-justify-content-center">
+						<ion-button (click)="dismissToHome()" routerDirection="root"><ion-icon name="home" color="cowboyBoot"></ion-icon></ion-button>
+					</ion-col>
+					<ion-col size="2" class="ion-justify-content-center">
+						<ion-button (click)="openSettings()"><ion-icon name="cog" color="sunsetPurple"></ion-icon></ion-button>
+					</ion-col>
+					<ion-col size="2" class="ion-justify-content-center">
+						<ion-button (click)="share()"><ion-icon name="share" color="deepGreen"></ion-icon></ion-button>
+					</ion-col>
+				</ion-row>
+				<br>
+			 	<ion-row class="ion-justify-content-center element">
+			    	<button class="main-button" (click)="dismiss()">
+			    		<img src="../../assets/RedoButton.png">
+			    	</button>
+			    	<div *ngIf="allow_rewarded_ad" class="reward" id="reward_button">
+			    		<button (click)="showRewardVideo()">Continue?&nbsp;<ion-icon name="caret-forward-circle-outline" color="rangerRed"></ion-icon></button>
+			    	</div>
+			 	</ion-row>
 			</div>
-		</ion-row>
-		<ion-row>
-			<p class="highscore">{{ highscore }}</p>
-		</ion-row>
-		<ion-row class="ion-justify-content-center">
-			<ion-col size="2" class="ion-justify-content-center">
-				<ion-button (click)="dismissToHome()" routerDirection="root"><ion-icon name="home" color="cowboyBoot"></ion-icon></ion-button>
-			</ion-col>
-			<ion-col size="2" class="ion-justify-content-center">
-				<ion-button (click)="openSettings()"><ion-icon name="cog" color="sunsetPurple"></ion-icon></ion-button>
-			</ion-col>
-			<ion-col size="2" class="ion-justify-content-center">
-				<ion-button (click)="share()"><ion-icon name="share" color="deepGreen"></ion-icon></ion-button>
-			</ion-col>
-		</ion-row>
-		<br>
-	 	<ion-row class="ion-justify-content-center element">
-	    	<button class="main-button" (click)="dismiss()">
-	    		<img src="../../assets/RedoButton.png">
-	    	</button>
-	    	<div *ngIf="allow_rewarded_ad" class="reward" id="reward_button">
-	    		<button (click)="showRewardVideo()">Continue?&nbsp;<ion-icon name="caret-forward-circle-outline" color="rangerRed"></ion-icon></button>
-	    	</div>
-	 	</ion-row>
+		</div>
 	</ion-grid>
 	
 </div>

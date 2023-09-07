@@ -251,7 +251,6 @@ export class PlayPage implements OnInit, AfterViewInit {
       if (this.sfx_is_on)
       {
         this.upgradeSfxPlayer.play();
-        console.log(this.upgradeSfxPlayer);
       }
       this.setupService.pointsValue++;
       this.setupService.createUpgrade();
