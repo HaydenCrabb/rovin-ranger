@@ -49,6 +49,7 @@ export class ModalPage {
 
       // SET SCORE GLOBALLY
       this.scoreService.highScore = this.theLastScore;
+
     }
 
     this.highscore = "High Score: " + this.currentHighScore;
@@ -56,9 +57,11 @@ export class ModalPage {
   	if (this.params.get('newHighscore') == true && this.theLastScore > this.currentHighScore)
   	{
       //IF SCORE IS HIGHER, CHANGE HIGH SCORE MESSAGE
-      this.currentHighScore = this.theLastScore;;
+      this.currentHighScore = this.theLastScore;
   		this.highscore = "New High Score: " + this.currentHighScore + "!!!";
   	}
+
+    this.scoreService.submitScore(this.currentHighScore);
   }
 
   dismiss() {

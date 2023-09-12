@@ -21,7 +21,10 @@ export class AppComponent {
       localStorage.setItem('savedScore','0');
     }
 
+    var characterScale = Math.floor(window.innerHeight / 26);
+    var root = document.documentElement;
 
+    root.style.setProperty('--charSize', characterScale + "px");
     
 
     this.scoreService.highScore = localStorage.getItem('savedScore');
@@ -29,6 +32,8 @@ export class AppComponent {
     this.soundService.checkIsMusicOn();
     this.soundService.checkIsSFXOn();
     this.soundService.checkVolume();
+
+    this.scoreService.authenticateGC();
     
   }
 

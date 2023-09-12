@@ -2,9 +2,6 @@
 	--ion-background-color:#28364A;
 }
 .playingField {
-	// margin-top: constant(safe-area-inset-top) !important;
-    // margin-top: env(safe-area-inset-top) !important;
-    // margin-bottom: calc(4px + env(safe-area-inset-top)) !important;
 	position: relative;
 	z-index: 1;
 	background-color: #FFEED6;
@@ -16,17 +13,17 @@
 }
 .player {
 	position: absolute;
-	width: 15px;
-	height: 15px;
-	border-radius: 7.5px;
+	width: var(--charSize);
+	height: var(--charSize);
+	border-radius: 50%;
 	top: 0px;
 	left: 0px;
 	background-size: contain;
 
 }
 .player::after {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: rgba(0, 0, 0, .25);
@@ -34,13 +31,13 @@
 	z-index: -1;
 	top: 3px;
 	left: -3px;
-	border-radius: 7.5px;
+	border-radius: 50%;
 }
 .enemy {
 	position: absolute;
-	width: 15px;
-	height: 15px;
-	border-radius: 7.5px;
+	width: var(--charSize);
+	height: var(--charSize);
+	border-radius: 50%;
 	top: 0px;
 	left: 0px;
 	border: 1px solid #FFEED6 inset;
@@ -55,12 +52,12 @@
 .enemy::before {
 	position: relative;
 	z-index: 1;
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: #D65353;
-	border-radius: 7.5px;
+	border-radius: 50%;
 	-webkit-animation-name: enter;
 	/* Safari 4.0 - 8.0 */
 	-webkit-animation-duration: .75s;
@@ -69,8 +66,8 @@
 	animation-duration: .75s;
 }
 .enemy::after {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: rgba(0, 0, 0, .25);
@@ -78,7 +75,7 @@
 	z-index: -1;
 	bottom: 15px;
 	left: -3px;
-	border-radius: 7.5px;
+	border-radius: 50%;
 }
 .points {
 	position: absolute;
@@ -97,9 +94,9 @@
 }
 .upgrade {
 	position: absolute;
-	width: 15px;
-	height: 15px;
-	border-radius: 7.5px;
+	width: var(--charSize);
+	height: var(--charSize);
+	border-radius: 50%;
 	top: 0px;
 	left: 0px;
 	background-color: #F7C45F;
@@ -107,18 +104,18 @@
 	z-index: 2;
 }
 .upgrade::before {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	content: " ";
 	display: inline-block;
 	background-color: #F7C45F;
 	position: relative;
-	border-radius: 7.5px;
+	border-radius: 50%;
 }
 
 .upgrade::after {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: rgba(0, 0, 0, .25);
@@ -126,7 +123,7 @@
 	z-index: -5;
 	bottom: 15px;
 	left: -3px;
-	border-radius: 7.5px;
+	border-radius: 50%;
 }
 .cover {
 	position: absolute;
@@ -135,16 +132,16 @@
 }
 .wall {
 	position: absolute;
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	top: 0px;
 	left: 0px;
 	background-color: #28364A;
 	border: 1px solid #FFEED6 inset;
 }
 .wall::after {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: rgba(0, 0, 0, .25);
@@ -155,45 +152,45 @@
 }
 .cloud.top_left,
 .wall.top_left {
-	border-top-left-radius: 7.5px;
+	border-top-left-radius: 50%;
 }
 .cloud.top_right,
 .wall.top_right {
-	border-top-right-radius: 7.5px;
+	border-top-right-radius: 50%;
 }
 .cloud.bottom_left,
 .wall.bottom_left {
-	border-bottom-left-radius: 7.5px;
+	border-bottom-left-radius: 50%;
 }
 .cloud.bottom_right,
 .wall.bottom_right {
-	border-bottom-right-radius: 7.5px;
+	border-bottom-right-radius: 50%;
 }
 
 .cloud.top_left::after,
 .cloud.top_left::before,
 .wall.top_left::after {
-	border-top-left-radius: 7.5px;
+	border-top-left-radius: 50%;
 }
 .cloud.top_right::after,
 .cloud.top_right::before,
 .wall.top_right::after {
-	border-top-right-radius: 7.5px;
+	border-top-right-radius: 50%;
 }
 .cloud.bottom_left::after,
 .cloud.bottom_left::before,
 .wall.bottom_left::after {
-	border-bottom-left-radius: 7.5px;
+	border-bottom-left-radius: 50%;
 }
 .cloud.bottom_right::after,
 .cloud.bottom_right::before,
 .wall.bottom_right::after {
-	border-bottom-right-radius: 7.5px;
+	border-bottom-right-radius: 50%;
 }
 .wall-white {
 	position: absolute;
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	top: 0px;
 	left: 0px;
 	background-color: white;
@@ -207,8 +204,8 @@
 /* All my cloud styling ---------------------------------- */
 .cloud {
 	position: absolute;
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	top: 0px;
 	left: 0px;
 	background-color: #ffffff91;
@@ -216,8 +213,8 @@
 	transition: 250ms;
 }
 .cloud::before{
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	content: " ";
 	top: 0px;
 	left: 0px;
@@ -227,8 +224,8 @@
 	z-index: 5;
 }
 .cloud::after {
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	display: inline-block;
 	content: " ";
 	background-color: rgba(0, 0, 0, .25);
@@ -239,8 +236,8 @@
 }
 .cloud-white {
 	position: absolute;
-	width: 15px;
-	height: 15px;
+	width: var(--charSize);
+	height: var(--charSize);
 	top: 0px;
 	left: 0px;
 	background-color: white;

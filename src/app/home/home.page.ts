@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
 
 
 
-  constructor( private scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService, public modalController: ModalController) {
+  constructor( public scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService, public modalController: ModalController) {
 
   }
 

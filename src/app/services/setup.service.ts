@@ -26,7 +26,7 @@ export class SetupService {
 
   pointsValue = 0;
 
-  characterSize = 15;
+  characterSize = 0;
   characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
   playingWidth = 0;
   playingHeight = 0;
@@ -81,12 +81,16 @@ export class SetupService {
     this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
     this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
 
+    this.characterSize = Number(getComputedStyle(document.documentElement).getPropertyValue('--charSize').replace("px", ""));
+
     
     var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
     var adjustedHeight = window.innerHeight - this.safeZoneBottom - this.safeZoneTop;
 
     var remainderx = 0;
     var remaindery = 0;
+
+    console.log(this.characterSize);
 
     if (this.router.url == '/play') {
       //make playwidth divisable by character size;
@@ -134,7 +138,7 @@ export class SetupService {
       this.numRows = this.playingHeight / this.characterSize;
       this.numCols = this.playingWidth / this.characterSize;
       this.visited = Array.from({ length: this.numCols }, () => Array(this.numRows).fill(false));
-
+      
       this.isConnectedDFS(0, 0);
       if ((this.playingArea / this.characterSize - this.totalWalls - blank_spaces) != this.countOfSpaces) {
         this.setup_reset();
@@ -789,7 +793,7 @@ export class SetupService {
     this.visited[x / this.characterSize][y / this.characterSize] = true;
 
     const directions: [number, number][] = [
-      [-15, 0], [15, 0], [0, -15], [0, 15]
+      [-this.characterSize, 0], [this.characterSize, 0], [0, -this.characterSize], [0, this.characterSize]
     ];
 
     for (const [dx, dy] of directions) {
