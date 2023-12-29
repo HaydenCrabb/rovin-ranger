@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: "Rovin' Ranger",
+  appName: "Roamin' Ranger",
   webDir: 'www',
   server: {
     androidScheme: 'https'

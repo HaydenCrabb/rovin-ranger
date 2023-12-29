@@ -1,5 +1,5 @@
 {
-  "name": "rovin-ranger",
+  "name": "roamin-ranger",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -34,7 +34,8 @@
     "@ionic/storage-angular": "^4.0.0",
     "0g": "^0.0.9",
     "cocoapods": "^0.0.0",
-    "cordova-plugin-game-center": "^0.4.2",
+    "cordova": "^12.0.0",
+    "cordova-plugin-game-center": "github:leecrossley/cordova-plugin-game-center",
     "hammerjs": "^2.0.8",
     "ionicons": "^7.0.0",
     "ios-sim": "^9.0.0",
