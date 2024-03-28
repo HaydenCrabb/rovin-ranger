@@ -348,6 +348,12 @@ ion-button {
 	border: 1px solid white inset;
 }
 
+.global-leaderboard {
+	animation: bump-right 4s ease-in-out infinite;
+}
+
+
+
 #loadingCover {
 	position: absolute;
 	width: 100%;
@@ -410,5 +416,21 @@ ion-button {
 	}
 	100% {
 		transform: translate(0px, 0px) rotate(13deg);
+	}
+}
+
+
+@keyframes bump-right {
+	75% {
+		transform: translate(0px, 0px);
+	}
+	80% {
+		transform: translate(10px, 0px);
+	}
+	84% {
+		transform: translate(10px, 0px);
+	}
+	100% {
+		transform: translate(0px, 0px);
 	}
 }

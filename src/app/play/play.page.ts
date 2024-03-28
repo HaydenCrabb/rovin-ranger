@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, AfterViewInit, OnChanges } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { GestureController, IonContent } from '@ionic/angular';
+import { Point } from '../models/variables';
 import type { GestureDetail } from '@ionic/angular';
 
 import { SetupService } from '../services/setup.service';
@@ -33,6 +34,17 @@ export class PlayPage implements OnInit, AfterViewInit {
   rewardedAdGranted = false;
   upgradeSfxPlayer:any;
   sfx_is_on: Boolean = true;
+
+  overlay_top = "-20px";
+  overlay_left = "-10px";
+
+  first_time_text = "This is You.\n Randy the Ranger.";
+  first_time_text_position_top = "0px";
+  first_time_text_position_left = "0px";
+
+  tutorial_standpoint = 1;
+
+
 
   async ngOnInit() {
     await this.storage.create();
@@ -75,10 +87,16 @@ export class PlayPage implements OnInit, AfterViewInit {
       this.setupService.createFirstUpgrade();
       //console.log('generating first upgrade');
     }
-
-    window.setTimeout(() => {
-      this.startOrStop();
-    }, 3000);
+    if (!this.firstTime) {
+      window.setTimeout(() => {
+        this.startOrStop();
+      }, 3000);
+    }
+    else {
+      window.setTimeout(() => {
+        this.tutorialNumberOne();
+      }, 2500);
+    }
 
     // CREATING FUNCTIONALITY TO READ HORIZONTAL AND VERTICAL GESTURES
     const gestureX = this.gestureCtrl.create({
@@ -146,50 +164,50 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   private first_timeX(detail: GestureDetail)
   {
-    const { deltaX, velocityX, deltaY, velocityY } = detail;
-    if (deltaX != 0 && (velocityX > 0.2 || velocityX < -0.2) && this.firstTime)
-    {
-      if (document.getElementById("gloved_hand"))
+    if (this.setupService.playing) {
+      const { deltaX, velocityX, deltaY, velocityY } = detail;
+      if (deltaX != 0 && (velocityX > 0.2 || velocityX < -0.2) && this.firstTime)
       {
-        var glove = document.getElementById("gloved_hand")!;
-        if (glove.classList.contains('glove-animation'))
+        if (document.getElementById("gloved_hand"))
         {
-          var swipe = document.getElementById("swipe_mark")!;
-          glove.classList.remove('glove-animation');
-          swipe.classList.remove('swipe-animation');
+          var glove = document.getElementById("gloved_hand")!;
+          if (glove.classList.contains('glove-animation'))
+          {
+            var swipe = document.getElementById("swipe_mark")!;
+            glove.classList.remove('glove-animation');
+            swipe.classList.remove('swipe-animation');
 
-          glove.classList.add('glove-animation-up');
-          swipe.classList.add('swipe-animation-up');
+            glove.classList.add('glove-animation-up');
+            swipe.classList.add('swipe-animation-up');
 
+          }
         }
       }
+      this.onMoveX(detail);
     }
-    this.onMoveX(detail);
   }
 
   private first_timeY(detail: GestureDetail)
   {
-    const { deltaX, velocityX, deltaY, velocityY } = detail;
-    if (deltaY != 0 && (velocityY > 0.2 || velocityY < -0.2) && this.firstTime)
-    {
-      if (document.getElementById("gloved_hand"))
+    if (this.setupService.playing) {
+      const { deltaX, velocityX, deltaY, velocityY } = detail;
+      if (deltaY != 0 && (velocityY > 0.2 || velocityY < -0.2) && this.firstTime)
       {
-        var glove = document.getElementById("gloved_hand")!;
-        if (glove.classList.contains('glove-animation-up'))
+        if (document.getElementById("gloved_hand"))
         {
-          var swipe = document.getElementById("swipe_mark")!;
-          glove.remove();
-          swipe.remove();
-          //set local storage to false here.
-
-          //set arrow
-          const arrow = document.getElementById("arrow")! ;
-          arrow.style.top = String(this.setupService.upgradePosition.top - 25) + "px";
-          arrow.style.left = String(this.setupService.upgradePosition.left + this.setupService.characterSize + this.setupService.safeZoneLeft) + "px";
+          var glove = document.getElementById("gloved_hand")!;
+          if (glove.classList.contains('glove-animation-up'))
+          {
+            var swipe = document.getElementById("swipe_mark")!;
+            var first_time_text = document.getElementById("first-time-text")!;
+            glove.remove();
+            swipe.remove();
+            first_time_text.remove();
+          }
         }
       }
+      this.onMoveY(detail);
     }
-    this.onMoveY(detail);
   }
 
   // FUNCTION FOR HORIZONTAL MOVEMENT 
@@ -238,6 +256,131 @@ export class PlayPage implements OnInit, AfterViewInit {
     }
 
 
+
+  }
+  tutorialNumberOne() {
+
+    //move in the overlay. 
+    var first_time_overlay = document.getElementById('first-time-overlay')!;
+    first_time_overlay.style.opacity = "1";
+    var first_time_overlay_width = first_time_overlay.offsetWidth;
+    var first_time_overlay_height = first_time_overlay.offsetHeight;
+    //find randy's postion, then adjust the overlay to match his location.
+
+    var top_middle = first_time_overlay_height / 2;
+    var width_middle = first_time_overlay_width / 2;
+
+    var new_position_top = (this.setupService.characterPosition.position.top - top_middle + this.setupService.characterSize + this.setupService.safeZoneTop);
+    var new_position_left = (this.setupService.characterPosition.position.left - width_middle + this.setupService.characterSize - 3 + this.setupService.safeZoneLeft);
+
+    this.overlay_top = new_position_top + "px";
+    this.overlay_left = new_position_left+ "px";
+
+    this.first_time_text_position_top = ((new_position_top + top_middle) - 10) + "px";
+    this.first_time_text_position_left = ((new_position_left + width_middle) + 60) + "px";
+    var first_time_text = document.getElementById("first-time-text")!;
+    first_time_text.style.opacity = "1";
+
+  }
+  tutorialNumberTwo() {
+
+    //move in the overlay. 
+    var first_time_overlay = document.getElementById('first-time-overlay')!;
+    first_time_overlay.style.opacity = "1";
+    var first_time_overlay_width = first_time_overlay.offsetWidth;
+    var first_time_overlay_height = first_time_overlay.offsetHeight;
+    //find randy's postion, then adjust the overlay to match his location.
+
+    var top_middle = first_time_overlay_height / 2;
+    var width_middle = first_time_overlay_width / 2;
+
+    var new_position_top = (this.setupService.upgradePosition.top - top_middle + this.setupService.characterSize + this.setupService.safeZoneTop);
+    var new_position_left = (this.setupService.upgradePosition.left - width_middle + this.setupService.characterSize - 3 + this.setupService.safeZoneLeft);
+
+    this.overlay_top = new_position_top + "px";
+    this.overlay_left = new_position_left+ "px";
+
+    var new_text_top = ((new_position_top + top_middle) - 10);
+    var new_text_left = ((new_position_left + width_middle) + 60);
+    var playing_field = document.getElementById("playingField")!;
+
+    if (new_text_left > (playing_field.offsetWidth - 80)) {
+      new_text_left -= 220;
+      new_text_top -= 10;
+    }
+    else if (new_text_top > (playing_field.offsetHeight - 80)) {
+      new_text_top -= 20;
+    }
+
+    this.first_time_text_position_top = new_text_top + "px";
+    this.first_time_text_position_left = new_text_left + "px";
+
+    this.first_time_text = "Collect the Gold!";
+
+  }
+  tutorialNumberThree() {
+
+    //move in the overlay. 
+    var first_time_overlay = document.getElementById('first-time-overlay')!;
+    first_time_overlay.style.opacity = "1";
+    var first_time_overlay_width = first_time_overlay.offsetWidth;
+    var first_time_overlay_height = first_time_overlay.offsetHeight;
+    //find randy's postion, then adjust the overlay to match his location.
+
+    var top_middle = first_time_overlay_height / 2;
+    var width_middle = first_time_overlay_width / 2;
+
+    var new_position_top = (this.setupService.enemies[0].position.top - top_middle + this.setupService.characterSize - 10 + this.setupService.safeZoneTop);
+    var new_position_left = (this.setupService.enemies[0].position.left - width_middle + this.setupService.characterSize - 3 + this.setupService.safeZoneLeft);
+
+    this.overlay_top = new_position_top + "px";
+    this.overlay_left = new_position_left+ "px";
+
+    this.first_time_text_position_top = ((new_position_top + top_middle) - 60) + "px";
+    this.first_time_text_position_left = ((new_position_left + width_middle) - 160) + "px";
+
+    this.first_time_text = "Dodge the enemies!";
+
+  }
+  tutorialNumberFour() {
+    var swipers = document.getElementById("gloved_hand_container")!;
+    var glove = document.getElementById("gloved_hand")!;
+    swipers.style.opacity = "1";
+
+    var new_position_top = parseInt(glove.style.top, 10);
+    var new_position_left = parseInt(glove.style.left, 10);
+
+    this.first_time_text = "Swipe to Move!";
+    var first_time_text = document.getElementById("first-time-text")!;
+    first_time_text.style.color = "#000000";
+
+    this.first_time_text_position_top = 50 + "%";
+    this.first_time_text_position_left = 60 + "%";
+  }
+
+  /* THIS FUNCTION WILL HANDLE THE MOVEMENTS BETWEEN THE SECTIONS. */
+  image_tapped() {
+    if (this.tutorial_standpoint == 1)
+    {
+      this.tutorial_standpoint++;
+      this.tutorialNumberTwo();
+    }
+    else if (this.tutorial_standpoint == 2)
+    {
+      this.tutorial_standpoint++;
+      this.tutorialNumberThree();
+
+    }
+    else if (this.tutorial_standpoint == 3)
+    {
+      this.tutorial_standpoint++;
+      this.overlay_top = "-5000px";
+      this.first_time_text_position_top = "-5000px";
+
+      this.tutorialNumberFour();
+
+      this.startOrStop();
+    }
 
   }
 

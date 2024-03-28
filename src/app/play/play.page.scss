@@ -357,6 +357,31 @@
 	animation: arrow-animation 1s ease-in-out;
 	animation-iteration-count: infinite;
 }
+/*  First Timer Overlays */
+#first-time-overlay-container {
+	background: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+#first-time-overlay {
+	opacity: 0;
+	max-width: 230vw;
+	max-height: 230vh;
+	width: auto;
+	height: auto;
+	position: relative;
+	z-index: 100;
+}
+#first-time-text {
+	position: absolute;
+	color: white;
+	z-index: 101;
+	opacity: 0;
+}
+
 
 /* Gloved Hand for Training  */
 
@@ -367,6 +392,7 @@
 	right: 0;
 	left: 0;
 	bottom: 0;
+	opacity: 0;
 }
 
 #gloved_hand {

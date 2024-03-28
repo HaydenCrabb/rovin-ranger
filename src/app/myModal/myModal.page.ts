@@ -61,7 +61,8 @@ export class ModalPage {
   		this.highscore = "New High Score: " + this.currentHighScore + "!!!";
   	}
 
-    this.scoreService.submitScore(this.currentHighScore);
+    this.scoreService.submitScore(this.currentHighScore, false);
+    this.scoreService.submitScore(this.theLastScore, true);
   }
 
   dismiss() {
@@ -110,7 +111,7 @@ export class ModalPage {
       if (canShare == true){
         Share.share({
           title: 'Beat My High Score',
-          text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', challenge me now!',
+          text: 'YeeeHaw! I just got a new Score of ' + this.theLastScore + ', Beat That!',
           url: 'https://apps.apple.com/us/app/rovin-ranger/id6463441345',
           dialogTitle: 'Share your score with friends',
         });
@@ -155,6 +156,9 @@ export class ModalPage {
       initializeForTesting: false,
     })
   }
+
+
+
   async showRewardVideo()
   {
     if (this.active == true) { //only allow this button to be clicked once.
@@ -171,6 +175,10 @@ export class ModalPage {
       await AdMob.showRewardVideoAd();
     }
     
+  }
+
+  async openLeaderboard2() {
+    this.scoreService.showLeaderboard(true);
   }
 
 }

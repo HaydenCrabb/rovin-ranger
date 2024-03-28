@@ -7,6 +7,7 @@ declare var gamecenter: any;
 })
 export class ScoreService {
   highScore: any;
+  daily_update_rank: number = 0;
   // leaderboardID: string = 'com.hcsolutions.rovinranger.highscores';
 
   constructor() { }
@@ -22,22 +23,36 @@ export class ScoreService {
     return false;
   }
 
-  submitScore(scoreToSubmit: number) {
+  submitScore(scoreToSubmit: number, daily_leaderboard: any) {
+    var leaderboardId: string = 'com.hcsolutions.rovinranger.highscores';
+    if (daily_leaderboard)
+    {
+      leaderboardId = 'com.hcsolutions.rovinranger.daily';
+    }
     gamecenter.submitScore((success: any) => {
+      if (daily_leaderboard)
+      {
+        //daily_update_rank 
+        console.log(gamecenter);
+      }
       console.log('successfully submitted score', success);
     },
       (error: any) => {
         console.error('failed to submit score', error);
       },
-      { score: scoreToSubmit, leaderboardId: 'com.hcsolutions.rovinranger.highscores' });
+      { score: scoreToSubmit, leaderboardId: leaderboardId });
   }
-
-  showLeaderboard() {
+  showLeaderboard(daily_leaderboard: any) {
+    var leaderboardId: string = 'com.hcsolutions.rovinranger.highscores';
+    if (daily_leaderboard)
+    {
+      leaderboardId = 'com.hcsolutions.rovinranger.daily';
+    }
       gamecenter.showLeaderboard((success: any) => {
         console.log('successfully found leaderboard', success);
       },
         (error: any) => {
           console.error('failed to find leaderboard', error);
-        }, { leaderboardId: 'com.hcsolutions.rovinranger.highscores' });
+        }, { leaderboardId: leaderboardId });
   }
 }

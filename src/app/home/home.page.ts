@@ -123,6 +123,10 @@ export class HomePage implements OnInit {
     await AdMob.showInterstitial();
   }
 
+  async openLeaderboard() {
+    this.scoreService.showLeaderboard(false);
+  }
+
   async openSettings(){
     const settingsModal = await this.modalController.create({
       component: SettingsPage,

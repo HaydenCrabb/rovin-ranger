@@ -382,7 +382,6 @@ export class SetupService {
   }
 
   createFirstUpgrade() {
-    //we need to edit these random functions so that the upgrade is always on a mulitple of 15.
     var satisfied = false;
     while (satisfied == false)
     {
