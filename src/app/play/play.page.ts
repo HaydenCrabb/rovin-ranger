@@ -53,12 +53,7 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
 
-
-    //setup upgrade SFX Player
-    this.upgradeSfxPlayer = document.createElement("audio");
-    this.upgradeSfxPlayer.src = '../assets/Sounds/UpgradeAquired_2.mp3';
-    this.upgradeSfxPlayer.volume = this.soundService.volume;
-    this.upgradeSfxPlayer.preload = 'auto';
+    this.setupSoundAffect();
 
     this.sfx_is_on = this.soundService.musicIsOn;
 
@@ -160,6 +155,16 @@ export class PlayPage implements OnInit, AfterViewInit {
   async ngOnDestroy() {
     this.setupService.clearTimers();
     this.soundService.stopMusic();
+  }
+
+  setupSoundAffect() {
+    //setup upgrade SFX Player
+    this.upgradeSfxPlayer = null;
+
+    this.upgradeSfxPlayer = document.createElement("audio");
+    this.upgradeSfxPlayer.src = '../assets/Sounds/UpgradeAquired_2.mp3';
+    this.upgradeSfxPlayer.volume = this.soundService.volume;
+    this.upgradeSfxPlayer.preload = 'auto';
   }
 
   private first_timeX(detail: GestureDetail)
@@ -510,6 +515,7 @@ export class PlayPage implements OnInit, AfterViewInit {
         {
           //do reward stuff
           this.rewardedAdGranted = true;
+          this.setupSoundAffect();
           this.startOrStop();
         }
         else {

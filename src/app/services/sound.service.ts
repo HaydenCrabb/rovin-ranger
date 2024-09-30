@@ -34,6 +34,13 @@ export class SoundService {
     this.sfxPlayer = document.createElement("audio");
   }
 
+  reset_audio() {
+    this.player = null;
+    this.sfxPlayer = null;
+    this.player = document.createElement("audio");
+    this.sfxPlayer = document.createElement("audio");
+  }
+
   //Music Functions
   playMusic(musicFile: String) {
     if (this.musicIsOn == false) {
@@ -61,7 +68,7 @@ export class SoundService {
     else {
       this.sfxPlayer.currentTime = 0;
       this.sfxPlayer.src = sfxFile;
-      this.sfxPlayer.volume = this.volume;
+      //this.sfxPlayer.volume = this.volume;
       this.sfxPlayer.play();
     }
   }

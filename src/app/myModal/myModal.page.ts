@@ -173,6 +173,7 @@ export class ModalPage {
 
       await AdMob.prepareRewardVideoAd(options);
       await AdMob.showRewardVideoAd();
+
     }
     
   }
