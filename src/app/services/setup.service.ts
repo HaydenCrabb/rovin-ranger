@@ -59,7 +59,7 @@ export class SetupService {
   enemyTimer: number = 0;
   cloudTimer: number = 0;
 
-  backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#BF7F40', '#836D84', '#9CC7E8', '#8397A5'];
+  backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#C174AD', '#836D84', '#9CC7E8', '#8397A5'];
   backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png', '../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
 
   setBackgroundColor: string = '#FCEFD9';
@@ -676,44 +676,55 @@ export class SetupService {
 
   buildCloud() {
     var previousDirection = 0
-    // Set strating position of cloud, starts offscreen at random Y value
+    // Set starting position of cloud, starts offscreen at random Y value
     var xPosition = -300;
     var yPosition = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
     yPosition = Math.ceil(yPosition / this.characterSize) * this.characterSize;
 
-    //Create a new cloud object
-    var cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+    let firstPuffSizeWidth = Math.ceil(Math.random() * 4) + 1; // expected 2 - 5
+    let firstPuffSizeHeight = Math.ceil(Math.random() * 4) + 1; //expected 2 - 5
 
-    // Create a 5x5 grid in which all future clouds must exist
-    var xMax = xPosition + (5 * this.characterSize);
-    var xMin = xPosition;
-    var yMax = yPosition;
-    var yMin = yPosition + (6 * this.characterSize)
 
-    //Maximum cloud size is 20, minimum is 10, pick a random number in that range
-    var cloudSize = Math.floor(Math.random() * (50 - 40 + 1)) + 40;
-
+    // We'll use this last_index to determine which clouds need rounding off. 
     var last_index = this.allClouds.length - 1;
     (last_index < 0 ? last_index = 0 : last_index = last_index);
 
-    for (let i = 0; i < cloudSize; i++) {
-
-      //function to select a random point within defined space
-      xPosition = this.selectPoint(xMax, xMin, yMax, yMin).x
-      yPosition = this.selectPoint(xMax, xMin, yMax, yMin).y
-
-      if (this.theresACloudThere(xPosition, yPosition) == false) {
-        cloudPuff = new Cloud(yPosition, xPosition, false, false, false, false);
+    for (let row = 0; row < firstPuffSizeHeight; row++) {
+      for (let column = 0; column < firstPuffSizeWidth; column++) {
+        let cloudPuff = new Cloud(yPosition + (row * this.characterSize), xPosition + (column * this.characterSize), false,false,false,false);
         this.allClouds.push(cloudPuff);
       }
-
-
     }
+
+    //adjust the second cloud Puff to be randomly in front / behind, or above / below the first. 
+    let xDirection = Math.ceil(Math.random() * 2) // expected 1 or 2.
+    let yDirection = Math.ceil(Math.random() * 2) // expected 1 or 2. 
+
+    //if a number is 2, we'll turn that into a negative one. (Essentially the coin flip landed on tails).
+    xDirection = (xDirection == 2 ? -1 : 1);
+    yDirection = (yDirection == 2 ? -1 : 1);
+
+    xPosition += (this.characterSize * 2 * xDirection);
+    yPosition += (this.characterSize * 2 * yDirection);
+
+    let secondPuffSizeWidth = Math.ceil(Math.random() * 4) + 1; // expected 2 - 5
+    let secondPuffSizeHeight = Math.ceil(Math.random() * 4) + 1; //expected 2 - 5
+
+    for (let row = 0; row < secondPuffSizeHeight; row++) {
+      for (let column = 0; column < secondPuffSizeWidth; column++) {
+        let newYPos = yPosition + (row * this.characterSize);
+        let newXPos = xPosition + (column * this.characterSize);
+        if (this.theresACloudThere(newXPos,newYPos) == false) {
+          let cloudPuff = new Cloud(newYPos, newXPos, false,false,false,false);
+          this.allClouds.push(cloudPuff);
+        }
+      }
+    }
+
     //call round off clouds on the newest additions to the array only. 
     for (var i = last_index; i < this.allClouds.length; i++){
       this.roundOffClouds(this.allClouds[i]);
     }
-    
 
   }
 

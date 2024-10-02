@@ -152,7 +152,6 @@ export class ModalPage {
     });
 
     AdMob.initialize({
-      requestTrackingAuthorization: true,
       initializeForTesting: false,
     })
   }

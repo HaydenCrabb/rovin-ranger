@@ -37,11 +37,7 @@ export class HomePage implements OnInit {
     if (status === 'notDetermined') {
     }
 
-    AdMob.initialize({
-      requestTrackingAuthorization: true,
-      initializeForTesting: false,
-
-    })
+    AdMob.requestTrackingAuthorization();
 
   }
 
