@@ -16,6 +16,7 @@ import { SettingsPage } from '../settings/settings.page';
 })
 export class HomePage implements OnInit {
   currentHighScore = 0;
+  currentCowboyCoins = 0;
   currentPath: string = window.location.pathname;
 
   subscription!: Subscription;
@@ -32,6 +33,7 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     this.currentHighScore = this.scoreService.highScore;
+    this.currentCowboyCoins = this.scoreService.cowboy_coins;
     const { status } = await AdMob.trackingAuthorizationStatus();
 
     if (status === 'notDetermined') {

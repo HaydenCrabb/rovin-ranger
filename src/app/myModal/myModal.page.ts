@@ -6,7 +6,6 @@ import { EventEmitter } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { SettingsPage } from '../settings/settings.page';
 import { SetupService } from '../services/setup.service';
-import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem, AdMobError } from '@capacitor-community/admob';
 
 
 @Component({
@@ -22,7 +21,6 @@ export class ModalPage {
   }
 
   isDismissed: boolean = false;
-  allow_rewarded_ad = true;
   active = true;
   button_color = '#000000';
   theLastScore = 0;
@@ -33,14 +31,9 @@ export class ModalPage {
 
   ngOnInit() {
 
-    //prepare the ad to be shown on game end
-    this.initializeAd();
-
     this.currentHighScore = this.scoreService.highScore;
 
   	this.theLastScore = this.params.get('points');
-
-    this.allow_rewarded_ad = this.params.get('rewarded');
   	
     // CHECK TO SEE IF TOTAL POINTS IS GREATER THAN HIGH SCORE
     if(this.theLastScore > this.currentHighScore){
@@ -54,7 +47,7 @@ export class ModalPage {
 
     this.highscore = "High Score: " + this.currentHighScore;
 
-  	if (this.params.get('newHighscore') == true && this.theLastScore > this.currentHighScore)
+  	if (this.params.get('newHighscore') == true)
   	{
       //IF SCORE IS HIGHER, CHANGE HIGH SCORE MESSAGE
       this.currentHighScore = this.theLastScore;
@@ -79,28 +72,11 @@ export class ModalPage {
   dismissToHome() {
     if (this.active == true)
     {
-      this.dismiss(); 
+      this.dismiss();
       this.router.navigate(['/home'], {replaceUrl: true});
     }
   }
 
-
-  rewardedAd()
-  {
-    //reset ability to do stuff.
-    this.active = true;
-
-    this.setupService.moveInCharacter();
-    this.setupService.allEnemiesReset();
-
-    //set game over to false and playing to false;
-    this.setupService.gameOver = false;
-    this.setupService.playing = false;
-    //and continue playing
-    
-
-    this.myModal.dismiss('rewards');
-  }
 
   async share() {
 
@@ -131,50 +107,6 @@ export class ModalPage {
       });
       return await settingsModal.present();
     }
-  }
-
-  async initializeAd()
-  {
-    AdMob.addListener(RewardAdPluginEvents.Dismissed, () => {
-      //reward add is done. Dissmis and reset.
-      this.rewardedAd();
-    });
-    AdMob.addListener(RewardAdPluginEvents.FailedToShow, (error: AdMobError) => {
-      //reward add is done. Dissmis and reset.
-      this.active = true;
-      this.dismiss();
-    });
-    AdMob.addListener(RewardAdPluginEvents.FailedToLoad, (error: AdMobError) => {
-      console.log("failed to load")
-      //reward add is done. Dissmis and reset.
-      this.active = true;
-      this.dismiss();
-    });
-
-    AdMob.initialize({
-      initializeForTesting: false,
-    })
-  }
-
-
-
-  async showRewardVideo()
-  {
-    if (this.active == true) { //only allow this button to be clicked once.
-      //disable other buttons while loading...
-      this.active = false;
-
-      document.getElementById("reward_button")!.style.backgroundColor = '#C75C58';
-      const options: RewardAdOptions = {
-        adId: 'ca-app-pub-6718720783731169/1073210490',
-        isTesting: false
-      };
-
-      await AdMob.prepareRewardVideoAd(options);
-      await AdMob.showRewardVideoAd();
-
-    }
-    
   }
 
   async openLeaderboard2() {

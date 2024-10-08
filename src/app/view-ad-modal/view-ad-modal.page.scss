@@ -1,0 +1,120 @@
+.column-container{
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: inherit;
+}
+.column {
+	max-height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.center-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.dropin {
+	--ion-background-color: rgba(0, 0, 0, 1);
+	height: 100%;
+	color: white !important;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.gap {
+	gap: 1.5em;
+}
+.outer-grid {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+#question-container {
+	margin-top: 2em;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100%;
+	height: auto;
+}
+#question {
+	font-size: 2rem;
+}
+
+.timer-container {
+	margin-bottom: 2em;
+}
+
+
+
+.main-button {
+	width: 12em;
+	height: 7em;
+	background-color: #2b3648;
+	border-radius: 2em;
+	box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
+}
+.element {
+	position: relative;
+}
+
+.margin-none {
+	margin: none;
+}
+.or-wording {
+	position: absolute;
+	left: 50%;
+	top:50%;
+	transform: rotate(-35deg);
+}
+.available-coins-container {
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: flex-end;
+}
+.available-coins {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	padding-left: 3em;
+	padding-right: 3em;
+	background: #2b3648 !important;
+	border-bottom-left-radius: 2em;
+}
+
+button>img {
+	height: 50%;
+	width: auto;
+}
+
+.space {
+	margin: 5px;
+	padding: 5px;
+}
+
+.icon-button {
+	width: 3.5em;
+	height: 3.5em;
+	text-align: center;
+	background-color: white;
+	border-radius: 15px;
+}
+
+ion-button {
+  --background: #ffffff;
+  --background-activated: #cccccc;
+
+  --color: #222222;
+
+  --border-radius: 10px;
+
+  --box-shadow: -5px 5px rgba(0, 0, 0, 0.5);
+}

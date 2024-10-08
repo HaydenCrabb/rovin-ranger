@@ -39,6 +39,26 @@
 
 	margin: 0;
 }
+.cowboy-coins-container {
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: flex-end;
+}
+.coin-container {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	padding-left: 3em;
+	padding-right: 3em;
+	background: #2b3648 !important;
+	border-bottom-left-radius: 2em;
+}
+#cowboy-coins {
+	color: white !important;
+}
 
 #container a {
 	text-decoration: none;

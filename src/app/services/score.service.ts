@@ -6,6 +6,7 @@ declare var gamecenter: any;
   providedIn: 'root'
 })
 export class ScoreService {
+  cowboy_coins: any;
   highScore: any;
   daily_update_rank: number = 0;
   // leaderboardID: string = 'com.hcsolutions.rovinranger.highscores';
@@ -21,6 +22,15 @@ export class ScoreService {
       return false;
     });
     return false;
+  }
+  saveCoins(coins_to_add: number) {
+    //add current coins to saved coins. 
+    //negative number if removing coins.
+    if (coins_to_add != 0) {
+      let tempCoinValue:Number = parseInt(this.cowboy_coins) + coins_to_add;
+      this.cowboy_coins = tempCoinValue.toString();
+      localStorage.setItem('cowboy_coins',this.cowboy_coins);
+    }
   }
 
   submitScore(scoreToSubmit: number, daily_leaderboard: any) {

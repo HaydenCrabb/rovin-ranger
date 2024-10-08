@@ -62,10 +62,7 @@ export class SoundService {
   }
 
   playSFX(sfxFile: string) {
-    if (this.sfxIsOn == false) {
-      return;
-    }
-    else {
+    if (!this.sfxIsOn) {
       this.sfxPlayer.currentTime = 0;
       this.sfxPlayer.src = sfxFile;
       //this.sfxPlayer.volume = this.volume;

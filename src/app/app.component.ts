@@ -14,20 +14,30 @@ export class AppComponent {
   constructor(private scoreService: ScoreService, public setupService: SetupService, public soundService: SoundService) {}
   ngOnInit() {
 
+
+    //retrieve the highscore, or set it if it doesn't exist. 
     if(localStorage.getItem('savedScore')){
-      console.log("found savedScore");
+      this.scoreService.highScore = localStorage.getItem('savedScore');
     }
     else {
       localStorage.setItem('savedScore','0');
     }
+
+     //retrieve the Player's Coins if they exists, if not create them. 
+    if(localStorage.getItem('cowboy_coins')){
+      this.scoreService.cowboy_coins = localStorage.getItem('cowboy_coins');
+    }
+    else {
+      //let them start with 100
+      localStorage.setItem('cowboy_coins','150');
+    }
+
 
     var characterScale = Math.floor(window.innerHeight / 26);
     var root = document.documentElement;
 
     root.style.setProperty('--charSize', characterScale + "px");
     
-
-    this.scoreService.highScore = localStorage.getItem('savedScore');
 
     this.soundService.checkIsMusicOn();
     this.soundService.checkIsSFXOn();

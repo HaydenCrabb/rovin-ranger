@@ -59,7 +59,7 @@ export class SetupService {
   enemyTimer: number = 0;
   cloudTimer: number = 0;
 
-  backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#C174AD', '#836D84', '#9CC7E8', '#8397A5'];
+  backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#D390B6', '#836D84', '#9CC7E8', '#8397A5'];
   backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png', '../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
 
   setBackgroundColor: string = '#FCEFD9';
@@ -90,7 +90,7 @@ export class SetupService {
     var remainderx = 0;
     var remaindery = 0;
 
-    console.log(this.characterSize);
+    //console.log(this.characterSize);
 
     if (this.router.url == '/play') {
       //make playwidth divisable by character size;

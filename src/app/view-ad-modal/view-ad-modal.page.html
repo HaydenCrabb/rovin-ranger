@@ -1,0 +1,31 @@
+<div class="dropin" scroll-y="false">
+  <div class="or-wording">OR</div>
+  <div class="available-coins-container">
+    <div class="available-coins">Coins: {{ currentCoins }}</div>
+  </div>
+  <ion-grid class="outer-grid">
+    <div id="question-container">
+      <div id="question">
+        Continue Playing?
+      </div>
+    </div>
+    <div class="column-container">
+      <div class="column">
+        <ion-row class="center-content">
+          <ion-button (click)="watchAdToContinue()">Watch Ad to Continue</ion-button>
+        </ion-row>
+      </div>
+      <div *ngIf="allowPurchase" class="column">
+        <ion-row class="center-content">
+          <ion-button (click)="payToContinue()">Pay to Continue</ion-button>
+        </ion-row>
+      </div>
+    </div>
+    <div class="timer-container">
+      <ion-row class="center-content">
+          Centered Timer Stuff
+        </ion-row>
+    </div>
+  </ion-grid>
+  
+</div>

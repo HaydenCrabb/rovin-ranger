@@ -11,6 +11,7 @@ import { ScoreService } from '../services/score.service';
 
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../myModal/myModal.page';
+import { ViewAdModalPage } from '../view-ad-modal/view-ad-modal.page'
 import { Router } from '@angular/router';
 
 @Component({
@@ -43,6 +44,7 @@ export class PlayPage implements OnInit, AfterViewInit {
   first_time_text_position_left = "0px";
 
   tutorial_standpoint = 1;
+  first_try_coins:number = 0;
 
 
 
@@ -53,10 +55,6 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
 
-    this.setupSoundAffect();
-
-    this.sfx_is_on = this.soundService.musicIsOn;
-
     //Reset safe zone values
     this.setupService.safeZoneTop = getComputedStyle(document.documentElement).getPropertyValue('--sat');
     this.setupService.safeZoneRight = getComputedStyle(document.documentElement).getPropertyValue('--sar');
@@ -64,6 +62,7 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.setupService.safeZoneLeft = getComputedStyle(document.documentElement).getPropertyValue('--sal');
 
     this.LoadingCover();
+    this.setupSoundAffect();
     //give us a nice little ca caw.
     this.soundService.playSFX(this.soundService.startButtonSFX);
     this.setupService.setBackground();
@@ -165,6 +164,8 @@ export class PlayPage implements OnInit, AfterViewInit {
     this.upgradeSfxPlayer.src = '../assets/Sounds/UpgradeAquired_2.mp3';
     this.upgradeSfxPlayer.volume = this.soundService.volume;
     this.upgradeSfxPlayer.preload = 'auto';
+
+    this.sfx_is_on = this.soundService.musicIsOn;
   }
 
   private first_timeX(detail: GestureDetail)
@@ -421,7 +422,8 @@ export class PlayPage implements OnInit, AfterViewInit {
 
         var newHighscore = false;
         if (self.setupService.pointsValue > self.scoreService.highScore) {
-          self.storage.set('highscore', self.setupService.pointsValue);
+          //commenting this out because it's set later when the modal displays
+          //self.storage.set('highscore', self.setupService.pointsValue);
           newHighscore = true;
         }
         self.soundService.stopMusic();
@@ -431,7 +433,13 @@ export class PlayPage implements OnInit, AfterViewInit {
         
 
         window.setTimeout(() => {
-          self.presentModal(newHighscore);
+          if (self.rewardedAdGranted) {
+            self.presentFinalModal(newHighscore);
+          }
+          else {
+            self.first_try_coins = self.setupService.pointsValue;
+            self.presentModal(newHighscore);
+          }
         }, 2000);
         return;
       }
@@ -490,13 +498,48 @@ export class PlayPage implements OnInit, AfterViewInit {
 
   async presentModal(newHighscore: boolean) {
 
-    // const randomNum = Math.floor(Math.random() * 3) + 1;
-    // if (randomNum == 1) {
-    //   this.showInterstitial();
-    // }
-
     this.soundService.stopMusic();
     this.setupService.clearTimers();
+    this.scoreService.saveCoins(this.setupService.pointsValue)
+
+    const adModal = await this.modalController.create({
+      component: ViewAdModalPage,
+      componentProps: {points: this.setupService.pointsValue},
+      cssClass: "small-modal"
+    });
+
+    adModal.onDidDismiss()
+    .then((data) => {
+
+      if(data['data'] == 'rewards-granted') {
+          this.rewardedAdGranted = true;
+          this.setupSoundAffect();
+          this.startOrStop();
+      }
+      else if(data['data'] == 'pay-to-play') {
+        //keep going folks!
+        this.rewardedAdGranted = true;
+        this.setupSoundAffect();
+        this.startOrStop();
+      }
+      else {
+        let self = this;
+        setTimeout(function(){
+          self.presentFinalModal(newHighscore);
+        },500);
+      }
+    });
+
+    return await adModal.present();
+  }
+
+  async presentFinalModal(newHighscore: boolean) {
+
+    if (this.first_try_coins < this.setupService.pointsValue) {
+      //this means that they watched an ad to keep playing and got more points. 
+      this.scoreService.saveCoins(this.setupService.pointsValue - this.first_try_coins);
+    }
+    
     var localHighscore = this.setupService.highscore;
     if (newHighscore) {
       localHighscore = this.setupService.pointsValue;
@@ -504,24 +547,16 @@ export class PlayPage implements OnInit, AfterViewInit {
 
     const myModal = await this.modalController.create({
       component: ModalPage,
-      componentProps: { rewarded: !this.rewardedAdGranted, points: this.setupService.pointsValue, highscore: localHighscore, newHighscore: newHighscore },
+      componentProps: {points: this.setupService.pointsValue, highscore: localHighscore, newHighscore: newHighscore, rewardGranted: this.rewardedAdGranted },
       cssClass: "small-modal"
     });
 
     myModal.onDidDismiss()
-      .then((data) => {
-        const theData = data['data'];
-        if (data['data'] == 'rewards')
-        {
-          //do reward stuff
-          this.rewardedAdGranted = true;
-          this.setupSoundAffect();
-          this.startOrStop();
-        }
-        else {
-          this.startOrStop();
-        }
-      });
+    .then((data) => {
+      this.startOrStop();
+
+    });
+
     return await myModal.present();
   }
 

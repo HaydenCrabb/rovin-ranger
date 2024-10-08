@@ -23,6 +23,10 @@ export const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   },
+  {
+    path: 'view-ad-modal',
+    loadChildren: () => import('./view-ad-modal/view-ad-modal.module').then( m => m.ViewAdModalPageModule)
+  },
 ];
 
 @NgModule({
