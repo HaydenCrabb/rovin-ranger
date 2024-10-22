@@ -14,6 +14,9 @@ export class ViewAdModalPage implements OnInit {
   active = true;
   something_selected = false; //this value changes if we're loading up an ad.
   allowPurchase = true;
+  coinSpendAnimationText = "- 50";
+  activateCoinAnimation:boolean = false;
+  isSliding = true;
 
   constructor(public setupService: SetupService, public params: NavParams, public myModal: ModalController, private scoreService: ScoreService) { 
 
@@ -27,6 +30,7 @@ export class ViewAdModalPage implements OnInit {
     let self = this;
     setTimeout(function() {
       if(self.something_selected == false) {
+        self.isSliding = false;
         self.dismiss();
       }
     }, 5000);
@@ -119,19 +123,29 @@ export class ViewAdModalPage implements OnInit {
   }
 
   payToContinue() {
-    this.something_selected = true;
-    this.scoreService.saveCoins(-50);
 
-    this.setupService.moveInCharacter();
-    this.setupService.allEnemiesReset();
+    if (this.active == true) {
 
-    //set game over to false and playing to false;
-    this.setupService.gameOver = false;
-    this.setupService.playing = false;
-    //and continue playing
+      this.active = false;
 
+      this.activateCoinAnimation = true;
 
-    this.myModal.dismiss('pay-to-play');
+      this.something_selected = true;
+      this.scoreService.saveCoins(-50);
+
+      this.setupService.moveInCharacter();
+      this.setupService.allEnemiesReset();
+
+      //set game over to false and playing to false;
+      this.setupService.gameOver = false;
+      this.setupService.playing = false;
+      //and continue playing
+
+      let self = this;
+      setTimeout(function() {
+        self.myModal.dismiss('pay-to-play');
+      },900);
+    }
   }
 
   dismiss() {

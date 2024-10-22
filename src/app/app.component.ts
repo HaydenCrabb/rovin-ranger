@@ -21,6 +21,7 @@ export class AppComponent {
     }
     else {
       localStorage.setItem('savedScore','0');
+      this.scoreService.highScore = 0;
     }
 
      //retrieve the Player's Coins if they exists, if not create them. 
@@ -28,8 +29,9 @@ export class AppComponent {
       this.scoreService.cowboy_coins = localStorage.getItem('cowboy_coins');
     }
     else {
-      //let them start with 100
+      //let them start with 150
       localStorage.setItem('cowboy_coins','150');
+      this.scoreService.cowboy_coins = 150;
     }
 
 

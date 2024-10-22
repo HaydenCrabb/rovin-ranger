@@ -18,8 +18,6 @@ export class SoundService {
   horseSnortSFX = '../assets/Sounds/Rovin_Isolated_Horse_Snort.mp3';
   //Gallup Sound Effect
   horseWhinee = '../assets/Sounds/Rovin_Isolated_Horse_Whinee.mp3';
-  //Upgrade Pickup Sound
-  pickupSFX = '../assets/Sounds/UpgradeAquired.mp3';
   //Death Sound
   deathSFX = '../assets/Sounds/rr_end_game.mp3';
 
@@ -29,6 +27,7 @@ export class SoundService {
   sfxPlayer:any;
   volume!: number;
 
+  
   constructor() { 
     this.player = document.createElement("audio");
     this.sfxPlayer = document.createElement("audio");
@@ -62,7 +61,7 @@ export class SoundService {
   }
 
   playSFX(sfxFile: string) {
-    if (!this.sfxIsOn) {
+    if (this.sfxIsOn) {
       this.sfxPlayer.currentTime = 0;
       this.sfxPlayer.src = sfxFile;
       //this.sfxPlayer.volume = this.volume;
@@ -75,6 +74,15 @@ export class SoundService {
     this.player.volume = this.volume;
   }
 
+  setVolume(volume: number) {
+    // Update volume for both music and SFX audio objects
+    if (this.player) {
+      this.player.volume = volume;
+    }
+    if (this.sfxPlayer) {
+      this.sfxPlayer.volume = volume;
+    }
+  }
   //these functions run when opening settings to check whether music or audio is muted
   checkIsMusicOn() {
     if (localStorage.getItem('musicIsOn')) {
