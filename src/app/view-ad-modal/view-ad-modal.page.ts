@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ScoreService } from '../services/score.service'; 
 import { SetupService } from '../services/setup.service';
+import { environment } from '../../environments/environment';
 import { AdMob, RewardAdOptions, AdLoadInfo, RewardAdPluginEvents, AdMobRewardItem, AdMobError } from '@capacitor-community/admob';
 
 @Component({
@@ -111,7 +112,7 @@ export class ViewAdModalPage implements OnInit {
 
       //document.getElementById("reward_button")!.style.backgroundColor = '#C75C58';
       const options: RewardAdOptions = {
-        adId: 'ca-app-pub-6718720783731169/1073210490',
+        adId: environment.adMobID,
         isTesting: false
       };
 
