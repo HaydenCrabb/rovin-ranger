@@ -68,6 +68,4 @@ testem.log
 Thumbs.db
 
 resources/ios/**/*
-
-# Other files
 /src/environments/
