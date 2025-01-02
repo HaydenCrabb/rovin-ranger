@@ -203,49 +203,30 @@ export class SetupService {
   }
 
   createAWall(topy: number, leftx: number, previousDirection: number, additionalWall: boolean) {
-    if ((topy >= 0 && topy < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      if (this.theresAWallThere(leftx, topy) != true) {
-        if (this.totalWalls < this.maxWalls) {
-          if (this.inNoGoZone(topy, leftx) != true) {
+      // Check if the position is within bounds and not exceeding max walls
+      const isWithinBounds = topy >= 0 && topy < this.playingHeight && leftx >= this.characterSize && leftx < this.playingWidth;
+      const canPlaceWall = !this.theresAWallThere(leftx, topy) && this.totalWalls < this.maxWalls && !this.inNoGoZone(topy, leftx);
+      
+      if (isWithinBounds && canPlaceWall) {
+          // Create and add the new wall
+          const wall = new Wall(topy, leftx, false, false, false, false);
+          this.walls.push(wall);
+          this.totalWalls++;
 
-            var wall = new Wall(topy, leftx, false, false, false, false);
+          // Potentially create an additional wall
+          if (additionalWall && Math.random() < 29 / 30) {  // 29/30 chance
+              const continueOnPath = Math.random() < 2 / 3;  // 2/3 chance
+              const randomDirection = continueOnPath && previousDirection !== 0 ? previousDirection : this.getRandomFour(previousDirection);
 
-            this.walls.push(wall);
-            this.totalWalls++;
-
-
-            if (additionalWall) {
-              //The higher the list of possible numbers, the more likely the if statement will be called.
-              var random = Math.floor(Math.random() * 30);
-              if (random != 0) {
-                //then lets add another wall!
-                var continueOnPath = Math.floor(Math.random() * 3);
-                var random2: number = 0;
-                if (continueOnPath != 0 && previousDirection != 0) {
-                  random2 = previousDirection;
-                }
-                else {
-                  random2 = this.getRandomFour(previousDirection)
-                }
-
-                if (random2 == 1) {
-                  this.createAWall(topy - this.characterSize, leftx, 1, true);
-                }
-                else if (random2 == 2) {
-                  this.createAWall(topy, leftx + this.characterSize, 2, true);
-                }
-                else if (random2 == 3) {
-                  this.createAWall(topy + this.characterSize, leftx, 3, true);
-                }
-                else if (random2 == 4) {
-                  this.createAWall(topy, leftx - this.characterSize, 4, true);
-                }
+              // Determine new coordinates based on direction
+              switch (randomDirection) {
+                  case 1: this.createAWall(topy - this.characterSize, leftx, 1, true); break; // Up
+                  case 2: this.createAWall(topy, leftx + this.characterSize, 2, true); break; // Right
+                  case 3: this.createAWall(topy + this.characterSize, leftx, 3, true); break; // Down
+                  case 4: this.createAWall(topy, leftx - this.characterSize, 4, true); break; // Left
               }
-            }
           }
-        }
       }
-    }
   }
   inNoGoZone(top: number, left: number) {
     var self = this;
