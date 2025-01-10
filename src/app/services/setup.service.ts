@@ -42,6 +42,7 @@ export class SetupService {
   totalWalls = 0;
   maxWalls = 0;
   walls: Wall[] = [];
+  wallPositions: Set<string> = new Set();
   totalClouds = 0;
 
   allClouds: Cloud[] = [];
@@ -194,73 +195,34 @@ export class SetupService {
   }
 
 
-  theresAWallThere(x: any, y: any) {
-    for (var i = this.walls.length - 1; i >= 0; i--) {
-      if (this.walls[i].position.top == y && this.walls[i].position.left == x)
-        return true;
-    }
-    return false;
+  theresAWallThere(x: number, y: number): boolean {
+    return this.wallPositions.has(`${x}_${y}`);
   }
 
   createAWall(topy: number, leftx: number, previousDirection: number, additionalWall: boolean) {
-    /* 
-      Only add a wall if the position is within the playable area. 
-    */
     if ((topy >= 0 && topy < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      
-      /* 
-        Only add a wall if there is not already a wall at the specified position.
-      */
       if (this.theresAWallThere(leftx, topy) != true) {
-        
-        /* 
-          Only add a wall if the total number of walls does not exceed the maximum allowed.
-        */
         if (this.totalWalls < this.maxWalls) {
-          
-          /*
-            Only add a wall if the position is not within a restricted 'no-go' zone.
-          */
           if (this.inNoGoZone(topy, leftx) != true) {
-
-            /*
-              If all checks have been passed, create a new wall object at the specified position.
-              Add this new wall to the walls array, and increment the totalWalls count. 
-            */
             var wall = new Wall(topy, leftx, false, false, false, false);
 
             this.walls.push(wall);
+            this.wallPositions.add(`${leftx}_${topy}`); // Add to the set
             this.totalWalls++;
 
             if (additionalWall) {
-
-              /*
-                If additional walls are allowed, generate a random number to determine if an additional wall should be created.
-                29/30 times this will proceed. 
-              */
               var random = Math.floor(Math.random() * 30);
               if (random != 0) {
                 // Decide whether to continue in the same direction or choose a new one.
                 var continueOnPath = Math.floor(Math.random() * 3);
                 var random2: number = 0;
                 
-                /*
-                  Decide whether to continue in the same direction or choose a new one based on random number continueOnPath. 2/3 times this will proceed.
-                  If continuing on the same path is chosen and it's not the initial direction, keep the direction.
-                */
                 if (continueOnPath != 0 && previousDirection != 0) {
                   random2 = previousDirection;
                 }
                 else {
-                  /* 
-                    Otherwise, get a new random direction, avoiding the previous one.
-                  */
                   random2 = this.getRandomFour(previousDirection)
                 }
-
-                /* 
-                  Recursively create a new wall in the chosen direction.
-                */
                 if (random2 == 1) {
                   this.createAWall(topy - this.characterSize, leftx, 1, true); // Move up
                 }
