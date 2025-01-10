@@ -823,6 +823,7 @@ export class SetupService {
     this.playing = false;
     this.totalWalls = 0;
     this.walls = [];
+    this.wallPositions.clear();
     this.enemies = [];
     this.gameOver = false;
 
