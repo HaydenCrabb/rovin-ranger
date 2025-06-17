@@ -1,0 +1,36 @@
+<div class="dropin" scroll-y="false">
+  <div class="or-wording">OR</div>
+  <div class="available-coins-container">
+    <div class="available-coins">Coins: {{ currentCoins }}</div>
+    <div [class.coin-spend-animation-active]="activateCoinAnimation" class="coin-spend-animation">{{ coinSpendAnimationText }}</div>
+  </div>
+  <ion-grid class="outer-grid">
+    <div id="question-container">
+      <div id="question">
+        Continue Playing?
+      </div>
+    </div>
+    <div class="column-container">
+      <div class="column">
+        <ion-row class="center-content">
+          <ion-button [class.button-deactivated]="!active" (click)="watchAdToContinue()">Watch Ad to Continue</ion-button>
+        </ion-row>
+      </div>
+      <div *ngIf="allowPurchase" class="column">
+        <ion-row class="center-content">
+          <ion-button [class.button-deactivated]="!active" (click)="payToContinue()">Pay to Continue</ion-button>
+        </ion-row>
+      </div>
+    </div>
+    <div class="timer-container">
+      <div *ngIf="isSliding" class="slider-container">
+        <div class="bar"></div>
+        <div [ngClass]="{'shrink': isSliding }" class="gray-bar"></div>
+        <div [ngClass]="{'slide': isSliding }" id="wrapper">
+          <div class="slider"><img id="player" src="../../assets/Cowboy_Right.png"></div>
+        </div>
+      </div>
+    </div>
+  </ion-grid>
+  
+</div>
