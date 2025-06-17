@@ -1,0 +1,89 @@
+<!-- src/app/myModal/myModal.page.html -->
+<div class="dropin" scroll-y="false">
+  <!-- Main Modal Content -->
+  <ion-grid [class.full-height]="!showContinueOptions" class="main-container">
+    <div class="column-container">
+      <div class="column" style="width: 40%">
+        <ion-row class="points-container">
+          <div class="points">{{ theLastScore }}</div>
+          <div class="points-2">{{ theLastScore }}</div>
+          <div class="ranking" (click)="openLeaderboard2()"><strong>See how you rank in today's daily challenge &rarr;</strong></div>
+        </ion-row>
+      </div>
+      <div class="column" style="width: 60%">
+        <ion-row>
+          <div class="buckle ion-justify-content-center" *ngIf="theLastScore < 9">
+            <img src="../../assets/Buckles/Buckles_None.png">
+          </div>
+          <div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 9 && theLastScore < 13">
+            <img src="../../assets/Buckles/Buckles_Bronze.png">
+          </div>
+          <div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 13 && theLastScore < 17">
+            <img src="../../assets/Buckles/Buckles_Silver.png">
+          </div>
+          <div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 17 && theLastScore < 21">
+            <img src="../../assets/Buckles/Buckles_Gold.png">
+          </div>
+          <div class="buckle ion-justify-content-center" *ngIf="theLastScore >= 21">
+            <img src="../../assets/Buckles/Buckles_Platinum.png">
+          </div>
+        </ion-row>
+        <ion-row>
+          <p class="highscore">{{ highscore }}</p>
+        </ion-row>
+        <ion-row class="ion-justify-content-center gap">
+          <ion-col size="2" class="ion-justify-content-center">
+            <ion-button (click)="dismissToHome()" routerDirection="root"><ion-icon name="home" color="cowboyBoot"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col size="2" class="ion-justify-content-center">
+            <ion-button (click)="openSettings()"><ion-icon name="cog" color="sunsetPurple"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col size="2" class="ion-justify-content-center">
+            <ion-button (click)="share()"><ion-icon name="share" color="deepGreen"></ion-icon></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center element">
+          <button class="main-button" (click)="dismiss()">
+            <img src="../../assets/RedoButton.png">
+          </button>
+        </ion-row>
+      </div>
+    </div>
+  </ion-grid>
+  <!-- Continue Options Section (shows for 5 seconds) -->
+  <div [class.hide-continue-options]="!showContinueOptions" class="continue-section">
+    <div style="width: 100%;">
+      <div class="timer-container">
+        <div *ngIf="isSliding" class="slider-container">
+          <div class="bar"></div>
+          <div [ngClass]="{'shrink': isSliding }" class="gray-bar"></div>
+          <div [ngClass]="{'slide': isSliding }" id="wrapper">
+            <div class="slider"></div>
+          </div>
+        </div>
+      </div>
+      <div class="available-coins-container">
+        <div class="available-coins">Coins: {{ currentCoins }}</div>
+        <div [class.coin-spend-animation-active]="activateCoinAnimation" class="coin-spend-animation">{{ coinSpendAnimationText }}</div>
+      </div>
+      <div class="question-column-container">
+        <div id="question-container">
+          <div id="question">Continue Playing?</div>
+        </div>
+        <div class="column-container">
+          <div class="or-wording">OR</div>
+          <div class="column">
+            <ion-row class="center-content">
+              <ion-button [class.button-deactivated]="!active" (click)="watchAdToContinue()">Watch Ad to Continue</ion-button>
+            </ion-row>
+          </div>
+          <div class="column">
+            <ion-row class="center-content">
+              <ion-button [disabled]="!active || !allowPurchase" [class.button-deactivated]="!active || !allowPurchase" (click)="payToContinue()">Pay to Continue</ion-button>
+            </ion-row>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

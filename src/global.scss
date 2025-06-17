@@ -1,0 +1,84 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+
+    --rangerRed: #C75C58;
+    --cowboyBoot: #BF7F40;
+    --sunsetPurple: #836D84;
+    --deepGreen: #395B5B;
+
+    
+}
+
+ion-modal::part(content) {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0; /* Optional: remove border-radius if present */
+}
+
+* {
+    font-family: fairplex-narrow, serif;
+}
+
+body {
+    margin-top: constant(safe-area-inset-top) !important;
+    margin-top: env(safe-area-inset-top) !important;
+    margin-bottom: calc(4px + env(safe-area-inset-top)) !important;
+}
+
+
+ion-modal {
+    --background: transparent !important;
+    }
+
+    :root {
+        --ion-color-rangerRed: #C75C58;
+        --ion-color-cowboyBoot: #BF7F40;
+        --ion-color-sunsetPurple: #836D84;
+        --ion-color-deepGreen: #395B5B;
+    }
+    
+    .ion-color-rangerRed {
+        --ion-color-base: var(--ion-color-rangerRed);
+    }
+    .ion-color-cowboyBoot {
+        --ion-color-base: var(--ion-color-cowboyBoot);
+    }
+    .ion-color-sunsetPurple {
+        --ion-color-base: var(--ion-color-sunsetPurple);
+    }
+    .ion-color-deepGreen {
+        --ion-color-base: var(--ion-color-deepGreen);
+    }
