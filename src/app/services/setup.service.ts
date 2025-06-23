@@ -18,13 +18,17 @@ export class SetupService {
   safeZoneBottom: any;
   safeZoneLeft: any;
 
-  currentPath: string = window.location.pathname;
-
+  // Game entities
   characterPosition: Character = new Character(60, 70, 3);
   upgradePosition: Point = new Point(0, 0);
   playingFieldPosition: Point = new Point(0, 0);
+  enemies: Character[] = [];
 
+  //Game State
   pointsValue = 0;
+  highscore = 0;
+  playing = false;
+  gameOver = false;
 
   characterSize = 0;
   characterBackgroundImage = "url(../../assets/Cowboy_Down.png)";
@@ -36,97 +40,90 @@ export class SetupService {
   visited: boolean[][] = [];
   countOfSpaces = 0;
 
-  highscore = 0;
-  playing = false;
-  noGoZone: Zone[] = [];
+  //Wall Management
   totalWalls = 0;
   maxWalls = 0;
   walls: Wall[] = [];
   wallPositions: Set<string> = new Set();
+  noGoZone: Zone[] = [];
+
+  //Cloud management
   totalClouds = 0;
-
   allClouds: Cloud[] = [];
-
   cloudClusters: Cloud[][] = [];
   cloudLoop = 0;
 
+  //Timing Management
   playingInterval = 100;
   currentPlayingInterval = 0;
   enemyPlayingInterval = 0;
   cloudPlayingInterval = 0;
-  enemies: Character[] = [];
-  gameOver = false;
   timer: number = 0;
   enemyTimer: number = 0;
   cloudTimer: number = 0;
 
+  //Visual Settings
   backgroundColors: string[] = ['#FCEFD9', '#EFB1A0', '#ED9970', '#D390B6', '#836D84', '#9CC7E8', '#8397A5'];
-  backgroundImages: string[] = ['../../assets/backgroundOverlays/layout-01.png', '../../assets/backgroundOverlays/layout-02.png', '../../assets/backgroundOverlays/layout-03.png', '../../assets/backgroundOverlays/layout-04.png', '../../assets/backgroundOverlays/layout-05.png', '../../assets/backgroundOverlays/layout-06.png'];
-
+  backgroundImages: string[] = [
+    '../../assets/backgroundOverlays/layout-01.png',
+    '../../assets/backgroundOverlays/layout-02.png',
+    '../../assets/backgroundOverlays/layout-03.png',
+    '../../assets/backgroundOverlays/layout-04.png',
+    '../../assets/backgroundOverlays/layout-05.png',
+    '../../assets/backgroundOverlays/layout-06.png'
+  ];
   setBackgroundColor: string = '#FCEFD9';
   setBackgroundImage: string = '../../assets/backgroundOverlays/layout-01.png';
 
-  constructor(public router: Router) {
-
-  }
-
+  constructor(public router: Router) {}
 
   setup() {
-    //supposedly screen_orientation has been locked on config.xml page
-
-
-
-    // Check safe zones don't need to be 
+    // Setup the safe zones to take up unused space on the board. 
     this.safeZoneTop = Number(getComputedStyle(document.documentElement).getPropertyValue('--sat').replace("px", ""));
     this.safeZoneRight = Number(getComputedStyle(document.documentElement).getPropertyValue('--sar').replace("px", ""));
     this.safeZoneBottom = Number(getComputedStyle(document.documentElement).getPropertyValue('--sab').replace("px", ""));
     this.safeZoneLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--sal').replace("px", ""));
 
+    //Determine Character size
     this.characterSize = Number(getComputedStyle(document.documentElement).getPropertyValue('--charSize').replace("px", ""));
 
-    
     var adjustedWidth = window.innerWidth - this.safeZoneLeft - this.safeZoneRight;
     var adjustedHeight = window.innerHeight - this.safeZoneBottom - this.safeZoneTop;
 
-    var remainderx = 0;
-    var remaindery = 0;
-
-    //console.log(this.characterSize);
+    var leftoverWidth = 0;
+    var leftoverHeight = 0;
 
     if (this.router.url == '/play') {
-      //make playwidth divisable by character size;
-      remainderx = adjustedWidth % this.characterSize;
-      remaindery = adjustedHeight % this.characterSize;
-      this.playingWidth = adjustedWidth - remainderx;
-      this.playingHeight = adjustedHeight - remaindery;
+      //make play width divisable by character size;
+      leftoverWidth = adjustedWidth % this.characterSize;
+      leftoverHeight = adjustedHeight % this.characterSize;
+      this.playingWidth = adjustedWidth - leftoverWidth;
+      this.playingHeight = adjustedHeight - leftoverHeight;
 
 
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
 
-      this.playingFieldPosition.top = (remaindery / 2) + this.safeZoneTop;
-      this.playingFieldPosition.left = (remainderx / 2) + this.safeZoneLeft;
+      this.playingFieldPosition.top = (leftoverHeight / 2) + this.safeZoneTop;
+      this.playingFieldPosition.left = (leftoverWidth / 2) + this.safeZoneLeft;
     }
     else {
-      remainderx = window.innerWidth % this.characterSize;
-      remaindery = window.innerHeight % this.characterSize;
-      this.playingWidth = window.innerWidth - remainderx;
-      this.playingHeight = window.innerHeight - remaindery;
-
+      leftoverWidth = window.innerWidth % this.characterSize;
+      leftoverHeight = window.innerHeight % this.characterSize;
+      this.playingWidth = window.innerWidth - leftoverWidth;
+      this.playingHeight = window.innerHeight - leftoverHeight;
       this.playingArea = (this.playingWidth * this.playingHeight) / this.characterSize;
-
-      this.playingFieldPosition.top = (remaindery / 2);
-      this.playingFieldPosition.left = (remainderx / 2);
+      this.playingFieldPosition.top = (leftoverHeight / 2);
+      this.playingFieldPosition.left = (leftoverWidth / 2);
     }
 
     this.maxWalls = Math.floor(this.playingArea / 165);
 
+    this.coveringWalls[0] = { top: 0, left: 0, height: (leftoverHeight / 2), width: window.innerWidth };
+    this.coveringWalls[1] = { top: 0, left: - 1, height: window.innerHeight, width: (leftoverWidth / 2) + 1 };
+    this.coveringWalls[2] = { top: window.innerHeight - (leftoverHeight / 2), left: 0, height: (leftoverHeight / 2) + 1, width: window.innerWidth };
+    this.coveringWalls[3] = { top: 0, left: window.innerWidth - (leftoverWidth / 2), height: window.innerHeight, width: leftoverWidth / 2 };
 
-    this.coveringWalls[0] = { top: 0, left: 0, height: (remaindery / 2), width: window.innerWidth };
-    this.coveringWalls[1] = { top: 0, left: - 1, height: window.innerHeight, width: (remainderx / 2) + 1 };
-    this.coveringWalls[2] = { top: window.innerHeight - (remaindery / 2), left: 0, height: (remaindery / 2) + 1, width: window.innerWidth };
-    this.coveringWalls[3] = { top: 0, left: window.innerWidth - (remainderx / 2), height: window.innerHeight, width: remainderx / 2 };
-
-    // BOOLEAN IS INTENDED TO SPECIFY IF PLAY PAGE, IF IT ISN'T, IT WON'T MAKE POINTS AREA
+    // Determine if Setup is occuring on the play page or on the home page. 
     if (this.router.url == '/play') {
       var blank_spaces = this.createPointsArea();
       this.createWalls();
@@ -135,7 +132,7 @@ export class SetupService {
       this.createEnemy();
       this.moveInCharacter();
 
-      /* FUNCTIONALITY TO CHECK FOR INACCESSIBLE AREAS. (Unecissary on home page.) */
+      // Functionality to check for inaccessible play areas (Unecissary on home page.)
       this.numRows = this.playingHeight / this.characterSize;
       this.numCols = this.playingWidth / this.characterSize;
       this.visited = Array.from({ length: this.numCols }, () => Array(this.numRows).fill(false));
@@ -159,7 +156,6 @@ export class SetupService {
       this.roundOffWalls();
       this.moveInCharacter();
 
-
       this.numRows = this.playingHeight / this.characterSize;
       this.numCols = this.playingWidth / this.characterSize;
       this.visited = Array.from({ length: this.numRows }, () => Array(this.numCols).fill(false));
@@ -171,140 +167,112 @@ export class SetupService {
     this.setBackgroundImage = 'url(' + this.backgroundImages[Math.floor(Math.random() * this.backgroundImages.length)] + ') no-repeat';
   }
 
-  getRandomFour(previousDirection: any): number {
-    var success = false;
-    var solution: number = 0;
-    while (success == false) {
-      success = true;
-      solution = Math.floor(Math.random() * 4);
-      if (previousDirection == 1 && solution == 3) {
-        success = false;
-      }
-      else if (previousDirection == 3 && solution == 1) {
-        success = false;
-      }
-      else if (previousDirection == 4 && solution == 2) {
-        success = false;
-      }
-      else if (previousDirection == 2 && solution == 4) {
-        success = false;
-      }
-    }
-    return solution
-
+  getRandomDirection(previousDirection: any): number {
+    const directions = [1, 2, 3, 4]; // 1: up, 2: right, 3: down, 4: left
+    const opposites: Record<number, number> = {
+      1: 3,
+      2: 4,
+      3: 1,
+      4: 2
+    };
+    // Exclude the reverse direction
+    const validDirections = directions.filter(dir => dir !== opposites[previousDirection + 1]);
+    // Pick a random one
+    const randomDirectionIndex = Math.floor(Math.random() * validDirections.length);
+    return validDirections[randomDirectionIndex];
   }
 
+  inPlayingArea(top: number, left: number) {
+    return ((top >= 0 && top < this.playingHeight) && (left >= 0 && left < this.playingWidth));
+  }
 
   theresAWallThere(x: number, y: number): boolean {
     return this.wallPositions.has(`${x}_${y}`);
   }
 
+  // Function checks if the poisition is valid, then creates a wall. 
+  // Optionally recursively calls itself to create stretches of walls. 
   createAWall(topy: number, leftx: number, previousDirection: number, additionalWall: boolean) {
-    if ((topy >= 0 && topy < this.playingHeight) && (leftx >= this.characterSize && leftx < this.playingWidth)) {
-      if (this.theresAWallThere(leftx, topy) != true) {
-        if (this.totalWalls < this.maxWalls) {
-          if (this.inNoGoZone(topy, leftx) != true) {
-            var wall = new Wall(topy, leftx, false, false, false, false);
+    if (
+      !this.inPlayingArea(topy, leftx) ||
+      this.theresAWallThere(leftx, topy) ||
+      this.totalWalls >= this.maxWalls ||
+      this.inNoGoZone(topy, leftx)
+    ) return;
 
-            this.walls.push(wall);
-            this.wallPositions.add(`${leftx}_${topy}`); // Add to the set
-            this.totalWalls++;
+    const wall = new Wall(topy, leftx, false, false, false, false);
+    this.walls.push(wall);
+    this.wallPositions.add(`${leftx}_${topy}`);
+    this.totalWalls++;
 
-            if (additionalWall) {
-              var random = Math.floor(Math.random() * 30);
-              if (random != 0) {
-                // Decide whether to continue in the same direction or choose a new one.
-                var continueOnPath = Math.floor(Math.random() * 3);
-                var random2: number = 0;
-                
-                if (continueOnPath != 0 && previousDirection != 0) {
-                  random2 = previousDirection;
-                }
-                else {
-                  random2 = this.getRandomFour(previousDirection)
-                }
-                if (random2 == 1) {
-                  this.createAWall(topy - this.characterSize, leftx, 1, true); // Move up
-                }
-                else if (random2 == 2) {
-                  this.createAWall(topy, leftx + this.characterSize, 2, true); // Move right
-                }
-                else if (random2 == 3) {
-                  this.createAWall(topy + this.characterSize, leftx, 3, true); // Move down
-                }
-                else if (random2 == 4) {
-                  this.createAWall(topy, leftx - this.characterSize, 4, true); // Move left
-                }
-              }
-            }
-          }
-        }
-      }
+    if (!additionalWall) return;
+
+    const additionalWallChance = Math.floor(Math.random() * 30);
+    if (additionalWallChance === 0) return;
+
+    const continueOnPath = Math.floor(Math.random() * 3);
+    const nextDirection = (continueOnPath !== 0 && previousDirection !== 0)
+      ? previousDirection
+      : this.getRandomDirection(previousDirection);
+
+    const offset = this.characterSize;
+    switch (nextDirection) {
+      case 1: this.createAWall(topy - offset, leftx, 1, true); break;
+      case 2: this.createAWall(topy, leftx + offset, 2, true); break;
+      case 3: this.createAWall(topy + offset, leftx, 3, true); break;
+      case 4: this.createAWall(topy, leftx - offset, 4, true); break;
     }
   }
-  inNoGoZone(top: number, left: number) {
-    var self = this;
-    var inRange = false;
-    for (var i = 0; i < this.noGoZone.length; i++) {
-      var zone = this.noGoZone[i];
-      var farthestRightBlock = zone.position.left + zone.width;
-      var farthestDownBlock = zone.position.top + zone.height;
-      if ((top >= zone.position.top && top < farthestDownBlock) && (left >= zone.position.left && left < farthestRightBlock)) {
-        inRange = true;
-        return inRange;
-      }
-    };
-    return inRange;
+
+  inNoGoZone(top: number, left: number): boolean {
+    return this.noGoZone.some(zone => {
+      const withinVertical = top >= zone.position.top && top < zone.position.top + zone.height;
+      const withinHorizontal = left >= zone.position.left && left < zone.position.left + zone.width;
+      return withinVertical && withinHorizontal;
+    });
   }
+
+
   createWalls() {
-    var leftx = this.characterSize; //start at first spot, don't put anything in 1st position;
-    var topy = 0;
+    const step = this.characterSize;
+    const chance = this.maxWalls * 0.0055;
+    let total = this.totalWalls;
 
-    while (leftx < this.playingWidth) {
-      if (topy < this.playingHeight) {
-        if (this.inNoGoZone(topy, leftx) != true) {
+    for (let x = step; x < this.playingWidth; x += step) {
+      for (let y = 0; y < this.playingHeight; y += step) {
+        if (this.inNoGoZone(y, x)) continue;
 
-          var random = Math.floor(Math.random() * 150);
-          if (random <= this.maxWalls * .0055) {
-            this.createAWall(topy, leftx, 0, true);
-            if (this.totalWalls == this.maxWalls) {
-              break;
-            }
-          }
+        const randomChanceOfWall = Math.floor(Math.random() * 150);
+        if (randomChanceOfWall <= chance) {
+          this.createAWall(y, x, 0, true);
+          total++;
+
+          if (total >= this.maxWalls) return;
         }
-        topy = topy + this.characterSize;
-      }
-      else {
-        leftx = leftx + this.characterSize;
-        topy = 0;
       }
     }
   }
-
 
   roundOffWalls() {
-    var self = this;
-    var size = this.characterSize;
-    this.walls.forEach(function (wall) {
-      var radius = size / 2;
+    const size = this.characterSize;
+    const radius = size / 2;
 
-      var wallLeft = !self.theresAWallThere(wall.position.left - size, wall.position.top);
-      var wallTop = !self.theresAWallThere(wall.position.left, wall.position.top - size);
-      var wallRight = !self.theresAWallThere(wall.position.left + size, wall.position.top);
-      var wallDown = !self.theresAWallThere(wall.position.left, wall.position.top + size);
+    this.walls.forEach(wall => {
+      const { left, top } = wall.position;
 
-      if (wallLeft && wallTop) {
-        wall.classes.top_left = true;
-      }
-      if (wallTop && wallRight) {
-        wall.classes.top_right = true;
-      }
-      if (wallRight && wallDown) {
-        wall.classes.bottom_right = true;
-      }
-      if (wallDown && wallLeft) {
-        wall.classes.bottom_left = true;
-      }
+      // Cache wall check results
+      const neighbors = {
+        left: !this.theresAWallThere(left - size, top),
+        top: !this.theresAWallThere(left, top - size),
+        right: !this.theresAWallThere(left + size, top),
+        down: !this.theresAWallThere(left, top + size)
+      };
+
+      // Set rounded corners based on neighbors
+      wall.classes.top_left = neighbors.left && neighbors.top;
+      wall.classes.top_right = neighbors.top && neighbors.right;
+      wall.classes.bottom_right = neighbors.right && neighbors.down;
+      wall.classes.bottom_left = neighbors.down && neighbors.left;
     });
   }
   createPointsArea(): number {
@@ -341,18 +309,29 @@ export class SetupService {
     return (even ? 8 : 10); // if it is an even points area, there will be 8 blank spaces, otherwise there is 10. 
   }
 
+  randomPlacementPosition(topLeftQuadrant: boolean): Point {
+    let areaWidth = (topLeftQuadrant ? this.playingWidth / 4 : this.playingWidth);
+    let areaHeight = (topLeftQuadrant ? this.playingHeight / 4 : this.playingHeight)
+    var point = new Point(0,0);
+
+    point.left = Math.floor(Math.random() * (areaWidth - this.characterSize));
+    point.top = Math.floor(Math.random() * (areaHeight - this.characterSize));
+
+    //adjust to fit on grid
+    point.left = Math.ceil(point.left / this.characterSize) * this.characterSize;
+    point.top = Math.ceil(point.top / this.characterSize) * this.characterSize;
+
+    return point;
+  }
+
   moveInCharacter() {
     var satisfied = false;
     while (satisfied == false)
     {
-      var randomX = Math.floor(Math.random() * (this.playingWidth / 4 - this.characterSize));
-      var randomY = Math.floor(Math.random() * (this.playingHeight / 4 - this.characterSize));
-
-      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
-      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
-      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX)) {
-        this.characterPosition.position.top = randomY;
-        this.characterPosition.position.left = randomX;
+      let newPosition:Point = this.randomPlacementPosition(true);
+      if (!this.theresAWallThere(newPosition.left, newPosition.top) && !this.inNoGoZone(newPosition.top, newPosition.left)) {
+        this.characterPosition.position.top = newPosition.top;
+        this.characterPosition.position.left = newPosition.left;
         satisfied = true;
       }
     }
@@ -363,14 +342,10 @@ export class SetupService {
     var satisfied = false;
     while (satisfied == false)
     {
-      var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
-      var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
-
-      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
-      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
-      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX)) {
-        this.upgradePosition.top = randomY;
-        this.upgradePosition.left = randomX;
+      let newPosition:Point = this.randomPlacementPosition(false);
+      if (!this.theresAWallThere(newPosition.left, newPosition.top) && !this.inNoGoZone(newPosition.top, newPosition.left)) {
+        this.upgradePosition.top = newPosition.top;
+        this.upgradePosition.left = newPosition.left;
         satisfied = true;
       }
     }
@@ -380,14 +355,10 @@ export class SetupService {
     var satisfied = false;
     while (satisfied == false)
     {
-      var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
-      var randomY = Math.floor(Math.random() * (this.playingHeight - this.characterSize));
-
-      randomX = Math.ceil(randomX / this.characterSize) * this.characterSize;
-      randomY = Math.ceil(randomY / this.characterSize) * this.characterSize;
-      if (!this.theresAWallThere(randomX, randomY) && !this.inNoGoZone(randomY, randomX) && randomY > (this.characterSize * 3)) {
-        this.upgradePosition.top = randomY;
-        this.upgradePosition.left = randomX;
+      let newPosition:Point = this.randomPlacementPosition(false);
+      if (!this.theresAWallThere(newPosition.left, newPosition.top) && !this.inNoGoZone(newPosition.top, newPosition.left) && newPosition.top > (this.characterSize * 3)) {
+        this.upgradePosition.top = newPosition.top;
+        this.upgradePosition.left = newPosition.left;
         satisfied = true;
       }
     }
@@ -397,7 +368,6 @@ export class SetupService {
     var enemyLeft = this.playingWidth - this.characterSize;
     var enemyTop = this.playingHeight - this.characterSize;
 
-
     if (this.characterPosition.position.top > this.playingHeight / 2 && this.characterPosition.position.left > this.playingWidth / 2) {
       enemyTop = 0;
       enemyLeft = 0;
@@ -406,6 +376,7 @@ export class SetupService {
     var Enemy = new Character(enemyTop, enemyLeft, 1);
     this.enemies.push(Enemy);
   }
+
   allEnemiesReset()
   {
     //This function is only called after a rewarded ad. From the play page.
@@ -449,18 +420,13 @@ export class SetupService {
       var canMoveHorizontal = self.canMove(enemy.position.top, enemy.position.left, horizontalDirection, true);
 
       if (canMoveHorizontal && canMoveVertical) {
-        var verticalDistance, horizontalDistance;
-
-        horizontalDistance = self.characterPosition.position.left - enemy.position.left;
-        horizontalDistance = (horizontalDistance > 0 ? horizontalDistance : horizontalDistance * -1);
-
-        verticalDistance = self.characterPosition.position.top - enemy.position.top;
-        verticalDistance = (verticalDistance > 0 ? verticalDistance : verticalDistance * -1);
+        const horizontalDistance = Math.abs(self.characterPosition.position.left - enemy.position.left);
+        const verticalDistance = Math.abs(self.characterPosition.position.top - enemy.position.top);
 
         if (verticalDistance > horizontalDistance) {
           enemy.direction = verticalDirection
         }
-        else if (verticalDistance < horizontalDistance) {
+        else {
           enemy.direction = horizontalDirection;
         }
       }
@@ -474,22 +440,19 @@ export class SetupService {
   }
 
   actuallyMove(character: Character) {
-
-    if (character.direction == 1) //move up
-    {
-      character.position.top = character.position.top - this.characterSize;
-    }
-    else if (character.direction == 2) //move right
-    {
-      character.position.left = character.position.left + this.characterSize;
-    }
-    else if (character.direction == 3) // move down
-    {
-      character.position.top = character.position.top + this.characterSize;
-    }
-    else if (character.direction == 4) // move left.
-    {
-      character.position.left = character.position.left - this.characterSize;
+    switch (character.direction) {
+      case 1: // move up
+        character.position.top -= this.characterSize;
+        break;
+      case 2: // move right
+        character.position.left += this.characterSize;
+        break;
+      case 3: // move down
+        character.position.top += this.characterSize;
+        break;
+      case 4: // move left
+        character.position.left -= this.characterSize;
+        break;
     }
   }
 
@@ -510,29 +473,20 @@ export class SetupService {
   }
 
   canMove(top: number, left: number, direction: number, enemy: boolean) {
-    var nextTop = top;
-    var nextLeft = left;
-    if (direction == 1)
-      nextTop = nextTop - this.characterSize;
-    else if (direction == 2)
-      nextLeft = nextLeft + this.characterSize;
-    else if (direction == 3)
-      nextTop = nextTop + this.characterSize;
-    else
-      nextLeft = nextLeft - this.characterSize;
+    let fakeCharacter = new Character(top, left, direction);
+    this.actuallyMove(fakeCharacter);
 
     //we have determined the next position, lets check if it is valid.
-    if ((nextTop >= 0 && nextTop < this.playingHeight) && (nextLeft >= 0 && nextLeft < this.playingWidth)) {
+    if (this.inPlayingArea(fakeCharacter.position.top, fakeCharacter.position.left)) {
       //it is successfully in the board, and good to go.
-      if (this.theresAWallThere(nextLeft, nextTop)) {
+      if (this.theresAWallThere(fakeCharacter.position.left, fakeCharacter.position.top)) {
         return false;
       }
       else {
         if (enemy) {
           for (var i = this.enemies.length - 1; i >= 0; i--) {
-            if (this.enemies[i].position.top == nextTop && this.enemies[i].position.left == nextLeft) {
+            if (this.enemies[i].position.top == fakeCharacter.position.top && this.enemies[i].position.left == fakeCharacter.position.left) {
               return false;
-              break;
             }
           }
         }
@@ -560,7 +514,6 @@ export class SetupService {
     var enemyLeft = this.playingWidth - this.characterSize;
     var enemyTop = this.playingHeight - this.characterSize;
 
-
     if (this.characterPosition.position.top > this.playingHeight / 2 && this.characterPosition.position.left > this.playingWidth / 2) {
       enemyTop = 0;
       enemyLeft = 0;
@@ -571,8 +524,6 @@ export class SetupService {
   }
 
   sendInTheCowboy() {
-    // overwrite location of cowboy
-
     this.enemies = [];
 
     var randomX = Math.floor(Math.random() * (this.playingWidth - this.characterSize));
@@ -610,9 +561,7 @@ export class SetupService {
       else {
         this.sendInTheCowboy();
       }
-
     }
-
     else {
       // Check if can send cowboy along X value "i"
       for (var i = 0; i < this.playingWidth; i += this.characterSize) {
@@ -638,36 +587,34 @@ export class SetupService {
         this.sendInTheCowboy();
       }
     }
-
   }
 
-  selectPoint(maxX: number, minX: number, maxY: number, minY: number) {
+  // selectPoint(maxX: number, minX: number, maxY: number, minY: number) {
+  //   const occupiedPositions = new Set();
 
-    const occupiedPositions = new Set();
+  //   const gridMinX = Math.ceil(minX / this.characterSize);
+  //   const gridMaxX = Math.floor(maxX / this.characterSize);
+  //   const gridMinY = Math.ceil(minY / this.characterSize);
+  //   const gridMaxY = Math.floor(maxY / this.characterSize);
 
-    const gridMinX = Math.ceil(minX / this.characterSize);
-    const gridMaxX = Math.floor(maxX / this.characterSize);
-    const gridMinY = Math.ceil(minY / this.characterSize);
-    const gridMaxY = Math.floor(maxY / this.characterSize);
+  //   let randomX, randomY, hash;
+  //   do {
+  //     // Generate random x and y values within the grid bounds
+  //     randomX = Math.floor(Math.random() * (gridMaxX - gridMinX + 1) + gridMinX);
+  //     randomY = Math.floor(Math.random() * (gridMaxY - gridMinY + 1) + gridMinY);
 
-    let randomX, randomY, hash;
-    do {
-      // Generate random x and y values within the grid bounds
-      randomX = Math.floor(Math.random() * (gridMaxX - gridMinX + 1) + gridMinX);
-      randomY = Math.floor(Math.random() * (gridMaxY - gridMinY + 1) + gridMinY);
+  //     // Calculate a hash representing the position (x, y)
+  //     hash = `${randomX}_${randomY}`;
+  //   } while (occupiedPositions.has(hash));
 
-      // Calculate a hash representing the position (x, y)
-      hash = `${randomX}_${randomY}`;
-    } while (occupiedPositions.has(hash));
+  //   // Mark the position as occupied
+  //   occupiedPositions.add(hash);
 
-    // Mark the position as occupied
-    occupiedPositions.add(hash);
+  //   randomX = randomX * this.characterSize;
+  //   randomY = randomY * this.characterSize;
 
-    randomX = randomX * this.characterSize;
-    randomY = randomY * this.characterSize;
-
-    return { x: randomX, y: randomY }
-  }
+  //   return { x: randomX, y: randomY }
+  // }
 
   buildCloud() {
     var previousDirection = 0
@@ -741,12 +688,6 @@ export class SetupService {
 
       }
     }
-    // allClouds.forEach((cloudPuff: Cloud, index: number) => {
-    //   cloudPuff.position.left = cloudPuff.position.left + this.characterSize;
-    //   if (cloudPuff.position.left > this.playingWidth + 100) {
-    //     allClouds.splice(index, 1);
-    //   }
-    // });
   }
 
   theresACloudThere(x: any, y: any) {
@@ -779,13 +720,9 @@ export class SetupService {
       cloud.classes.bottom_left = true;
     }
   }
-  //DFS function to make sure all areas of the map are accessible
-  isCoordinateValid(x: number, y: number): boolean {
-    return x >= 0 && x < this.playingWidth && y >= 0 && y < this.playingHeight;
-  }
 
   isConnectedDFS(x: number, y: number) {
-    if (!this.isCoordinateValid(x, y) || this.visited[x / this.characterSize][y / this.characterSize]) {
+    if (!this.inPlayingArea(y,x) || this.visited[x / this.characterSize][y / this.characterSize]) {
       return;
     }
     if (this.theresAWallThere(x, y)) {
@@ -846,9 +783,7 @@ export class SetupService {
 
   setTimers() {
     this.currentPlayingInterval = this.playingInterval;
-
     this.enemyPlayingInterval = (this.playingInterval * 1.4);
-
     this.cloudPlayingInterval = (this.playingInterval * 1.7);
   }
 }
