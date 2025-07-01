@@ -787,5 +787,3 @@ export class SetupService {
     this.cloudPlayingInterval = (this.playingInterval * 1.7);
   }
 }
-
-
